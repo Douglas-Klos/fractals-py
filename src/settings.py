@@ -1,8 +1,6 @@
 class Settings():
     def __init__(self):
 
-        self.current_fractal = 'mandelbrot'
-
         self.SCREEN_WIDTH = 1000
         self.SCREEN_HEIGHT = 1000
 
