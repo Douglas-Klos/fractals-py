@@ -11,10 +11,13 @@ import src.pygame_functions as pf
 
 def main():
     """ Fractals Main """
+    redraw = True
     # Get an instance of Settings
     settings = Settings()
 
+    # Set the fractal and color equations to use
     fractal = fe.mandelbrot
+    # fractal = fe.julia
     colorize = ce.colorize_hue
 
     # Initialize Pygame and create a screen
@@ -26,17 +29,19 @@ def main():
         display.set_caption(f"RE:({settings.RE_START}, {settings.RE_END}), "
                             f"IM:({settings.IM_START}, {settings.IM_END})")
 
-        # Regenerate point_list
-        point_list = fractal(settings)
 
-        # Create the color palette
-        palette = colorize(settings)
+        if redraw:
+            # Regenerate point_list
+            point_list = fractal(settings)
 
-        # Render
-        pf.display_fractal(palette, screen, point_list)
+            # Create the color palette
+            palette = colorize(settings)
 
-        display.flip()
-        pf.check_events(settings)
+            # Render
+            pf.display_fractal(palette, screen, point_list)
+
+            display.flip()
+        redraw = pf.check_events(settings)
 
 
 if __name__ == "__main__":

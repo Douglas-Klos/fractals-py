@@ -16,27 +16,24 @@ def check_events(settings):
 
         elif event.type == pygame.KEYDOWN:
             check_keydown_event(event)
-            return 0
+            return False
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             settings._mouse_down = pygame.mouse.get_pos()
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             settings._mouse_up = pygame.mouse.get_pos()
-            left_mouse_up_event(settings)
-            return 0
+            return left_mouse_up_event(settings)
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
             settings._mouse_down = pygame.mouse.get_pos()
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 3:
             settings._mouse_up = pygame.mouse.get_pos()
-            right_mouse_up_event(settings)
-            return 0
+            return right_mouse_up_event(settings)
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 2:
-            center_mouse_up_event(settings)
-            return 0
+            return center_mouse_up_event(settings)
 
 
 def center_mouse_up_event(settings):
@@ -46,9 +43,17 @@ def center_mouse_up_event(settings):
     settings.IM_START = -1.5
     settings.IM_END = 1.5
 
+    return True
+
 
 def right_mouse_up_event(settings):
     """ Shift screen based on mouse movement """
+    if (
+        settings._mouse_down[0] == settings._mouse_up[0]
+        and settings._mouse_down[1] == settings._mouse_up[1]
+    ):
+        return False
+
     # Calculate how many pixels the mouse moved while right clicked
     horizontal_movement = settings._mouse_up[0] - settings._mouse_down[0]
     verticle_movement = settings._mouse_up[1] - settings._mouse_down[1]
@@ -58,7 +63,9 @@ def right_mouse_up_event(settings):
     verticle_percent = verticle_movement / settings.SCREEN_HEIGHT
 
     # Calculate percentage of coordinate plane moved
-    horizontal_shift = horizontal_percent * (settings.RE_START - settings.RE_END)
+    horizontal_shift = horizontal_percent * (
+        settings.RE_START - settings.RE_END
+    )
     verticle_shift = verticle_percent * (settings.IM_START - settings.IM_END)
 
     # Update settings to new coordinate plane
@@ -67,42 +74,78 @@ def right_mouse_up_event(settings):
     settings.IM_START = settings.IM_START + verticle_shift
     settings.IM_END = settings.IM_END + verticle_shift
 
+    return True
+
 
 def left_mouse_up_event(settings):
     """ Zoom in on mouse selection area """
+    if (
+        settings._mouse_down[0] == settings._mouse_up[0]
+        and settings._mouse_down[1] == settings._mouse_up[1]
+    ):
+        return False
+
     if settings._mouse_down[0] < settings._mouse_up[0]:
-        # We want to maintain 1:1 ratio, so we move vert the same as horz
-        #   regardless of user input.  Otherwise the image distorts.
-        settings._mouse_up = (
-            settings._mouse_up[0],
-            settings._mouse_down[1] + (settings._mouse_up[0] - settings._mouse_down[0]),
-        )
+        left = settings._mouse_down[0]
+        right = settings._mouse_up[0]
+    else:
+        left = settings._mouse_up[0]
+        right = settings._mouse_down[0]
 
-        # Calculate the % of the current corrdinate plane the mouse moved.
-        start_percent_re = settings._mouse_down[0] / settings.SCREEN_WIDTH
-        end_percent_re = settings._mouse_up[0] / settings.SCREEN_WIDTH
-        start_percent_im = settings._mouse_down[1] / settings.SCREEN_HEIGHT
-        end_percent_im = settings._mouse_up[1] / settings.SCREEN_HEIGHT
+    if settings._mouse_down[1] < settings._mouse_up[1]:
+        bottom = settings._mouse_down[1]
+        top = settings._mouse_up[1]
+    else:
+        bottom = settings._mouse_up[1]
+        top = settings._mouse_down[1]
 
-        # Calculate the new coordinate plane to render.
-        new_start_re = settings.RE_START + abs(
-            (start_percent_re * abs((settings.RE_START - settings.RE_END)))
-        )
-        new_end_re = new_start_re + abs((end_percent_re - start_percent_re)) * abs(
-            (settings.RE_START - settings.RE_END)
-        )
-        new_start_im = settings.IM_START + abs(
-            (start_percent_im * abs((settings.IM_START - settings.IM_END)))
-        )
-        new_end_im = new_start_im + abs((end_percent_im - start_percent_im)) * abs(
-            (settings.IM_START - settings.IM_END)
-        )
+    # We want to maintain our ratio to prevent distorting.
+    delta = ((right - left) + (top - bottom)) / 2
 
-        # Update settings
-        settings.RE_START = new_start_re
-        settings.RE_END = new_end_re
-        settings.IM_START = new_start_im
-        settings.IM_END = new_end_im
+    if (right - left) < delta:
+        h_adjust = (delta - (right - left)) / 2
+    elif (right - left) > delta:
+        h_adjust = -(((right - left) - delta) / 2)
+    if (top - bottom) < delta:
+        v_adjust = (delta - (top - bottom)) / 2
+    elif (top - bottom) > delta:
+        v_adjust = -(((top - bottom) - delta) / 2)
+
+    # We also want to center the zoom center of the two points
+    left -= h_adjust
+    right += h_adjust
+    bottom -= v_adjust
+    top += v_adjust
+
+    # Calculate the % of the current corrdinate plane the mouse moved.
+    start_percent_re = left / settings.SCREEN_WIDTH
+    end_percent_re = right / settings.SCREEN_WIDTH
+    start_percent_im = bottom / settings.SCREEN_HEIGHT
+    end_percent_im = top / settings.SCREEN_HEIGHT
+
+    # Calculate the new coordinate plane to render.
+    new_start_re = settings.RE_START + abs(
+        (start_percent_re * abs((settings.RE_START - settings.RE_END)))
+    )
+    new_end_re = new_start_re + abs((end_percent_re - start_percent_re)) * abs(
+        (settings.RE_START - settings.RE_END)
+    )
+    new_start_im = settings.IM_START + abs(
+        (start_percent_im * abs((settings.IM_START - settings.IM_END)))
+    )
+    new_end_im = new_start_im + abs((end_percent_im - start_percent_im)) * abs(
+        (settings.IM_START - settings.IM_END)
+    )
+
+    # Update settings
+    settings.RE_START = new_start_re
+    settings.RE_END = new_end_re
+    settings.IM_START = new_start_im
+    settings.IM_END = new_end_im
+
+    return True
+
+    # return False
 
 
 def check_keydown_event(event):

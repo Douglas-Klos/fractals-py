@@ -3,7 +3,6 @@ class Settings():
 
         self.SCREEN_WIDTH = 1000
         self.SCREEN_HEIGHT = 1000
-
         self.WIDTH = self.SCREEN_WIDTH
         self.HEIGHT = self.SCREEN_WIDTH
 
@@ -21,5 +20,6 @@ class Settings():
         self.C_1 = julia_values[2][0]
         self.C_2 = julia_values[2][1]
 
+        # Internal program use, do not adjust.
         self._mouse_down = None
         self._mouse_up = None
