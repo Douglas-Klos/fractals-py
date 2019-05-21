@@ -5,32 +5,49 @@ from math import floor
 import pygame
 
 
-def check_events(screen, settings, palette, fractal):
+def check_events(settings):
     """ Check events """
-    for event in pygame.event.get():
+    while True:
+
+        event = pygame.event.wait()
 
         if event.type == pygame.QUIT:
             exit()
 
         elif event.type == pygame.KEYDOWN:
             check_keydown_event(event)
+            return 0
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             settings._mouse_down = pygame.mouse.get_pos()
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             settings._mouse_up = pygame.mouse.get_pos()
-            left_mouse_up_event(screen, settings, palette, fractal)
+            left_mouse_up_event(settings)
+            return 0
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
             settings._mouse_down = pygame.mouse.get_pos()
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 3:
             settings._mouse_up = pygame.mouse.get_pos()
-            right_mouse_up_event(screen, settings, palette, fractal)
+            right_mouse_up_event(settings)
+            return 0
+
+        elif event.type == pygame.MOUSEBUTTONUP and event.button == 2:
+            center_mouse_up_event(settings)
+            return 0
 
 
-def right_mouse_up_event(screen, settings, palette, fractal):
+def center_mouse_up_event(settings):
+    """ Reset to default screen pos """
+    settings.RE_START = -2
+    settings.RE_END = 1
+    settings.IM_START = -1.5
+    settings.IM_END = 1.5
+
+
+def right_mouse_up_event(settings):
     """ Shift screen based on mouse movement """
     # Calculate how many pixels the mouse moved while right clicked
     horizontal_movement = settings._mouse_up[0] - settings._mouse_down[0]
@@ -50,17 +67,8 @@ def right_mouse_up_event(screen, settings, palette, fractal):
     settings.IM_START = settings.IM_START + verticle_shift
     settings.IM_END = settings.IM_END + verticle_shift
 
-    # Regenerate point list
-    point_list = fractal(settings)
 
-    # Render
-    for point in point_list:
-        screen.set_at((point[0], point[1]), palette[floor(point[2])])
-
-    pygame.display.flip()
-
-
-def left_mouse_up_event(screen, settings, palette, fractal):
+def left_mouse_up_event(settings):
     """ Zoom in on mouse selection area """
     if settings._mouse_down[0] < settings._mouse_up[0]:
         # We want to maintain 1:1 ratio, so we move vert the same as horz
@@ -90,35 +98,11 @@ def left_mouse_up_event(screen, settings, palette, fractal):
             (settings.IM_START - settings.IM_END)
         )
 
-        # # Output to stdout
-        # print(f"start_percent_re:{start_percent_re}")
-        # print(f"end_percent_re:{end_percent_re}")
-        # print()
-        # print(f"old_start_re:{settings.RE_START}")
-        # print(f"new_start_re:{new_start_re}")
-        # print(f"old_end_re:{settings.RE_END}")
-        # print(f"new_end_re:{new_end_re}")
-        # print()
-        # print(f"old_start_im:{settings.IM_START}")
-        # print(f"new_start_im:{new_start_im}")
-        # print(f"old_end_im:{settings.IM_END}")
-        # print(f"new_end_im:{new_end_im}")
-        # print()
-
         # Update settings
         settings.RE_START = new_start_re
         settings.RE_END = new_end_re
         settings.IM_START = new_start_im
         settings.IM_END = new_end_im
-
-        # Regenerate point_list
-        point_list = fractal(settings)
-
-        # Render
-        for point in point_list:
-            screen.set_at((point[0], point[1]), palette[floor(point[2])])
-
-        pygame.display.flip()
 
 
 def check_keydown_event(event):

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ Fractals in Python """
 #pylint: disable=E0611
+from math import floor
 from pygame import display, init
 from src.settings import Settings
 import src.fractal_equations as fe
@@ -16,22 +17,26 @@ def main():
     fractal = fe.mandelbrot
     colorize = ce.colorize_hue
 
-    # Generate our fractal points
-    point_list = fractal(settings)
-
-    # Create the color palette
-    palette = colorize(settings)
-
     # Initialize Pygame and create a screen
     init()
     screen = display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
-    display.set_caption(f"Fractals")
-
-    pf.display_fractal(palette, screen, point_list)
-    display.flip()
 
     while True:
-        pf.check_events(screen, settings, palette, fractal)
+        # Set display title
+        display.set_caption(f"RE:({settings.RE_START}, {settings.RE_END}), "
+                            f"IM:({settings.IM_START}, {settings.IM_END})")
+
+        # Regenerate point_list
+        point_list = fractal(settings)
+
+        # Create the color palette
+        palette = colorize(settings)
+
+        # Render
+        pf.display_fractal(palette, screen, point_list)
+
+        display.flip()
+        pf.check_events(settings)
 
 
 if __name__ == "__main__":

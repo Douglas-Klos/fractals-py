@@ -49,15 +49,15 @@ def mandelbrot(settings):
             f"Calculating Fractal: {((x / settings.SCREEN_WIDTH) * 100):0.2f} % complete  ",
             end="\r",
         )
-    print(f"time:{datetime.now()-start}")
+    print(f"Calculating Fractal: 100.00% complete - Time:{datetime.now()-start}")
     return point_list
 
 
 def julia(settings):
     """ Julia sequence """
-    SCALE = 1.4
+    SCALE = 1
     CENTER = (0, 0)
-
+    start = datetime.now()
     point_list = []
 
     for x in range(0, settings.SCREEN_WIDTH):
@@ -84,4 +84,5 @@ def julia(settings):
             f"Calculating Fractal: {((x / settings.SCREEN_WIDTH) * 100):0.2f} % complete  ",
             end="\r",
         )
+    print(f"Calculating Fractal: 100.00% complete - Time:{datetime.now()-start}")
     return point_list
