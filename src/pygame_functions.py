@@ -37,7 +37,7 @@ def right_mouse_up_event(screen, settings, palette):
     # Calculate percentage of coordinate plane moved
     horizontal_shift = horizontal_percent * (settings.RE_START - settings.RE_END)
     verticle_shift = verticle_percent * (settings.IM_START - settings.IM_END)
-    
+
     # Update settings to new coordinate plane
     settings.RE_START = settings.RE_START + horizontal_shift
     settings.RE_END = settings.RE_END + horizontal_shift

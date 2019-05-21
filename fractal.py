@@ -11,8 +11,10 @@ def main():
     
 
     point_list = func.fractal_list[settings.current_fractal](settings)
-    # palette = func.linear_colorize(settings)
-    palette = func.colorize(settings)
+    # palette = func.colorize_linear(settings)
+    palette = func.colorize_hue(settings)
+    # palette = func.colorize_cos(settings)
+    # palette = func.colorize_sin(settings)
 
     init() #pygame
     screen = display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))

@@ -9,8 +9,8 @@ class Settings():
         self.WIDTH = 1000
         self.HEIGHT = 1000
 
-        self.MAX_ITER = 32
-        self.COLOR_SCALE = 32
+        self.MAX_ITER = 256
+        self.COLOR_SCALE = 64
 
         # Default, FUll plot window
         self.RE_START = -2

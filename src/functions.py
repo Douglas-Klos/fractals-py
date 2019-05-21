@@ -4,10 +4,11 @@ from colorsys import hsv_to_rgb
 from collections import defaultdict
 from src.settings import Settings
 from datetime import datetime
-from math import log, log2, floor, ceil
+from math import floor, ceil, log2, log, sin, cos, tan
+from numba import jit
 
 
-@lru_cache(maxsize=10**7)
+@jit(nopython=True)
 def iterate_mandelbrot(MAX_ITER, c, z=0):
     n = 0
     while abs(z) <= 2 and n < MAX_ITER:
@@ -17,7 +18,7 @@ def iterate_mandelbrot(MAX_ITER, c, z=0):
     if n == MAX_ITER:
         return MAX_ITER - 1
 
-    return n + 1 - log(log2(abs(z)))
+    return n + 1 - log(log(abs(z)/log(2)))
 
 
 def mandelbrot(settings):
@@ -60,23 +61,46 @@ def julia(settings):
     return point_list
 
 
-def colorize(settings):
+def colorize_hue(settings):
     """ Calculate color palette """
     palette = [0] * settings.MAX_ITER
 
     for i in range(settings.MAX_ITER):
         f = 1 - abs((float(i) / settings.MAX_ITER - 1) ** (settings.MAX_ITER/settings.COLOR_SCALE))
+        # r, g, b = hsv_to_rgb(0.26 + f / 3, 1 - f, f if i < settings.MAX_ITER - 1 else 0)
         r, g, b = hsv_to_rgb(0.66 + f / 3, 1 - f, f if i < settings.MAX_ITER - 1 else 0)
         palette[i] = (int(r * 255), int(g * 255), int(b * 255))
 
     return palette
 
 
-def linear_colorize(settings):
+def colorize_linear(settings):
     palette = [0] * settings.MAX_ITER
 
     for i in range(settings.MAX_ITER):
         r, g, b = hsv_to_rgb(i/settings.MAX_ITER, 1, 1 if i < settings.MAX_ITER - 1 else 0)
+        palette[i] = (int(r * 255), int(g * 255), int(b * 255))
+
+    return palette
+
+
+def colorize_sin(settings):
+    """ Calculate color palette """
+    palette = [0] * settings.MAX_ITER
+
+    for i in range(settings.MAX_ITER):
+        r, g, b = hsv_to_rgb(abs(sin(i)), 1, 1 if i < settings.MAX_ITER - 1 else 0)
+        palette[i] = (int(r * 255), int(g * 255), int(b * 255))
+
+    return palette
+
+
+def colorize_cos(settings):
+    """ Calculate color palette """
+    palette = [0] * settings.MAX_ITER
+
+    for i in range(settings.MAX_ITER):
+        r, g, b = hsv_to_rgb(abs(cos(i)), 1, 1 if i < settings.MAX_ITER - 1 else 0)
         palette[i] = (int(r * 255), int(g * 255), int(b * 255))
 
     return palette
@@ -95,7 +119,6 @@ def update_screen():
 
 fractal_list = {"mandelbrot": mandelbrot,
                 "julia": julia}
-
 
 # def min_max(point_list):
 #     """ For checking rendered min max values, useless at the moment really """
