@@ -1,3 +1,4 @@
+from functools import lru_cache
 from pygame import display
 from colorsys import hsv_to_rgb
 from collections import defaultdict
@@ -6,20 +7,8 @@ from datetime import datetime
 from math import log, log2, floor, ceil
 
 
-# def iterate_mandelbrot(BLACK_CENTER, MAX_ITER, c, z=0):
-#     """ Calculate the mandelbrot sequence for the point c with start value z """
-#     n = 0
-#     for n in range(MAX_ITER):
-#         z = z * z + c
-#         if abs(z) > 2:
-#             return n
-#     if BLACK_CENTER:
-#         return 0
-#     else:
-#         return MAX_ITER - 1
-
-
-def iterate_mandelbrot(BLACK_CENTER, MAX_ITER, c, z=0):
+@lru_cache(maxsize=10**7)
+def iterate_mandelbrot(MAX_ITER, c, z=0):
     n = 0
     while abs(z) <= 2 and n < MAX_ITER:
         z = z*z + c
@@ -27,9 +16,8 @@ def iterate_mandelbrot(BLACK_CENTER, MAX_ITER, c, z=0):
 
     if n == MAX_ITER:
         return MAX_ITER - 1
-    
-    return n + 1 - log(log2(abs(z)))
 
+    return n + 1 - log(log2(abs(z)))
 
 
 def mandelbrot(settings):
@@ -46,7 +34,7 @@ def mandelbrot(settings):
                 (settings.IM_START + (y / settings.HEIGHT) * (settings.IM_END - settings.IM_START)) * SCALE + CENTER[1],
             )
 
-            m = iterate_mandelbrot(settings.BLACK_CENTER, settings.MAX_ITER, c)
+            m = iterate_mandelbrot(settings.MAX_ITER, c)
             point_list.append((x, y, m))
         print(f"Calculating Fractal: {((x / settings.SCREEN_WIDTH) * 100):0.2f} % complete  ", end='\r')
     print(f"time:{datetime.now()-start}")
@@ -66,7 +54,7 @@ def julia(settings):
                 (settings.RE_START + (x / settings.WIDTH) * (settings.RE_END - settings.RE_START)) * SCALE + CENTER[0],
                 (settings.IM_START + (y / settings.HEIGHT) * (settings.IM_END - settings.IM_START)) * SCALE + CENTER[1],
             )
-            m = iterate_mandelbrot(settings.BLACK_CENTER, settings.MAX_ITER, complex(settings.C_1, settings.C_2), c)
+            m = iterate_mandelbrot(settings.MAX_ITER, complex(settings.C_1, settings.C_2), c)
             point_list.append((x, y, m))
         print(f"Calculating Fractal: {((x / settings.SCREEN_WIDTH) * 100):0.2f} % complete  ", end='\r')
     return point_list
@@ -77,7 +65,7 @@ def colorize(settings):
     palette = [0] * settings.MAX_ITER
 
     for i in range(settings.MAX_ITER):
-        f = 1 - abs((float(i) / settings.MAX_ITER - 1) ** (settings.MAX_ITER/settings.COLOR_DEPTH))
+        f = 1 - abs((float(i) / settings.MAX_ITER - 1) ** (settings.MAX_ITER/settings.COLOR_SCALE))
         r, g, b = hsv_to_rgb(0.66 + f / 3, 1 - f, f if i < settings.MAX_ITER - 1 else 0)
         palette[i] = (int(r * 255), int(g * 255), int(b * 255))
 
