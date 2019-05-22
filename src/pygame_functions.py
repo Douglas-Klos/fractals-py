@@ -7,6 +7,8 @@ import pygame
 
 def check_events(settings):
     """ Check events """
+    mouse_down = None
+
     while True:
 
         event = pygame.event.wait()
@@ -19,21 +21,19 @@ def check_events(settings):
             return False
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            settings._mouse_down = pygame.mouse.get_pos()
+            mouse_down = left_mouse_down()
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            settings._mouse_up = pygame.mouse.get_pos()
-            return left_mouse_up(settings)
-
-        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
-            settings._mouse_down = pygame.mouse.get_pos()
-
-        elif event.type == pygame.MOUSEBUTTONUP and event.button == 3:
-            settings._mouse_up = pygame.mouse.get_pos()
-            return right_mouse_up(settings)
+            return left_mouse_up(settings, mouse_down)
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 2:
             return center_mouse_up(settings)
+
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+            mouse_down = right_mouse_down()
+
+        elif event.type == pygame.MOUSEBUTTONUP and event.button == 3:
+            return right_mouse_up(settings, mouse_down)
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 4:
             return mouse_wheel_up(settings)
@@ -42,97 +42,36 @@ def check_events(settings):
             return mouse_wheel_down(settings)
 
 
-def mouse_wheel_up(settings):
-    """ Mouse wheel up, zoom in 10% """
-    re_adjust = (settings.RE_START - settings.RE_END) * .1
-    im_adjust = (settings.IM_START - settings.IM_END) * .1
-
-    settings.RE_START -= re_adjust
-    settings.RE_END += re_adjust
-    settings.IM_START -= im_adjust
-    settings.IM_END += im_adjust
-
-    return True
+def left_mouse_down():
+    """ Left mouse button down event - capture mouse position """
+    return pygame.mouse.get_pos()
 
 
-def mouse_wheel_down(settings):
-    """ Mouse wheel down, zoom out 10% """
+def left_mouse_up(settings, mouse_down):
+    """ Left mouse button up event - zoom in on mouse selection area """
+    mouse_up = pygame.mouse.get_pos()
 
-    re_adjust = (settings.RE_START - settings.RE_END) * .1
-    im_adjust = (settings.IM_START - settings.IM_END) * .1
-
-    settings.RE_START += re_adjust
-    settings.RE_END -= re_adjust
-    settings.IM_START += im_adjust
-    settings.IM_END -= im_adjust
-
-    return True
-
-
-def center_mouse_up(settings):
-    """ Reset to default screen pos """
-    settings.RE_START = -2
-    settings.RE_END = 1
-    settings.IM_START = -1.5
-    settings.IM_END = 1.5
-
-    return True
-
-
-def right_mouse_up(settings):
-    """ Shift screen based on mouse movement """
-    if (
-        settings._mouse_down[0] == settings._mouse_up[0]
-        and settings._mouse_down[1] == settings._mouse_up[1]
-    ):
+    if (mouse_down[0] == mouse_up[0] and mouse_down[1] == mouse_up[1]):
         return False
 
-    # Calculate how many pixels the mouse moved while right clicked
-    horizontal_movement = settings._mouse_up[0] - settings._mouse_down[0]
-    verticle_movement = settings._mouse_up[1] - settings._mouse_down[1]
-
-    # Calculate percentage of screen moved
-    horizontal_percent = horizontal_movement / settings.SCREEN_WIDTH
-    verticle_percent = verticle_movement / settings.SCREEN_HEIGHT
-
-    # Calculate percentage of coordinate plane moved
-    horizontal_shift = horizontal_percent * (
-        settings.RE_START - settings.RE_END
-    )
-    verticle_shift = verticle_percent * (settings.IM_START - settings.IM_END)
-
-    # Update settings to new coordinate plane
-    settings.RE_START = settings.RE_START + horizontal_shift
-    settings.RE_END = settings.RE_END + horizontal_shift
-    settings.IM_START = settings.IM_START + verticle_shift
-    settings.IM_END = settings.IM_END + verticle_shift
-
-    return True
-
-
-def left_mouse_up(settings):
-    """ Zoom in on mouse selection area """
-    if (
-        settings._mouse_down[0] == settings._mouse_up[0]
-        and settings._mouse_down[1] == settings._mouse_up[1]
-    ):
-        return False
-
-    if settings._mouse_down[0] < settings._mouse_up[0]:
-        left = settings._mouse_down[0]
-        right = settings._mouse_up[0]
+    if mouse_down[0] < mouse_up[0]:
+        left = mouse_down[0]
+        right = mouse_up[0]
     else:
-        left = settings._mouse_up[0]
-        right = settings._mouse_down[0]
+        left = mouse_up[0]
+        right = mouse_down[0]
 
-    if settings._mouse_down[1] < settings._mouse_up[1]:
-        bottom = settings._mouse_down[1]
-        top = settings._mouse_up[1]
+    if mouse_down[1] < mouse_up[1]:
+        bottom = mouse_down[1]
+        top = mouse_up[1]
     else:
-        bottom = settings._mouse_up[1]
-        top = settings._mouse_down[1]
+        bottom = mouse_up[1]
+        top = mouse_down[1]
 
     # We want to maintain our ratio to prevent distorting.
+    #   This needs work, it maintains a square ration, change so it maintains
+    #   whatever the initial ratio might have been, to support different
+    #   screen sizes.
     delta = ((right - left) + (top - bottom)) / 2
 
     if (right - left) < delta:
@@ -182,7 +121,80 @@ def left_mouse_up(settings):
 
     return True
 
-    # return False
+
+def center_mouse_up(settings):
+    """ Center mouse button up event - Reset to default screen pos """
+    settings.RE_START = -2
+    settings.RE_END = 1
+    settings.IM_START = -1.5
+    settings.IM_END = 1.5
+
+    return True
+
+
+def right_mouse_down():
+    """ Right mouse button down event - capture mouse position """
+    return pygame.mouse.get_pos()
+
+
+def right_mouse_up(settings, mouse_down):
+    """ Right mouse button up event -  Shift screen based on mouse movement """
+    mouse_up = pygame.mouse.get_pos()
+
+    if (
+        mouse_down[0] == mouse_up[0]
+        and mouse_down[1] == mouse_up[1]
+    ):
+        return False
+
+    # Calculate how many pixels the mouse moved while right clicked
+    horizontal_movement = mouse_up[0] - mouse_down[0]
+    verticle_movement = mouse_up[1] - mouse_down[1]
+
+    # Calculate percentage of screen moved
+    horizontal_percent = horizontal_movement / settings.SCREEN_WIDTH
+    verticle_percent = verticle_movement / settings.SCREEN_HEIGHT
+
+    # Calculate percentage of coordinate plane moved
+    horizontal_shift = horizontal_percent * (
+        settings.RE_START - settings.RE_END
+    )
+    verticle_shift = verticle_percent * (settings.IM_START - settings.IM_END)
+
+    # Update settings to new coordinate plane
+    settings.RE_START = settings.RE_START + horizontal_shift
+    settings.RE_END = settings.RE_END + horizontal_shift
+    settings.IM_START = settings.IM_START + verticle_shift
+    settings.IM_END = settings.IM_END + verticle_shift
+
+    return True
+
+
+def mouse_wheel_down(settings):
+    """ Mouse wheel down event, zoom out 10% """
+
+    re_adjust = (settings.RE_START - settings.RE_END) * .1
+    im_adjust = (settings.IM_START - settings.IM_END) * .1
+
+    settings.RE_START += re_adjust
+    settings.RE_END -= re_adjust
+    settings.IM_START += im_adjust
+    settings.IM_END -= im_adjust
+
+    return True
+
+
+def mouse_wheel_up(settings):
+    """ Mouse wheel up event, zoom in 10% """
+    re_adjust = (settings.RE_START - settings.RE_END) * .1
+    im_adjust = (settings.IM_START - settings.IM_END) * .1
+
+    settings.RE_START -= re_adjust
+    settings.RE_END += re_adjust
+    settings.IM_START -= im_adjust
+    settings.IM_END += im_adjust
+
+    return True
 
 
 def check_keydown(event):

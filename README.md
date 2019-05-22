@@ -15,10 +15,27 @@ Mouse Wheel Down - Zoom Out 10%
 
 Q - Quit
 
+### fractal.py
+
+There's a couple lines here you can adjust
+
+```Python
+fractal = fe.mandelbrot
+colorize = ce.colorize_hue_shifted
+```
+
+These are the fractal and coloring algorithms to be used for the run.  You can
+try things like:
+
+```Python
+fractal = fe.julia
+colorize = ce.colorize_hue
+```
+
+
 ### settings.py
 
 MAX_ITER = Number of iterations to perform.
-COLOR_SCALE = A divisor for the hue palette.
 
 
 ## Why though?

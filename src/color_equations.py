@@ -6,14 +6,14 @@ from colorsys import hsv_to_rgb
 from math import sin, cos, log, floor, ceil
 
 
-def colorize_hue(settings, point_list, screen):
+def colorize_hue(settings, *_):
     """ Calculate hue color palette """
     palette = [0] * settings.MAX_ITER
 
     for i in range(settings.MAX_ITER):
         f = 1 - abs(
             (float(i) / settings.MAX_ITER - 1)
-            ** (settings.MAX_ITER / settings.COLOR_SCALE)
+            ** (settings.MAX_ITER / 32)
         )
 
         hue = 0.66 + f / 3
@@ -28,86 +28,7 @@ def colorize_hue(settings, point_list, screen):
     return palette
 
 
-def colorize_linear(settings, point_list, screen):
-    """ Calculate linear color palette """
-    palette = [0] * settings.MAX_ITER
-
-    for i in range(settings.MAX_ITER):
-        r, g, b = hsv_to_rgb(
-            i / settings.MAX_ITER, 1, 1 if i < settings.MAX_ITER - 1 else 0
-        )
-        palette[i] = (int(r * 255), int(g * 255), int(b * 255))
-
-    return palette
-
-
-def colorize_sin(settings, point_list, screen):
-    """ Calculate sin color palette """
-    palette = [0] * settings.MAX_ITER
-
-    for i in range(settings.MAX_ITER):
-        r, g, b = hsv_to_rgb(abs(sin(i)), 1, 1 if i < settings.MAX_ITER - 1 else 0)
-        palette[i] = (int(r * 255), int(g * 255), int(b * 255))
-
-    return palette
-
-
-def colorize_cos(settings, point_list, screen):
-    """ Calculate cos color palette """
-    palette = [0] * settings.MAX_ITER
-
-    for i in range(settings.MAX_ITER):
-        r, g, b = hsv_to_rgb(abs(cos(i)), 1, 1 if i < settings.MAX_ITER - 1 else 0)
-        palette[i] = (int(r * 255), int(g * 255), int(b * 255))
-
-    return palette
-
-
-def colorize_log(settings, point_list, screen):
-    """ Calculate a log color palette """
-    palette = [0] * settings.MAX_ITER
-
-    for i in range(settings.MAX_ITER):
-
-        f = log(1 + (i / settings.MAX_ITER), 7)
-
-        hue = 1 / ((f / 2) + 0.6)
-        sat = 1 - f
-        val = 0.3 + f if i < settings.MAX_ITER - 1 else 0
-
-        print(f"f:{f}, hue:{hue}, sat:{sat}, val:{val}")
-
-        r, g, b = hsv_to_rgb(hue, sat, val)
-        palette[i] = (int(r * 255), int(g * 255), int(b * 255))
-
-    return palette
-
-
-def colorize_hue2(settings, point_list, screen):
-    """ Calculate hue color palette """
-    palette = [0] * settings.MAX_ITER
-
-    for i in range(settings.MAX_ITER):
-
-        hue = 0.66 + (
-            1 - abs((float(i) / settings.MAX_ITER - 1) ** (settings.MAX_ITER / 32)) / 3
-        )
-        sat = 1 - abs(((i / settings.MAX_ITER) - 1) ** 1024 / 32)
-        val = (
-            abs(1 - abs(((i - 4) / settings.MAX_ITER) - 1) ** 32)
-            if i < settings.MAX_ITER - 1
-            else 0
-        )
-
-        # print(f"hue:{hue}, sat:{sat}, val:{val}")
-
-        r, g, b = hsv_to_rgb(hue, sat, val)
-        palette[i] = (int(r * 255), int(g * 255), int(b * 255))
-
-    return palette
-
-
-def colorize_hue_shifted(settings, point_list, screen):
+def colorize_hue_shifted(settings, point_list, *_):
     hues = []
     val_count = 0
     for point in point_list:
@@ -130,11 +51,11 @@ def colorize_hue_shifted(settings, point_list, screen):
             1
             - abs(
                 ((float(i) - min_val) / settings.MAX_ITER - 1)
-                ** (settings.MAX_ITER / settings.COLOR_SCALE)
+                ** (settings.MAX_ITER / 128)
             )
         )
         val = (
-            abs(1 - abs(((i - min_val - 8) / settings.MAX_ITER) - 1) ** 32)
+            abs(1 - abs(((i - min_val - 20) / settings.MAX_ITER) - 1) ** 32)
             if i < settings.MAX_ITER - 1
             else 0
         )
@@ -147,7 +68,85 @@ def colorize_hue_shifted(settings, point_list, screen):
     return palette
 
 
-# Work in progress
+def colorize_hue2(settings, *_):
+    """ Calculate hue color palette """
+    palette = [0] * settings.MAX_ITER
+
+    for i in range(settings.MAX_ITER):
+        hue = .46 + (1 - abs((i/(settings.MAX_ITER))-1)**(settings.MAX_ITER / 64) / 3)
+        sat = abs(i / settings.MAX_ITER - 1) ** (settings.MAX_ITER / 64)
+        val = (
+            abs(1 - abs((i / settings.MAX_ITER) - 1.03) ** (256/12))
+            if i < settings.MAX_ITER - 1
+            else 0
+        )
+
+        # print(f"hue:{hue}, sat:{sat}, val:{val}")
+
+        r, g, b = hsv_to_rgb(hue, sat, val)
+        palette[i] = (int(r * 255), int(g * 255), int(b * 255))
+
+    return palette
+
+
+# While these next ones "work", they're certainly not very  aesthetic.
+
+def colorize_log(settings, *_):
+    """ Calculate a log color palette """
+    palette = [0] * settings.MAX_ITER
+
+    for i in range(settings.MAX_ITER):
+
+        f = log(1 + (i / settings.MAX_ITER), 7)
+
+        hue = 1 / ((f / 2) + 0.6)
+        sat = 1 - f
+        val = 0.3 + f if i < settings.MAX_ITER - 1 else 0
+
+        print(f"f:{f}, hue:{hue}, sat:{sat}, val:{val}")
+
+        r, g, b = hsv_to_rgb(hue, sat, val)
+        palette[i] = (int(r * 255), int(g * 255), int(b * 255))
+
+    return palette
+
+
+def colorize_linear(settings, *_):
+    """ Calculate linear color palette """
+    palette = [0] * settings.MAX_ITER
+
+    for i in range(settings.MAX_ITER):
+        r, g, b = hsv_to_rgb(
+            i / settings.MAX_ITER, 1, 1 if i < settings.MAX_ITER - 1 else 0
+        )
+        palette[i] = (int(r * 255), int(g * 255), int(b * 255))
+
+    return palette
+
+
+def colorize_sin(settings, *_):
+    """ Calculate sin color palette """
+    palette = [0] * settings.MAX_ITER
+
+    for i in range(settings.MAX_ITER):
+        r, g, b = hsv_to_rgb(abs(sin(i)), 1, 1 if i < settings.MAX_ITER - 1 else 0)
+        palette[i] = (int(r * 255), int(g * 255), int(b * 255))
+
+    return palette
+
+
+def colorize_cos(settings, *_):
+    """ Calculate cos color palette """
+    palette = [0] * settings.MAX_ITER
+
+    for i in range(settings.MAX_ITER):
+        r, g, b = hsv_to_rgb(abs(cos(i)), 1, 1 if i < settings.MAX_ITER - 1 else 0)
+        palette[i] = (int(r * 255), int(g * 255), int(b * 255))
+
+    return palette
+
+
+# Work in progress - It's currently conceptual, a mess.
 # def colorize_shifting(settings, point_list, screen):
 #     hues = []
 #     val_count = 0
@@ -164,7 +163,7 @@ def colorize_hue_shifted(settings, point_list, screen):
 #         )
 #         sat = 1 - (1 - abs(
 #             ((float(i) - min_val) / settings.MAX_ITER - 1)
-#             ** (settings.MAX_ITER / settings.COLOR_SCALE)
+#             ** (settings.MAX_ITER / 128)
 #         ))
 #         val = (
 #             abs(1 - abs(((i - min_val - 8) / settings.MAX_ITER) - 1) ** 32)
