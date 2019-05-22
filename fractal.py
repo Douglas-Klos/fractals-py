@@ -18,7 +18,7 @@ def main():
     # Set the fractal and color equations to use
     fractal = fe.mandelbrot
     # fractal = fe.julia
-    colorize = ce.colorize_hue_shifting
+    colorize = ce.colorize_hue_shifted
 
     # Create the color palette
     # palette = colorize(settings)
@@ -36,7 +36,7 @@ def main():
         if redraw:
             # Regenerate point_list
             point_list = fractal(settings)
-            palette = colorize(settings, point_list)
+            palette = colorize(settings, point_list, screen)
 
             # Render
             pf.display_fractal(palette, screen, point_list)
