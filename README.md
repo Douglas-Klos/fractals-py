@@ -2,18 +2,22 @@
 
 ## Interface
 
-Us the left mouse button to drag a selection box around the area you wish to
-zoom in on.  Note: currently no box is displayed while selecting an area,
-however the points are captured and zooming works.
+Left Mouse Button -  Zoom in on selected area.
+   Note: Currently no box is _displayed_ while selecting an area.
 
-Pan the image around using the right mouse button.  Right click and drag to
-move the center of the image to a new location on the screen.
+Right Mouse Button - Pan the image around.
 
-Reset the image to the original coordinate plane using the center mouse button.
+Center Mouse Button - Reset the image to the original coordinate plane.
 
-The settings.py file contains some values that can be adjusted for various
-results.  MAX_ITER is the fractal iteration.  COLOR_SCALE is a divisor for the
-hue color palette (hoping to deprecate soon).
+Mouse Wheel Up - Zoom in 10%
+
+Mouse Wheel Down - Zoom Out 10%
+
+Q - Quit
+
+### settings.py
+
+MAX_ITER = Number of iterations to perform.
 
 
 ## Why though?

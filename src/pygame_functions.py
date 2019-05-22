@@ -15,7 +15,7 @@ def check_events(settings):
             exit()
 
         elif event.type == pygame.KEYDOWN:
-            check_keydown_event(event)
+            check_keydown(event)
             return False
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -23,20 +23,53 @@ def check_events(settings):
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             settings._mouse_up = pygame.mouse.get_pos()
-            return left_mouse_up_event(settings)
+            return left_mouse_up(settings)
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
             settings._mouse_down = pygame.mouse.get_pos()
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 3:
             settings._mouse_up = pygame.mouse.get_pos()
-            return right_mouse_up_event(settings)
+            return right_mouse_up(settings)
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 2:
-            return center_mouse_up_event(settings)
+            return center_mouse_up(settings)
+
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 4:
+            return mouse_wheel_up(settings)
+
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 5:
+            return mouse_wheel_down(settings)
 
 
-def center_mouse_up_event(settings):
+def mouse_wheel_up(settings):
+    """ Mouse wheel up, zoom in 10% """
+    re_adjust = (settings.RE_START - settings.RE_END) * .1
+    im_adjust = (settings.IM_START - settings.IM_END) * .1
+
+    settings.RE_START -= re_adjust
+    settings.RE_END += re_adjust
+    settings.IM_START -= im_adjust
+    settings.IM_END += im_adjust
+
+    return True
+
+
+def mouse_wheel_down(settings):
+    """ Mouse wheel down, zoom out 10% """
+
+    re_adjust = (settings.RE_START - settings.RE_END) * .1
+    im_adjust = (settings.IM_START - settings.IM_END) * .1
+
+    settings.RE_START += re_adjust
+    settings.RE_END -= re_adjust
+    settings.IM_START += im_adjust
+    settings.IM_END -= im_adjust
+
+    return True
+
+
+def center_mouse_up(settings):
     """ Reset to default screen pos """
     settings.RE_START = -2
     settings.RE_END = 1
@@ -46,7 +79,7 @@ def center_mouse_up_event(settings):
     return True
 
 
-def right_mouse_up_event(settings):
+def right_mouse_up(settings):
     """ Shift screen based on mouse movement """
     if (
         settings._mouse_down[0] == settings._mouse_up[0]
@@ -77,7 +110,7 @@ def right_mouse_up_event(settings):
     return True
 
 
-def left_mouse_up_event(settings):
+def left_mouse_up(settings):
     """ Zoom in on mouse selection area """
     if (
         settings._mouse_down[0] == settings._mouse_up[0]
@@ -148,7 +181,7 @@ def left_mouse_up_event(settings):
     # return False
 
 
-def check_keydown_event(event):
+def check_keydown(event):
     """ Check event when keydown is detected """
     if event.key == pygame.K_q:
         exit()

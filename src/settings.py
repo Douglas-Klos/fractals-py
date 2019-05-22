@@ -1,13 +1,13 @@
 class Settings():
     def __init__(self):
 
+        self.MAX_ITER = 256
+        self.COLOR_SCALE = 64
+
         self.SCREEN_WIDTH = 1000
         self.SCREEN_HEIGHT = 1000
         self.WIDTH = self.SCREEN_WIDTH
         self.HEIGHT = self.SCREEN_WIDTH
-
-        self.MAX_ITER = 1024
-        self.COLOR_SCALE = 64
 
         # Default, FUll plot window
         self.RE_START = -2
