@@ -18,10 +18,10 @@ def main():
     # Set the fractal and color equations to use
     fractal = fe.mandelbrot
     # fractal = fe.julia
-    colorize = ce.colorize_hue
+    colorize = ce.colorize_hue_shifting
 
     # Create the color palette
-    palette = colorize(settings)
+    # palette = colorize(settings)
 
     # Initialize Pygame and create a screen
     init()
@@ -36,6 +36,7 @@ def main():
         if redraw:
             # Regenerate point_list
             point_list = fractal(settings)
+            palette = colorize(settings, point_list)
 
             # Render
             pf.display_fractal(palette, screen, point_list)

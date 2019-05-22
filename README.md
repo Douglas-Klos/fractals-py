@@ -18,6 +18,7 @@ Q - Quit
 ### settings.py
 
 MAX_ITER = Number of iterations to perform.
+COLOR_SCALE = A divisor for the hue palette.
 
 
 ## Why though?

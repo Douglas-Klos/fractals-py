@@ -21,8 +21,6 @@ def iterate_mandelbrot(MAX_ITER, c, z=0):
 
 def mandelbrot(settings):
     """ Mandelbrot sequence """
-    SCALE = 1
-    CENTER = (0, 0)
     start = datetime.now()
     point_list = []
 
@@ -32,15 +30,11 @@ def mandelbrot(settings):
                 (
                     settings.RE_START
                     + (x / settings.WIDTH) * (settings.RE_END - settings.RE_START)
-                )
-                * SCALE
-                + CENTER[0],
+                ),
                 (
                     settings.IM_START
                     + (y / settings.HEIGHT) * (settings.IM_END - settings.IM_START)
                 )
-                * SCALE
-                + CENTER[1],
             )
 
             m = iterate_mandelbrot(settings.MAX_ITER, c)
@@ -55,8 +49,6 @@ def mandelbrot(settings):
 
 def julia(settings):
     """ Julia sequence """
-    SCALE = 1
-    CENTER = (0, 0)
     start = datetime.now()
     point_list = []
 
@@ -66,15 +58,11 @@ def julia(settings):
                 (
                     settings.RE_START
                     + (x / settings.WIDTH) * (settings.RE_END - settings.RE_START)
-                )
-                * SCALE
-                + CENTER[0],
+                ),
                 (
                     settings.IM_START
                     + (y / settings.HEIGHT) * (settings.IM_END - settings.IM_START)
                 )
-                * SCALE
-                + CENTER[1],
             )
             m = iterate_mandelbrot(
                 settings.MAX_ITER, complex(settings.C_1, settings.C_2), c

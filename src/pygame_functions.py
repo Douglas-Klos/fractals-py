@@ -139,10 +139,14 @@ def left_mouse_up(settings):
         h_adjust = (delta - (right - left)) / 2
     elif (right - left) > delta:
         h_adjust = -(((right - left) - delta) / 2)
+    else:
+        h_adjust = delta
     if (top - bottom) < delta:
         v_adjust = (delta - (top - bottom)) / 2
     elif (top - bottom) > delta:
         v_adjust = -(((top - bottom) - delta) / 2)
+    else:
+        v_adjust = delta
 
     # We also want to center the zoom center of the two points
     left -= h_adjust

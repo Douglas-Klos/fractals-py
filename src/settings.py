@@ -1,7 +1,7 @@
 class Settings():
     def __init__(self):
 
-        self.MAX_ITER = 256
+        self.MAX_ITER = 1024
         self.COLOR_SCALE = 64
 
         self.SCREEN_WIDTH = 1000
