@@ -13,6 +13,10 @@ Mouse Wheel Up - Zoom in 10%
 
 Mouse Wheel Down - Zoom Out 10%
 
+Space - Take screen shot
+
+Enter - Open menu
+
 Q - Quit
 
 ### fractal.py

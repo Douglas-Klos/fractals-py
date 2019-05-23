@@ -3,7 +3,7 @@
 
 import pygame
 from colorsys import hsv_to_rgb
-from math import sin, cos, log, floor, ceil
+from math import sin, cos, log, floor, ceil, sqrt
 
 
 def colorize_hue(settings, *_):
@@ -11,10 +11,7 @@ def colorize_hue(settings, *_):
     palette = [0] * settings.MAX_ITER
 
     for i in range(settings.MAX_ITER):
-        f = 1 - abs(
-            (float(i) / settings.MAX_ITER - 1)
-            ** (settings.MAX_ITER / 32)
-        )
+        f = 1 - abs((float(i) / settings.MAX_ITER - 1) ** (settings.MAX_ITER / 32))
 
         hue = 0.66 + f / 3
         sat = 1 - f
@@ -30,20 +27,22 @@ def colorize_hue(settings, *_):
 
 def colorize_hue_shifted(settings, point_list, *_):
     hues = []
+    palette = []
     val_count = 0
     for point in point_list:
         hues.append(floor(point[2]))
 
     min_val = min(set(hues))
 
+    # print(settings.MAX_ITER)
     palette = [0] * settings.MAX_ITER
 
     for i in range(settings.MAX_ITER):
-        hue = 0.7 + (
+        hue = settings.HUE_SEED + (
             1
             - abs(
                 ((float(i) - min_val) / settings.MAX_ITER - 1)
-                ** (settings.MAX_ITER / 128)
+                ** (sqrt(settings.MAX_ITER))
             )
             / 4
         )
@@ -51,11 +50,21 @@ def colorize_hue_shifted(settings, point_list, *_):
             1
             - abs(
                 ((float(i) - min_val) / settings.MAX_ITER - 1)
-                ** (settings.MAX_ITER / 128)
+                ** (sqrt(settings.MAX_ITER))
             )
         )
         val = (
-            abs(1 - abs(((i - min_val - 20) / settings.MAX_ITER) - 1) ** 32)
+            abs(
+                1
+                - abs(
+                    (
+                        (i - min_val - settings.SHIFT - (settings.MAX_ITER / 128))
+                        / settings.MAX_ITER
+                    )
+                    - 1
+                )
+                ** 32
+            )
             if i < settings.MAX_ITER - 1
             else 0
         )
@@ -63,8 +72,9 @@ def colorize_hue_shifted(settings, point_list, *_):
         # print(f"hue:{hue}, sat:{sat}, val:{val}")
 
         r, g, b = hsv_to_rgb(hue, sat, val)
+
         palette[i] = (int(r * 255), int(g * 255), int(b * 255))
-    
+
     return palette
 
 
@@ -73,10 +83,12 @@ def colorize_hue2(settings, *_):
     palette = [0] * settings.MAX_ITER
 
     for i in range(settings.MAX_ITER):
-        hue = .46 + (1 - abs((i/(settings.MAX_ITER))-1)**(settings.MAX_ITER / 64) / 3)
+        hue = 0.46 + (
+            1 - abs((i / (settings.MAX_ITER)) - 1) ** (settings.MAX_ITER / 64) / 3
+        )
         sat = abs(i / settings.MAX_ITER - 1) ** (settings.MAX_ITER / 64)
         val = (
-            abs(1 - abs((i / settings.MAX_ITER) - 1.03) ** (256/12))
+            abs(1 - abs((i / settings.MAX_ITER) - 1.03) ** (settings.MAX_ITER / 12))
             if i < settings.MAX_ITER - 1
             else 0
         )
@@ -90,6 +102,7 @@ def colorize_hue2(settings, *_):
 
 
 # While these next ones "work", they're certainly not very  aesthetic.
+
 
 def colorize_log(settings, *_):
     """ Calculate a log color palette """

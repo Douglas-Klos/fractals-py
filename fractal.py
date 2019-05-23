@@ -23,21 +23,20 @@ def main():
 
     # Initialize Pygame and create a screen
     init()
-    screen = display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
+    settings.SCREEN = display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
 
     while True:
         # Set display title
         display.set_caption(f"RE:({settings.RE_START}, {settings.RE_END}), "
                             f"IM:({settings.IM_START}, {settings.IM_END})")
 
-
         if draw:
             # Regenerate point_list
             point_list = fractal(settings)
-            palette = colorize(settings, point_list, screen)
+            palette = colorize(settings, point_list)
 
             # Render
-            pf.display_fractal(palette, screen, point_list)
+            pf.display_fractal(settings, palette, point_list)
 
             display.flip()
 

@@ -23,6 +23,7 @@ def mandelbrot(settings):
     """ Mandelbrot sequence """
     start = datetime.now()
     point_list = []
+    print(settings.MAX_ITER)
 
     # We're wrapping calculate_mandelbrot so we can jit it.
     for point in calculate_mandelbrot(
@@ -36,9 +37,9 @@ def mandelbrot(settings):
     ):
         if point[1] % 1000 == 0:
             print(
-            f"Calculating Fractal: {((point[0] / settings.SCREEN_WIDTH) * 100):0.2f} % complete  ",
-            end="\r",
-        )
+                f"Calculating Fractal: {((point[0] / settings.SCREEN_WIDTH) * 100):0.2f} % complete  ",
+                end="\r",
+            )
         point_list.append(point)
 
     print(f"Calculating Fractal: 100.00% complete - Time:{datetime.now()-start}")
@@ -73,13 +74,13 @@ def julia(settings):
         settings.IM_END,
         settings.MAX_ITER,
         settings.C_1,
-        settings.C_2
+        settings.C_2,
     ):
         if point[1] % 1000 == 0:
             print(
-            f"Calculating Fractal: {((point[0] / settings.SCREEN_WIDTH) * 100):0.2f} % complete  ",
-            end="\r",
-        )
+                f"Calculating Fractal: {((point[0] / settings.SCREEN_WIDTH) * 100):0.2f} % complete  ",
+                end="\r",
+            )
         point_list.append(point)
 
     print(f"Calculating Fractal: 100.00% complete - Time:{datetime.now()-start}")
@@ -87,7 +88,9 @@ def julia(settings):
 
 
 @jit(nopython=True)
-def calculate_julia(width, height, re_start, re_end, im_start, im_end, max_iter, C_1, C_2):
+def calculate_julia(
+    width, height, re_start, re_end, im_start, im_end, max_iter, C_1, C_2
+):
     """ Julia sequence """
     for x in range(0, width):
         for y in range(0, height):

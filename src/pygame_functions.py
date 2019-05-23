@@ -1,8 +1,11 @@
 """ Pygame functions for Fractals """
 # pylint: disable=C0301, E1101, W0212
 
+from datetime import datetime
 from math import floor
 import pygame
+import src.dialog_box as db
+from tkinter import *
 
 
 def check_events(settings):
@@ -17,8 +20,7 @@ def check_events(settings):
             exit()
 
         elif event.type == pygame.KEYDOWN:
-            check_keydown(event)
-            return False
+            return check_keydown(settings, event)
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             mouse_down = left_mouse_down()
@@ -42,6 +44,32 @@ def check_events(settings):
             return mouse_wheel_down(settings)
 
 
+def check_keydown(settings, event):
+    """ Check event when keydown is detected """
+    if event.key == pygame.K_q:
+        exit()
+    if event.key == pygame.K_SPACE:
+        filename = f"{datetime.now():%Y-%m-%d %H-%M-%S}.png"
+        print(f"Saving {filename}")
+        pygame.image.save(settings.SCREEN, f"fractal {filename}")
+        return False
+    if event.key == pygame.K_RETURN:
+        open_dialog_box(settings)
+        return True
+
+
+def open_dialog_box(settings):
+    """ TKinter dialog box """
+    root = Tk()
+    entries = db.makeform(root, ["Iterations", "Hue Seed", "Color Shift"], settings)
+    b1 = Button(root, text="Update", command=(lambda e=entries: db.update(settings, e)))
+    b1.pack(side=LEFT, padx=5, pady=5)
+    b2 = Button(root, text="Close", command=root.destroy)
+    b2.pack(side=LEFT, padx=5, pady=5)
+    root.mainloop()
+    return True
+
+
 def left_mouse_down():
     """ Left mouse button down event - capture mouse position """
     return pygame.mouse.get_pos()
@@ -51,7 +79,7 @@ def left_mouse_up(settings, mouse_down):
     """ Left mouse button up event - zoom in on mouse selection area """
     mouse_up = pygame.mouse.get_pos()
 
-    if (mouse_down[0] == mouse_up[0] and mouse_down[1] == mouse_up[1]):
+    if mouse_down[0] == mouse_up[0] and mouse_down[1] == mouse_up[1]:
         return False
 
     if mouse_down[0] < mouse_up[0]:
@@ -68,10 +96,7 @@ def left_mouse_up(settings, mouse_down):
         bottom = mouse_up[1]
         top = mouse_down[1]
 
-    # We want to maintain our ratio to prevent distorting.
-    #   This needs work, it maintains a square ration, change so it maintains
-    #   whatever the initial ratio might have been, to support different
-    #   screen sizes.
+    # Maintain our screen ratio
     delta = ((right - left) + (top - bottom)) / 2
 
     if (right - left) < delta:
@@ -80,12 +105,13 @@ def left_mouse_up(settings, mouse_down):
         h_adjust = -(((right - left) - delta) / 2)
     else:
         h_adjust = delta
-    if (top - bottom) < delta:
-        v_adjust = (delta - (top - bottom)) / 2
-    elif (top - bottom) > delta:
-        v_adjust = -(((top - bottom) - delta) / 2)
+
+    if (top - bottom) < (delta * settings.RATIO):
+        v_adjust = ((delta * settings.RATIO) - (top - bottom)) / 2
+    elif (top - bottom) > (delta * settings.RATIO):
+        v_adjust = -(((top - bottom) - (delta * settings.RATIO)) / 2)
     else:
-        v_adjust = delta
+        v_adjust = delta * settings.RATIO
 
     # We also want to center the zoom center of the two points
     left -= h_adjust
@@ -126,8 +152,9 @@ def center_mouse_up(settings):
     """ Center mouse button up event - Reset to default screen pos """
     settings.RE_START = -2
     settings.RE_END = 1
-    settings.IM_START = -1.5
-    settings.IM_END = 1.5
+    ratio = settings.SCREEN_HEIGHT / settings.SCREEN_WIDTH
+    settings.IM_START = -(((settings.RE_END - settings.RE_START) * ratio) / 2)
+    settings.IM_END = ((settings.RE_END - settings.RE_START) * ratio) / 2
 
     return True
 
@@ -141,10 +168,7 @@ def right_mouse_up(settings, mouse_down):
     """ Right mouse button up event -  Shift screen based on mouse movement """
     mouse_up = pygame.mouse.get_pos()
 
-    if (
-        mouse_down[0] == mouse_up[0]
-        and mouse_down[1] == mouse_up[1]
-    ):
+    if mouse_down[0] == mouse_up[0] and mouse_down[1] == mouse_up[1]:
         return False
 
     # Calculate how many pixels the mouse moved while right clicked
@@ -156,9 +180,7 @@ def right_mouse_up(settings, mouse_down):
     verticle_percent = verticle_movement / settings.SCREEN_HEIGHT
 
     # Calculate percentage of coordinate plane moved
-    horizontal_shift = horizontal_percent * (
-        settings.RE_START - settings.RE_END
-    )
+    horizontal_shift = horizontal_percent * (settings.RE_START - settings.RE_END)
     verticle_shift = verticle_percent * (settings.IM_START - settings.IM_END)
 
     # Update settings to new coordinate plane
@@ -173,8 +195,8 @@ def right_mouse_up(settings, mouse_down):
 def mouse_wheel_down(settings):
     """ Mouse wheel down event, zoom out 10% """
 
-    re_adjust = (settings.RE_START - settings.RE_END) * .1
-    im_adjust = (settings.IM_START - settings.IM_END) * .1
+    re_adjust = (settings.RE_START - settings.RE_END) * 0.1
+    im_adjust = (settings.IM_START - settings.IM_END) * 0.1
 
     settings.RE_START += re_adjust
     settings.RE_END -= re_adjust
@@ -186,8 +208,8 @@ def mouse_wheel_down(settings):
 
 def mouse_wheel_up(settings):
     """ Mouse wheel up event, zoom in 10% """
-    re_adjust = (settings.RE_START - settings.RE_END) * .1
-    im_adjust = (settings.IM_START - settings.IM_END) * .1
+    re_adjust = (settings.RE_START - settings.RE_END) * 0.1
+    im_adjust = (settings.IM_START - settings.IM_END) * 0.1
 
     settings.RE_START -= re_adjust
     settings.RE_END += re_adjust
@@ -197,13 +219,8 @@ def mouse_wheel_up(settings):
     return True
 
 
-def check_keydown(event):
-    """ Check event when keydown is detected """
-    if event.key == pygame.K_q:
-        exit()
-
-
-def display_fractal(palette, screen, point_list):
+def display_fractal(settings, palette, point_list):
     """ Draw the fractal to the screen """
     for point in point_list:
-        screen.set_at((point[0], point[1]), palette[floor(point[2])])
+        # print(f"x:{point[0]}, y:{point[1]}, z:{point[2]}")
+        settings.SCREEN.set_at((point[0], point[1]), palette[floor(point[2])])
