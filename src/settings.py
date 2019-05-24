@@ -7,8 +7,8 @@ class Settings:
         self.MAX_ITER = 1024
 
         # Screen settings
-        self.SCREEN_WIDTH = 1024
-        self.SCREEN_HEIGHT = 768
+        self.SCREEN_WIDTH = 2560
+        self.SCREEN_HEIGHT = 1440
         self.WIDTH = self.SCREEN_WIDTH
         self.HEIGHT = self.SCREEN_WIDTH
         self.RATIO = self.SCREEN_HEIGHT / self.SCREEN_WIDTH
@@ -36,5 +36,5 @@ class Settings:
 
         # Interesting Julia Values
         julia_values = ((0.4, 0.3), (0.3, 0.2), (0.35, 0.4))
-        self.C_1 = julia_values[2][0]
-        self.C_2 = julia_values[2][1]
+        self.C_1 = julia_values[0][0]
+        self.C_2 = julia_values[0][1]

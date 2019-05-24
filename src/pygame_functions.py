@@ -79,8 +79,16 @@ def left_mouse_up(settings, mouse_down):
     """ Left mouse button up event - zoom in on mouse selection area """
     mouse_up = pygame.mouse.get_pos()
 
+    # Trapping some corner case that shouldn't exist, but occasionally does.
+    if mouse_down == None or mouse_up == None:
+        return False
+
+    # Rejecting clicks that didn't move
     if mouse_down[0] == mouse_up[0] and mouse_down[1] == mouse_up[1]:
         return False
+    
+    
+
 
     if mouse_down[0] < mouse_up[0]:
         left = mouse_down[0]
@@ -96,23 +104,24 @@ def left_mouse_up(settings, mouse_down):
         bottom = mouse_up[1]
         top = mouse_down[1]
 
+
     # Maintain our screen ratio
     delta = ((right - left) + (top - bottom)) / 2
 
-    if (right - left) < delta:
+    # print(f"left:{left}, right:{right}, bottom:{bottom}, top:{top}")
+    # print(f"l-r:{left - right}, t-b:{top-bottom}")
+    # print(f"delta:{delta}")
+
+    if (right - left) <= delta:
         h_adjust = (delta - (right - left)) / 2
-    elif (right - left) > delta:
+    else: # (right - left) > delta:
         h_adjust = -(((right - left) - delta) / 2)
-    else:
-        h_adjust = delta
 
-    if (top - bottom) < (delta * settings.RATIO):
+    if (top - bottom) <= (delta * settings.RATIO):
         v_adjust = ((delta * settings.RATIO) - (top - bottom)) / 2
-    elif (top - bottom) > (delta * settings.RATIO):
+    else: # (top - bottom) > (delta * settings.RATIO):
         v_adjust = -(((top - bottom) - (delta * settings.RATIO)) / 2)
-    else:
-        v_adjust = delta * settings.RATIO
-
+    
     # We also want to center the zoom center of the two points
     left -= h_adjust
     right += h_adjust
@@ -168,6 +177,11 @@ def right_mouse_up(settings, mouse_down):
     """ Right mouse button up event -  Shift screen based on mouse movement """
     mouse_up = pygame.mouse.get_pos()
 
+
+    # Trapping some corner case that shouldn't exist, but occasionally does.
+    if mouse_down == None or mouse_up == None:
+        return False
+
     if mouse_down[0] == mouse_up[0] and mouse_down[1] == mouse_up[1]:
         return False
 
@@ -222,5 +236,5 @@ def mouse_wheel_up(settings):
 def display_fractal(settings, palette, point_list):
     """ Draw the fractal to the screen """
     for point in point_list:
-        # print(f"x:{point[0]}, y:{point[1]}, z:{point[2]}")
+        # print(f"x:{point[0]}, y:{point[1]}, z:{palette[floor(point[2])]}")
         settings.SCREEN.set_at((point[0], point[1]), palette[floor(point[2])])

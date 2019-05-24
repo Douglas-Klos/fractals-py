@@ -18,9 +18,8 @@ def main():
 
     # Set the fractal and color equations to use
     fractal = fe.mandelbrot
-    colorize = ce.colorize_hue_shifted
-
-
+    colorize = ce.colorize_black_shift
+    
     # Initialize Pygame and create a screen
     init()
     settings.SCREEN = display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
