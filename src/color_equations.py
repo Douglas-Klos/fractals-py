@@ -23,7 +23,7 @@ def colorize_hue(settings, point_list, *_):
             ((float(i) - min_val) / settings.MAX_ITER - 1) ** (settings.MAX_ITER / 32)
         )
 
-        hue = 0.66 + f / 3
+        hue = settings.HUE_SEED + f / 3
         sat = 1 - f
         val = f if i < settings.MAX_ITER - 1 else 0
 
@@ -155,19 +155,19 @@ def colorize_blue_green_gold(settings, *_):
     palette = []
     return_palette = []
 
-    palette += list(black.range_to(blue, 10 * floor(settings.MAX_ITER / 1024)))
-    palette += list(blue.range_to(white, 20 * floor(settings.MAX_ITER / 1024)))
-    palette += list(white.range_to(gold, 40 * floor(settings.MAX_ITER / 1024)))
-    palette += list(gold.range_to(black, 40 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(blue, 80 * floor(settings.MAX_ITER / 1024)))
-    palette += list(blue.range_to(white, 80 * floor(settings.MAX_ITER / 1024)))
-    palette += list(white.range_to(gold, 80 * floor(settings.MAX_ITER / 1024)))
-    palette += list(gold.range_to(black, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(blue, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += list(blue.range_to(white, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += list(white.range_to(gold, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += list(gold.range_to(black, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(white, 200 * floor(settings.MAX_ITER / 1024)))
+    palette += list(black.range_to(blue, floor(10 * (settings.MAX_ITER / 1024))))
+    palette += list(blue.range_to(white, floor(20 * (settings.MAX_ITER / 1024))))
+    palette += list(white.range_to(gold, floor(40 * (settings.MAX_ITER / 1024))))
+    palette += list(gold.range_to(black, floor(40 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(blue, floor(80 * (settings.MAX_ITER / 1024))))
+    palette += list(blue.range_to(white, floor(80 * (settings.MAX_ITER / 1024))))
+    palette += list(white.range_to(gold, floor(80 * (settings.MAX_ITER / 1024))))
+    palette += list(gold.range_to(black, floor(100 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(blue, floor(100 * (settings.MAX_ITER / 1024))))
+    palette += list(blue.range_to(white, floor(100 * (settings.MAX_ITER / 1024))))
+    palette += list(white.range_to(gold, floor(100 * (settings.MAX_ITER / 1024))))
+    palette += list(gold.range_to(black, floor(100 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(white, floor(200 * (settings.MAX_ITER / 1024))))
 
     for item in enumerate(palette):
         r = item[1].rgb[0]
@@ -193,19 +193,19 @@ def colorize_black_shift(settings, *_):
     palette = []
     return_palette = []
 
-    palette += list(black.range_to(violet, 10 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(red, 20 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(yellow, 4 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(green, 40 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(cyan, 80 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(blue, 80 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(violet, 80 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(red, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(yellow, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(green, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(cyan, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(blue, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(white, 250 * floor(settings.MAX_ITER / 1024)))
+    palette += list(black.range_to(violet, floor(10 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(red, floor(20 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(yellow, floor(40 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(green, floor(40 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(cyan, floor(80 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(blue, floor(80 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(violet, floor(80 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(red, floor(100 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(yellow, floor(100 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(green, floor(100 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(cyan, floor(100 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(blue, floor(100 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(white, floor(250 * (settings.MAX_ITER / 1024))))
 
     for item in enumerate(palette):
         r = item[1].rgb[0]
@@ -231,19 +231,19 @@ def colorize_white_shift(settings, *_):
     palette = []
     return_palette = []
 
-    palette += list(white.range_to(violet, 10 * floor(settings.MAX_ITER / 1024)))
-    palette += list(white.range_to(red, 20 * floor(settings.MAX_ITER / 1024)))
-    palette += list(white.range_to(yellow, 4 * floor(settings.MAX_ITER / 1024)))
-    palette += list(white.range_to(green, 40 * floor(settings.MAX_ITER / 1024)))
-    palette += list(white.range_to(cyan, 80 * floor(settings.MAX_ITER / 1024)))
-    palette += list(white.range_to(blue, 80 * floor(settings.MAX_ITER / 1024)))
-    palette += list(white.range_to(violet, 80 * floor(settings.MAX_ITER / 1024)))
-    palette += list(white.range_to(red, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += list(white.range_to(yellow, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += list(white.range_to(green, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += list(white.range_to(cyan, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += list(white.range_to(blue, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(white, 250 * floor(settings.MAX_ITER / 1024)))
+    palette += list(white.range_to(violet, floor(10 * (settings.MAX_ITER / 1024))))
+    palette += list(white.range_to(red, floor(20 * (settings.MAX_ITER / 1024))))
+    palette += list(white.range_to(yellow, floor(40 * (settings.MAX_ITER / 1024))))
+    palette += list(white.range_to(green, floor(40 * (settings.MAX_ITER / 1024))))
+    palette += list(white.range_to(cyan, floor(80 * (settings.MAX_ITER / 1024))))
+    palette += list(white.range_to(blue, floor(80 * (settings.MAX_ITER / 1024))))
+    palette += list(white.range_to(violet, floor(80 * (settings.MAX_ITER / 1024))))
+    palette += list(white.range_to(red, floor(100 * (settings.MAX_ITER / 1024))))
+    palette += list(white.range_to(yellow, floor(100 * (settings.MAX_ITER / 1024))))
+    palette += list(white.range_to(green, floor(100 * (settings.MAX_ITER / 1024))))
+    palette += list(white.range_to(cyan, floor(100 * (settings.MAX_ITER / 1024))))
+    palette += list(white.range_to(blue, floor(100 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(white, floor(250 * (settings.MAX_ITER / 1024))))
 
     for item in enumerate(palette):
         r = item[1].rgb[0]
@@ -261,17 +261,17 @@ def colorize_black_gold(settings, *_):
     black = Color("black")
     palette = []
     return_palette = []
-    palette += list(gold.range_to(black, 10 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(gold, 20 * floor(settings.MAX_ITER / 1024)))
-    palette += list(gold.range_to(black, 60 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(gold, 60 * floor(settings.MAX_ITER / 1024)))
-    palette += list(gold.range_to(black, 60 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(gold, 60 * floor(settings.MAX_ITER / 1024)))
-    palette += list(gold.range_to(black, 60 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(gold, 60 * floor(settings.MAX_ITER / 1024)))
-    palette += list(gold.range_to(black, 60 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(gold, 444 * floor(settings.MAX_ITER / 1024)))
-    palette += list(gold.range_to(black, 1000 * floor(settings.MAX_ITER / 1024)))
+    palette += list(gold.range_to(black, floor(10 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(gold, floor(20 * (settings.MAX_ITER / 1024))))
+    palette += list(gold.range_to(black, floor(60 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(gold, floor(60 * (settings.MAX_ITER / 1024))))
+    palette += list(gold.range_to(black, floor(60 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(gold, floor(60 * (settings.MAX_ITER / 1024))))
+    palette += list(gold.range_to(black, floor(60 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(gold, floor(60 * (settings.MAX_ITER / 1024))))
+    palette += list(gold.range_to(black, floor(60 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(gold, floor(200 * (settings.MAX_ITER / 1024))))
+    palette += list(gold.range_to(black, floor(settings.MAX_ITER - len(palette))))
 
     for item in enumerate(palette):
         r = item[1].rgb[0]
@@ -290,17 +290,17 @@ def colorize_white_green_black(settings, *_):
     green = Color("green")
     palette = []
     return_palette = []
-    palette += list(white.range_to(green, 10 * floor(settings.MAX_ITER / 1024)))
-    palette += list(green.range_to(black, 20 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(green, 60 * floor(settings.MAX_ITER / 1024)))
-    palette += list(green.range_to(white, 60 * floor(settings.MAX_ITER / 1024)))
-    palette += list(white.range_to(green, 60 * floor(settings.MAX_ITER / 1024)))
-    palette += list(green.range_to(white, 60 * floor(settings.MAX_ITER / 1024)))
-    palette += list(white.range_to(green, 60 * floor(settings.MAX_ITER / 1024)))
-    palette += list(green.range_to(black, 60 * floor(settings.MAX_ITER / 1024)))
-    palette += list(black.range_to(green, 60 * floor(settings.MAX_ITER / 1024)))
-    palette += list(green.range_to(white, 444 * floor(settings.MAX_ITER / 1024)))
-    palette += list(white.range_to(black, 130 * floor(settings.MAX_ITER / 1024)))
+    palette += list(white.range_to(green, floor(10 * (settings.MAX_ITER / 1024))))
+    palette += list(green.range_to(black, floor(20 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(green, floor(60 * (settings.MAX_ITER / 1024))))
+    palette += list(green.range_to(white, floor(60 * (settings.MAX_ITER / 1024))))
+    palette += list(white.range_to(green, floor(60 * (settings.MAX_ITER / 1024))))
+    palette += list(green.range_to(white, floor(60 * (settings.MAX_ITER / 1024))))
+    palette += list(white.range_to(green, floor(60 * (settings.MAX_ITER / 1024))))
+    palette += list(green.range_to(black, floor(60 * (settings.MAX_ITER / 1024))))
+    palette += list(black.range_to(green, floor(60 * (settings.MAX_ITER / 1024))))
+    palette += list(green.range_to(white, floor(60 * (settings.MAX_ITER / 1024))))
+    palette += list(white.range_to(black, floor(settings.MAX_ITER - len(palette))))
 
     for item in enumerate(palette):
         r = item[1].rgb[0]
@@ -326,19 +326,19 @@ def colorize_rgb(settings, *_):
     palette = []
     return_palette = []
 
-    palette += list(black.range_to(red, 10 * floor(settings.MAX_ITER / 1024)))
-    palette += list(red.range_to(yellow, 20 * floor(settings.MAX_ITER / 1024)))
-    palette += list(yellow.range_to(green, 40 * floor(settings.MAX_ITER / 1024)))
-    palette += list(green.range_to(cyan, 40 * floor(settings.MAX_ITER / 1024)))
-    palette += list(cyan.range_to(blue, 80 * floor(settings.MAX_ITER / 1024)))
-    palette += list(blue.range_to(violet, 80 * floor(settings.MAX_ITER / 1024)))
-    palette += list(violet.range_to(red, 80 * floor(settings.MAX_ITER / 1024)))
-    palette += list(red.range_to(yellow, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += list(yellow.range_to(green, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += list(green.range_to(cyan, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += list(cyan.range_to(blue, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += list(blue.range_to(violet, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += list(violet.range_to(white, 1000 * floor(settings.MAX_ITER / 1024)))
+    palette += list(black.range_to(red, floor(10 * (settings.MAX_ITER / 1024))))
+    palette += list(red.range_to(yellow, floor(20 * (settings.MAX_ITER / 1024))))
+    palette += list(yellow.range_to(green, floor(40 * (settings.MAX_ITER / 1024))))
+    palette += list(green.range_to(cyan, floor(40 * (settings.MAX_ITER / 1024))))
+    palette += list(cyan.range_to(blue, floor(80 * (settings.MAX_ITER / 1024))))
+    palette += list(blue.range_to(violet, floor(80 * (settings.MAX_ITER / 1024))))
+    palette += list(violet.range_to(red, floor(80 * (settings.MAX_ITER / 1024))))
+    palette += list(red.range_to(yellow, floor(100 * (settings.MAX_ITER / 1024))))
+    palette += list(yellow.range_to(green, floor(100 * (settings.MAX_ITER / 1024))))
+    palette += list(green.range_to(cyan, floor(100 * (settings.MAX_ITER / 1024))))
+    palette += list(cyan.range_to(blue, floor(100 * (settings.MAX_ITER / 1024))))
+    palette += list(blue.range_to(violet, floor(100 * (settings.MAX_ITER / 1024))))
+    palette += list(violet.range_to(white, floor(settings.MAX_ITER - len(palette))))
 
     for item in enumerate(palette):
         r = item[1].rgb[0]
@@ -358,17 +358,105 @@ def colorize_blue_gold(settings, *_):
     palette = []
     return_palette = []
 
-    palette += black_to_blue(10 * floor(settings.MAX_ITER / 1024))
-    palette += blue_to_black(30 * floor(settings.MAX_ITER / 1024))
-    palette += list(black.range_to(gold, 60 * floor(settings.MAX_ITER / 1024)))
-    palette += list(gold.range_to(black, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += black_to_blue(100 * floor(settings.MAX_ITER / 1024))
-    palette += blue_to_black(100 * floor(settings.MAX_ITER / 1024))
-    palette += list(black.range_to(gold, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += list(gold.range_to(black, 100 * floor(settings.MAX_ITER / 1024)))
-    palette += black_to_blue(100 * floor(settings.MAX_ITER / 1024))
-    palette += blue_to_black(100 * floor(settings.MAX_ITER / 1024))
-    palette += list(black.range_to(white, 400 * floor(settings.MAX_ITER / 1024)))
+    palette += black_to_blue(floor(10 * (settings.MAX_ITER / 1024)))
+    palette += blue_to_black(floor(30 * (settings.MAX_ITER / 1024)))
+    palette += list(black.range_to(gold, floor(60 * settings.MAX_ITER / 1024)))
+    palette += list(gold.range_to(black, floor(60 * settings.MAX_ITER / 1024)))
+    palette += black_to_blue(floor(100 * (settings.MAX_ITER / 1024)))
+    palette += blue_to_black(floor(100 * (settings.MAX_ITER / 1024)))
+    palette += list(black.range_to(gold, floor(10 * settings.MAX_ITER / 1024)))
+    palette += list(gold.range_to(black, floor(10 * settings.MAX_ITER / 1024)))
+    palette += black_to_blue(floor(100 * (settings.MAX_ITER / 1024)))
+    palette += blue_to_black(floor(100 * (settings.MAX_ITER / 1024)))
+    palette += black_to_white(settings.MAX_ITER - len(palette))
+
+    for item in enumerate(palette):
+        try:
+            r = item[1].rgb[0]
+            g = item[1].rgb[1]
+            b = item[1].rgb[2]
+        except AttributeError:
+            # print(f"item:{item}")
+            r = item[1][0]/255
+            g = item[1][1]/255
+            b = item[1][2]/255
+        finally:
+            return_palette.append([int(r * 255), int(g * 255), int(b * 255)])
+
+    return_palette[settings.MAX_ITER - 1] = (0, 0, 0)
+    # print(f"palette:{return_palette}")
+    return return_palette
+
+
+def colorize_color_black(settings, *_):
+    """ Predefined blue and gold color palette """
+    palette = []
+    return_palette = []
+
+    palette += black_to_blue(floor(10 * (settings.MAX_ITER / 1024)))
+    palette += blue_to_black(floor(30 * (settings.MAX_ITER / 1024)))
+    palette += black_to_cyan(floor(60 * (settings.MAX_ITER / 1024)))
+    palette += cyan_to_black(floor(90 * (settings.MAX_ITER / 1024)))
+    palette += black_to_green(floor(90 * (settings.MAX_ITER / 1024)))
+    palette += green_to_black(floor(90 * (settings.MAX_ITER / 1024)))
+    palette += black_to_yellow(floor(90 * (settings.MAX_ITER / 1024)))
+    palette += yellow_to_black(floor(90 * (settings.MAX_ITER / 1024)))
+    palette += black_to_red(floor(90 * (settings.MAX_ITER / 1024)))
+    palette += red_to_black(floor(90 * (settings.MAX_ITER / 1024)))
+    palette += black_to_violet(floor(90 * (settings.MAX_ITER / 1024)))
+    palette += violet_to_black(floor(90 * (settings.MAX_ITER / 1024)))
+    palette += black_to_white(settings.MAX_ITER - len(palette))
+
+
+    for item in enumerate(palette):
+        try:
+            r = item[1].rgb[0]
+            g = item[1].rgb[1]
+            b = item[1].rgb[2]
+        except AttributeError:
+            # print(f"item:{item}")
+            r = item[1][0]/255
+            g = item[1][1]/255
+            b = item[1][2]/255
+        finally:
+            return_palette.append([int(r * 255), int(g * 255), int(b * 255)])
+
+    print(f"palette length:{len(return_palette)}")
+    return_palette[(settings.MAX_ITER - 1)] = (0, 0, 0)
+    # print(f"palette:{return_palette}")
+    return return_palette
+
+def colorize_color_black2(settings, *_):
+    """ Predefined blue and gold color palette """
+    palette = []
+    return_palette = []
+
+    palette += black_to_blue(floor(10 * (settings.MAX_ITER / 1024)))
+    palette += blue_to_black(floor(30 * (settings.MAX_ITER / 1024)))
+    palette += black_to_cyan(floor(30 * (settings.MAX_ITER / 1024)))
+    palette += cyan_to_black(floor(45 * (settings.MAX_ITER / 1024)))
+    palette += black_to_green(floor(45 * (settings.MAX_ITER / 1024)))
+    palette += green_to_black(floor(45 * (settings.MAX_ITER / 1024)))
+    palette += black_to_yellow(floor(45 * (settings.MAX_ITER / 1024)))
+    palette += yellow_to_black(floor(45 * (settings.MAX_ITER / 1024)))
+    palette += black_to_red(floor(45 * (settings.MAX_ITER / 1024)))
+    palette += red_to_black(floor(45 * (settings.MAX_ITER / 1024)))
+    palette += black_to_violet(floor(45 * (settings.MAX_ITER / 1024)))
+    palette += violet_to_black(floor(45 * (settings.MAX_ITER / 1024)))
+    palette += black_to_blue(floor(45 * (settings.MAX_ITER / 1024)))
+    palette += blue_to_black(floor(45 * (settings.MAX_ITER / 1024)))
+    palette += black_to_cyan(floor(45 * (settings.MAX_ITER / 1024)))
+    palette += cyan_to_black(floor(45 * (settings.MAX_ITER / 1024)))
+    palette += black_to_green(floor(45 * (settings.MAX_ITER / 1024)))
+    palette += green_to_black(floor(45 * (settings.MAX_ITER / 1024)))
+    palette += black_to_yellow(floor(45 * (settings.MAX_ITER / 1024)))
+    palette += yellow_to_black(floor(45 * (settings.MAX_ITER / 1024)))
+    palette += black_to_red(floor(45 * (settings.MAX_ITER / 1024)))
+    palette += red_to_black(floor(45 * (settings.MAX_ITER / 1024)))
+    palette += black_to_violet(floor(45 * (settings.MAX_ITER / 1024)))
+    palette += violet_to_black(floor(45 * (settings.MAX_ITER / 1024)))
+    palette += black_to_white(settings.MAX_ITER - len(palette))
+
 
     for item in enumerate(palette):
         try:
@@ -391,6 +479,12 @@ def colorize_blue_gold(settings, *_):
 # The black to blue and blue to black color shifts in the Color package
 #   do not operate as expected, it would always pass through green.
 #   Decided to code my own blue to black shift functions.
+def black_to_white(span):
+    return [[x * (256/span), x * (256/span), x * (256/span)] for x in range(span)]
+
+def white_to_black(span):
+    return [[x * (256/span), x * (256/span), x * (256/span)] for x in reversed(range(span))]
+
 def blue_to_black(span):
     """ Colour package blue.range_to(black) gives incorrect result """
     return [[0, 0, floor(x * (256/span))] for x in reversed(range(span))]
@@ -398,3 +492,33 @@ def blue_to_black(span):
 def black_to_blue(span):
     """ Colour package black.range_to(blue) gives incorrect result """
     return [[0, 0, floor(x * (256/span))] for x in range(span)]
+
+def green_to_black(span):
+    return [[0, floor(x * (256/span)), 0] for x in reversed(range(span))]
+
+def black_to_green(span):
+    return [[0, floor(x * (256/span)), 0] for x in range(span)]
+
+def red_to_black(span):
+    return [[floor(x * (256/span)), 0, 0] for x in reversed(range(span))]
+
+def black_to_red(span):
+    return [[floor(x * (256/span)), 0, 0] for x in range(span)]
+
+def cyan_to_black(span):
+    return [[0, floor(x * (256/span)), floor(x * (256/span))] for x in reversed(range(span))]
+
+def black_to_cyan(span):
+    return [[0, floor(x * (256/span)), floor(x * (256/span))] for x in range(span)]
+
+def yellow_to_black(span):
+    return [[floor(x * (256/span)), floor(x * (256/span)), 0] for x in reversed(range(span))]
+
+def black_to_yellow(span):
+    return [[floor(x * (256/span)), floor(x * (256/span)), 0] for x in range(span)]
+
+def violet_to_black(span):
+    return [[floor(x * (256/span)), 0, floor(x * (256/span))] for x in reversed(range(span))]
+
+def black_to_violet(span):
+    return [[floor(x * (256/span)), 0, floor(x * (256/span))] for x in range(span)]

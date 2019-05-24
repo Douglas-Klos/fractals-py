@@ -52,21 +52,18 @@ def check_keydown(settings, event):
         filename = f"{datetime.now():%Y-%m-%d %H-%M-%S}.png"
         print(f"Saving {filename}")
         pygame.image.save(settings.SCREEN, f"fractal {filename}")
+        # False, do not redraw the screen
         return False
     if event.key == pygame.K_RETURN:
         open_dialog_box(settings)
+        # True, redraw the screen
         return True
 
 
 def open_dialog_box(settings):
     """ TKinter dialog box """
     root = Tk()
-    entries = db.makeform(root, ["Iterations", "Hue Seed", "Color Shift"], settings)
-    b1 = Button(root, text="Update", command=(lambda e=entries: db.update(settings, e)))
-    b1.pack(side=LEFT, padx=5, pady=5)
-    b2 = Button(root, text="Close", command=root.destroy)
-    b2.pack(side=LEFT, padx=5, pady=5)
-    root.mainloop()
+    db.construct_dialog_box(settings, root)
     return True
 
 
@@ -81,15 +78,15 @@ def left_mouse_up(settings, mouse_down):
 
     # Trapping some corner case that shouldn't exist, but occasionally does.
     if mouse_down == None or mouse_up == None:
+        # False, do not redraw the screen
         return False
 
     # Rejecting clicks that didn't move
     if mouse_down[0] == mouse_up[0] and mouse_down[1] == mouse_up[1]:
+        # False, do not redraw the screen
         return False
-    
-    
 
-
+    # Setting left, right, bottom, top values for click points
     if mouse_down[0] < mouse_up[0]:
         left = mouse_down[0]
         right = mouse_up[0]
@@ -112,17 +109,18 @@ def left_mouse_up(settings, mouse_down):
     # print(f"l-r:{left - right}, t-b:{top-bottom}")
     # print(f"delta:{delta}")
 
+    # Calculate the amount to adjust screen position based on click points
     if (right - left) <= delta:
         h_adjust = (delta - (right - left)) / 2
-    else: # (right - left) > delta:
+    else:  # (right - left) > delta:
         h_adjust = -(((right - left) - delta) / 2)
 
     if (top - bottom) <= (delta * settings.RATIO):
         v_adjust = ((delta * settings.RATIO) - (top - bottom)) / 2
-    else: # (top - bottom) > (delta * settings.RATIO):
+    else:  # (top - bottom) > (delta * settings.RATIO):
         v_adjust = -(((top - bottom) - (delta * settings.RATIO)) / 2)
-    
-    # We also want to center the zoom center of the two points
+
+    # Center the zoom at the middle of the two click points
     left -= h_adjust
     right += h_adjust
     bottom -= v_adjust
@@ -154,6 +152,7 @@ def left_mouse_up(settings, mouse_down):
     settings.IM_START = new_start_im
     settings.IM_END = new_end_im
 
+    # True, redraw the screen
     return True
 
 
@@ -165,6 +164,7 @@ def center_mouse_up(settings):
     settings.IM_START = -(((settings.RE_END - settings.RE_START) * ratio) / 2)
     settings.IM_END = ((settings.RE_END - settings.RE_START) * ratio) / 2
 
+    # True, redraw the screen
     return True
 
 
@@ -177,12 +177,13 @@ def right_mouse_up(settings, mouse_down):
     """ Right mouse button up event -  Shift screen based on mouse movement """
     mouse_up = pygame.mouse.get_pos()
 
-
     # Trapping some corner case that shouldn't exist, but occasionally does.
     if mouse_down == None or mouse_up == None:
+        # False, do not redraw the screen
         return False
 
     if mouse_down[0] == mouse_up[0] and mouse_down[1] == mouse_up[1]:
+        # False, do not redraw the screen
         return False
 
     # Calculate how many pixels the mouse moved while right clicked
@@ -203,33 +204,36 @@ def right_mouse_up(settings, mouse_down):
     settings.IM_START = settings.IM_START + verticle_shift
     settings.IM_END = settings.IM_END + verticle_shift
 
+    # True, redraw the screen
     return True
 
 
 def mouse_wheel_down(settings):
     """ Mouse wheel down event, zoom out 10% """
 
-    re_adjust = (settings.RE_START - settings.RE_END) * 0.1
-    im_adjust = (settings.IM_START - settings.IM_END) * 0.1
+    re_adjust = (settings.RE_START - settings.RE_END) * settings.MWHEEL_ZOOM
+    im_adjust = (settings.IM_START - settings.IM_END) * settings.MWHEEL_ZOOM
 
     settings.RE_START += re_adjust
     settings.RE_END -= re_adjust
     settings.IM_START += im_adjust
     settings.IM_END -= im_adjust
 
+    # True, redraw the screen
     return True
 
 
 def mouse_wheel_up(settings):
     """ Mouse wheel up event, zoom in 10% """
-    re_adjust = (settings.RE_START - settings.RE_END) * 0.1
-    im_adjust = (settings.IM_START - settings.IM_END) * 0.1
+    re_adjust = (settings.RE_START - settings.RE_END) * settings.MWHEEL_ZOOM
+    im_adjust = (settings.IM_START - settings.IM_END) * settings.MWHEEL_ZOOM
 
     settings.RE_START -= re_adjust
     settings.RE_END += re_adjust
     settings.IM_START -= im_adjust
     settings.IM_END += im_adjust
 
+    # True, redraw the screen
     return True
 
 

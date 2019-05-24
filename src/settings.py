@@ -4,7 +4,7 @@ class Settings:
     def __init__(self):
 
         # Mandelbrot iterations
-        self.MAX_ITER = 1024
+        self.MAX_ITER = 128
 
         # Screen settings
         self.SCREEN_WIDTH = 1024
@@ -14,18 +14,15 @@ class Settings:
         self.RATIO = self.SCREEN_HEIGHT / self.SCREEN_WIDTH
         self.SCREEN = None
 
-        # Color settings
-        # 0. = Violet
-        # .1 = Pink
-        # .2 = Red
-        # .3 = Orange - Red
-        # .4 = Yellow - Green
-        # .5 = Green
-        # .6 = Green - Blue
-        # .7 = Light Blue
-        # .8 = Blue
-        # .9 = Blue - Purple
+        # Color settings for colorize_hue and colorized_hue_shifted
+        # 0. = Violet              .5 = Green
+        # .1 = Pink                .6 = Green - Blue
+        # .2 = Red                 .7 = Light Blue
+        # .3 = Orange - Red        .8 = Blue
+        # .4 = Yellow - Green      .9 = Blue - Purple
         self.HUE_SEED = 0
+
+        # Setting for colorized_hue_shifted
         self.SHIFT = 10
 
         # Plot window settings
@@ -33,6 +30,16 @@ class Settings:
         self.RE_END = 1
         self.IM_START = -(((self.RE_END - self.RE_START) * self.RATIO) / 2)
         self.IM_END = ((self.RE_END - self.RE_START) * self.RATIO) / 2
+
+        # Point history
+        self.history = []
+
+        # Mouse zoom
+        self.MWHEEL_ZOOM = .1
+
+        # Menu
+        self.MENU_OPEN = 0
+
 
         # Interesting Julia Values
         julia_values = ((0.4, 0.3), (0.3, 0.2), (0.35, 0.4))

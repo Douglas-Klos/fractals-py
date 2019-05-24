@@ -18,7 +18,7 @@ def main():
 
     # Set the fractal and color equations to use
     fractal = fe.mandelbrot
-    colorize = ce.colorize_blue_gold
+    colorize = ce.colorize_blue_green_sin
 
     # Initialize Pygame and create a screen
     init()

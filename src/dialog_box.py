@@ -2,10 +2,22 @@
 """ TKinter Dialog box to change settings """
 #pylint: disable=W0614, W0401
 
-from tkinter import Frame, Label, Entry, Tk, StringVar, TOP, X, LEFT, RIGHT, YES
+import asyncio
+from tkinter import Frame, Label, Entry, Tk, StringVar, TOP, X, LEFT, RIGHT, YES, Button
 
 # This is for testing outside of execution
 # from settings import Settings
+
+
+def construct_dialog_box(settings, root):
+    entries = makeform(root, ["Iterations", "Hue Seed", "Color Shift"], settings)
+    b1 = Button(root, text="Update", command=(lambda e=entries: update(settings, e)))
+    b1.pack(side=LEFT, padx=5, pady=5)
+    b2 = Button(root, text="Close", command=root.destroy)
+    b2.pack(side=LEFT, padx=5, pady=5)
+    root.mainloop()
+    return 0
+    # await
 
 
 def makeform(root, fields, settings):
@@ -37,7 +49,7 @@ def makeform(root, fields, settings):
     row.pack(side=TOP, fill=X, padx=5, pady=5)
     label.pack(side=LEFT)
     entry.pack(side=RIGHT, expand=YES, fill=X)
-    entries.append((fields[1], entry))
+    entries.append((fields[2], entry))
 
     return entries
 
