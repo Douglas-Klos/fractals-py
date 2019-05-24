@@ -7,8 +7,8 @@ class Settings:
         self.MAX_ITER = 1024
 
         # Screen settings
-        self.SCREEN_WIDTH = 2560
-        self.SCREEN_HEIGHT = 1440
+        self.SCREEN_WIDTH = 1024
+        self.SCREEN_HEIGHT = 768
         self.WIDTH = self.SCREEN_WIDTH
         self.HEIGHT = self.SCREEN_WIDTH
         self.RATIO = self.SCREEN_HEIGHT / self.SCREEN_WIDTH

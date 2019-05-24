@@ -1,11 +1,15 @@
 #!/usr/bin/python3
+""" TKinter Dialog box to change settings """
+#pylint: disable=W0614, W0401
 
-from tkinter import *
+from tkinter import Frame, Label, Entry, Tk, StringVar, TOP, X, LEFT, RIGHT, YES
 
+# This is for testing outside of execution
 # from settings import Settings
 
 
 def makeform(root, fields, settings):
+    """ Construct the dialog box """
     entries = []
 
     row = Frame(root)
@@ -39,13 +43,20 @@ def makeform(root, fields, settings):
 
 
 def update(settings, entries):
+    """ Update settings """
     settings.MAX_ITER = int(entries[0][1].get())
     settings.HUE_SEED = float(entries[1][1].get())
     settings.SHIFT = float(entries[2][1].get())
 
 
-if __name__ == "__main__":
+def main():
+    """ Main, just used for testing """
+    #pylint: disable= E0602, W0612
     root = Tk()
     settings = Settings()
     entries = makeform(root, ["Iterations", "Hue Seed", "Color Shift"], settings)
     root.mainloop()
+
+
+if __name__ == "__main__":
+    main()

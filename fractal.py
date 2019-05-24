@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ Fractals in Python """
-#pylint: disable=E0611
-from math import floor
+#pylint: disable=E0401
+
 from pygame import display, init
 from src.settings import Settings
 import src.fractal_equations as fe
@@ -18,8 +18,8 @@ def main():
 
     # Set the fractal and color equations to use
     fractal = fe.mandelbrot
-    colorize = ce.colorize_black_shift
-    
+    colorize = ce.colorize_blue_gold
+
     # Initialize Pygame and create a screen
     init()
     settings.SCREEN = display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
