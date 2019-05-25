@@ -18,7 +18,7 @@ def main():
 
     # Set the fractal and color equations to use
     fractal = fe.mandelbrot
-    colorize = ce.colorize_blue_green_sin
+    colorize = ce.colorize_rgb
 
     # Initialize Pygame and create a screen
     init()
@@ -28,6 +28,9 @@ def main():
         # Set display title
         display.set_caption(f"RE:({settings.RE_START}, {settings.RE_END}), "
                             f"IM:({settings.IM_START}, {settings.IM_END})")
+
+        fractal = eval(settings.FRACTAL_ALGORITHM)
+        colorize = eval(settings.COLOR_ALGORITHM)  
 
         if draw:
             # Regenerate point_list

@@ -14,6 +14,9 @@ class Settings:
         self.RATIO = self.SCREEN_HEIGHT / self.SCREEN_WIDTH
         self.SCREEN = None
 
+        self.COLOR_ALGORITHM = "ce.colorize_rgb"
+        self.FRACTAL_ALGORITHM = "fe.mandelbrot"
+
         # Color settings for colorize_hue and colorized_hue_shifted
         # 0. = Violet              .5 = Green
         # .1 = Pink                .6 = Green - Blue
@@ -36,10 +39,6 @@ class Settings:
 
         # Mouse zoom
         self.MWHEEL_ZOOM = .1
-
-        # Menu
-        self.MENU_OPEN = 0
-
 
         # Interesting Julia Values
         julia_values = ((0.4, 0.3), (0.3, 0.2), (0.35, 0.4))

@@ -5,7 +5,6 @@ from datetime import datetime
 from math import floor
 import pygame
 import src.dialog_box as db
-from tkinter import *
 
 
 def check_events(settings):
@@ -48,23 +47,27 @@ def check_keydown(settings, event):
     """ Check event when keydown is detected """
     if event.key == pygame.K_q:
         exit()
-    if event.key == pygame.K_SPACE:
+    elif event.key == pygame.K_SPACE:
         filename = f"{datetime.now():%Y-%m-%d %H-%M-%S}.png"
         print(f"Saving {filename}")
         pygame.image.save(settings.SCREEN, f"fractal {filename}")
         # False, do not redraw the screen
         return False
-    if event.key == pygame.K_RETURN:
-        open_dialog_box(settings)
+    elif event.key == pygame.K_RETURN:
+        db.construct_dialog_box(settings)
         # True, redraw the screen
         return True
-
-
-def open_dialog_box(settings):
-    """ TKinter dialog box """
-    root = Tk()
-    db.construct_dialog_box(settings, root)
-    return True
+    elif event.key == pygame.K_BACKSPACE:
+        if settings.history:
+            coordinates = settings.history.pop()
+            settings.RE_START = coordinates[0]
+            settings.RE_END = coordinates[1]
+            settings.IM_START = coordinates[2]
+            settings.IM_END = coordinates[3]
+            return True
+        else:
+            print("At beginning")
+            return False
 
 
 def left_mouse_down():
@@ -146,6 +149,9 @@ def left_mouse_up(settings, mouse_down):
         (settings.IM_START - settings.IM_END)
     )
 
+    # Save current coordinates
+    settings.history.append((settings.RE_START, settings.RE_END, settings.IM_START, settings.IM_END))
+
     # Update settings
     settings.RE_START = new_start_re
     settings.RE_END = new_end_re
@@ -158,6 +164,9 @@ def left_mouse_up(settings, mouse_down):
 
 def center_mouse_up(settings):
     """ Center mouse button up event - Reset to default screen pos """
+    # Save current coordinates
+    settings.history.append((settings.RE_START, settings.RE_END, settings.IM_START, settings.IM_END))
+
     settings.RE_START = -2
     settings.RE_END = 1
     ratio = settings.SCREEN_HEIGHT / settings.SCREEN_WIDTH
@@ -198,6 +207,9 @@ def right_mouse_up(settings, mouse_down):
     horizontal_shift = horizontal_percent * (settings.RE_START - settings.RE_END)
     verticle_shift = verticle_percent * (settings.IM_START - settings.IM_END)
 
+    # Save current coordinates
+    settings.history.append((settings.RE_START, settings.RE_END, settings.IM_START, settings.IM_END))
+
     # Update settings to new coordinate plane
     settings.RE_START = settings.RE_START + horizontal_shift
     settings.RE_END = settings.RE_END + horizontal_shift
@@ -214,6 +226,9 @@ def mouse_wheel_down(settings):
     re_adjust = (settings.RE_START - settings.RE_END) * settings.MWHEEL_ZOOM
     im_adjust = (settings.IM_START - settings.IM_END) * settings.MWHEEL_ZOOM
 
+    # Save current coordinates
+    settings.history.append((settings.RE_START, settings.RE_END, settings.IM_START, settings.IM_END))
+
     settings.RE_START += re_adjust
     settings.RE_END -= re_adjust
     settings.IM_START += im_adjust
@@ -227,6 +242,9 @@ def mouse_wheel_up(settings):
     """ Mouse wheel up event, zoom in 10% """
     re_adjust = (settings.RE_START - settings.RE_END) * settings.MWHEEL_ZOOM
     im_adjust = (settings.IM_START - settings.IM_END) * settings.MWHEEL_ZOOM
+
+    # Save current coordinates
+    settings.history.append((settings.RE_START, settings.RE_END, settings.IM_START, settings.IM_END))
 
     settings.RE_START -= re_adjust
     settings.RE_END += re_adjust
