@@ -5,6 +5,8 @@ from colorsys import hsv_to_rgb
 from math import sin, cos, floor, sqrt
 import pygame
 from numba import jit
+import numpy as np
+from math import floor
 from .color import Color
 
 
@@ -32,7 +34,7 @@ def colorize_hue(settings, point_list, *_):
         palette[i] = [int(r * 255), int(g * 255), int(b * 255)]
 
     # geld(palette)
-    return palette
+    return roll_rgb(palette, settings)
 
 
 def colorize_hue_shifted(settings, point_list, *_):
@@ -80,29 +82,7 @@ def colorize_hue_shifted(settings, point_list, *_):
         r, g, b = hsv_to_rgb(hue, sat, val)
         palette[i] = [int(r * 255), int(g * 255), int(b * 255)]
 
-    return geld(palette)
-
-
-def colorize_hue2(settings, *_):
-    """ Calculate hue color palette """
-    palette = [0] * settings.MAX_ITER
-
-    for i in range(settings.MAX_ITER):
-        hue = 0.46 + (
-            1 - abs((i / (settings.MAX_ITER)) - 1) ** (settings.MAX_ITER / 64) / 3
-        )
-        sat = abs(i / settings.MAX_ITER - 1) ** (settings.MAX_ITER / 64)
-        val = (
-            abs(1 - abs((i / settings.MAX_ITER) - 1.03) ** (settings.MAX_ITER / 12))
-            if i < settings.MAX_ITER - 1
-            else 0
-        )
-
-        # print(f"hue:{hue}, sat:{sat}, val:{val}")
-        r, g, b = hsv_to_rgb(hue, sat, val)
-        palette[i] = (int(r * 255), int(g * 255), int(b * 255))
-
-    return palette
+    return geld(roll_rgb(palette, settings))
 
 
 def colorize_blue_green_sin(settings, *_):
@@ -119,7 +99,7 @@ def colorize_blue_green_sin(settings, *_):
         palette[i] = [int(r * 255), int(g * 255), int(b * 255)]
 
     palette[settings.MAX_ITER - 1] = hsv_to_rgb(0, 0, 0)
-    return geld(palette)
+    return geld(roll_rgb(palette, settings))
 
 
 def geld(palette):
@@ -176,7 +156,7 @@ def colorize_blue_green_gold(settings, *_):
         return_palette.append([int(r * 255), int(g * 255), int(b * 255)])
 
     return_palette[settings.MAX_ITER - 1] = (0, 0, 0)
-    return return_palette
+    return roll_rgb(return_palette, settings)
 
 
 def colorize_black_shift(settings, *_):
@@ -214,7 +194,7 @@ def colorize_black_shift(settings, *_):
         return_palette.append([int(r * 255), int(g * 255), int(b * 255)])
 
     return_palette[settings.MAX_ITER - 1] = (0, 0, 0)
-    return return_palette
+    return roll_rgb(return_palette, settings)
 
 
 def colorize_white_shift(settings, *_):
@@ -252,7 +232,7 @@ def colorize_white_shift(settings, *_):
         return_palette.append([int(r * 255), int(g * 255), int(b * 255)])
 
     return_palette[settings.MAX_ITER - 1] = (0, 0, 0)
-    return return_palette
+    return roll_rgb(return_palette, settings)
 
 
 def colorize_black_gold(settings, *_):
@@ -280,7 +260,7 @@ def colorize_black_gold(settings, *_):
         return_palette.append([int(r * 255), int(g * 255), int(b * 255)])
 
     return_palette[settings.MAX_ITER - 1] = (0, 0, 0)
-    return return_palette
+    return roll_rgb(return_palette, settings)
 
 
 def colorize_white_green_black(settings, *_):
@@ -309,7 +289,7 @@ def colorize_white_green_black(settings, *_):
         return_palette.append([int(r * 255), int(g * 255), int(b * 255)])
 
     return_palette[settings.MAX_ITER - 1] = (0, 0, 0)
-    return return_palette
+    return roll_rgb(return_palette, settings)
 
 
 def colorize_rgb(settings, *_):
@@ -347,7 +327,7 @@ def colorize_rgb(settings, *_):
         return_palette.append([int(r * 255), int(g * 255), int(b * 255)])
 
     return_palette[settings.MAX_ITER - 1] = (0, 0, 0)
-    return return_palette
+    return roll_rgb(return_palette, settings)
 
 
 def colorize_blue_gold(settings, *_):
@@ -385,7 +365,7 @@ def colorize_blue_gold(settings, *_):
 
     return_palette[settings.MAX_ITER - 1] = (0, 0, 0)
     # print(f"palette:{return_palette}")
-    return return_palette
+    return roll_rgb(return_palette, settings)
 
 
 def colorize_color_black(settings, *_):
@@ -422,7 +402,7 @@ def colorize_color_black(settings, *_):
             return_palette.append([int(r * 255), int(g * 255), int(b * 255)])
 
     return_palette[(settings.MAX_ITER - 1)] = (0, 0, 0)
-    return return_palette
+    return roll_rgb(return_palette, settings)
 
 def colorize_color_black2(settings, *_):
     """ Predefined blue and gold color palette """
@@ -471,7 +451,7 @@ def colorize_color_black2(settings, *_):
 
     return_palette[settings.MAX_ITER - 1] = (0, 0, 0)
     # print(f"palette:{return_palette}")
-    return return_palette
+    return roll_rgb(return_palette, settings)
 
 
 # The black to blue and blue to black color shifts in the Color package
@@ -520,3 +500,10 @@ def violet_to_black(span):
 
 def black_to_violet(span):
     return [[floor(x * (256/span)), 0, floor(x * (256/span))] for x in range(span)]
+
+def roll_rgb(palette, settings):
+    array = np.array(palette)
+    array[:, -3] = np.roll(array[:, -3], settings.ROLL_R)
+    array[:, -2] = np.roll(array[:, -2], settings.ROLL_G)
+    array[:, -1] = np.roll(array[:, -1], settings.ROLL_B)
+    return array.tolist()

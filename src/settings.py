@@ -4,11 +4,12 @@ class Settings:
     def __init__(self):
 
         # Mandelbrot iterations
-        self.MAX_ITER = 128
+        self.MAX_ITER = 1024
 
         # Screen settings
-        self.SCREEN_WIDTH = 1024
-        self.SCREEN_HEIGHT = 768
+        self.SCREEN_WIDTH = 2000
+        self.SCREEN_HEIGHT = 1000
+
         self.WIDTH = self.SCREEN_WIDTH
         self.HEIGHT = self.SCREEN_WIDTH
         self.RATIO = self.SCREEN_HEIGHT / self.SCREEN_WIDTH
@@ -27,6 +28,10 @@ class Settings:
 
         # Setting for colorized_hue_shifted
         self.SHIFT = 10
+
+        self.ROLL_R = 0
+        self.ROLL_G = 0
+        self.ROLL_B = 0
 
         # Plot window settings
         self.RE_START = -2

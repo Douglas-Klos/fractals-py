@@ -2,6 +2,7 @@
 """ TKinter Dialog box to change settings """
 #pylint: disable=W0614, W0401
 
+from math import floor
 from pygame import display
 from tkinter import Frame, Label, Entry, Tk, StringVar, TOP, X, LEFT, RIGHT, YES, Button, OptionMenu
 
@@ -22,8 +23,8 @@ def construct_dialog_box(settings):
 
 def makeform(root, settings):
     """ Construct the dialog box """
-    fields = ["Iterations >= 64", "Hue Seed", "Color Shift", "Screen Width", "Screen Height", "Julia C_1", "Julis C_2", "Color Algorithm", "fractal algorithm"]
-    color_alg = ["ce.colorize_hue", "ce.colorize_hue_shifted", "ce.colorize_hue2", "ce.colorize_blue_green_sin", "ce.colorize_blue_green_gold", "ce.colorize_blue_green_gold", "ce.colorize_white_shift", "ce.colorize_black_gold", "ce.colorize_white_green_black", "ce.colorize_rgb", "ce.colorize_blue_gold", "ce.colorize_color_black", "ce.colorize_color_black2"]
+    fields = ["Iterations >= 64", "Hue Seed", "Color Shift", "Screen Width", "Screen Height", "Julia C_1", "Julis C_2", "Roll H", "Rolls S", "Roll V", "Color Algorithm", "fractal algorithm"]
+    color_alg = ["ce.colorize_hue", "ce.colorize_hue_shifted", "ce.colorize_blue_green_sin", "ce.colorize_blue_green_gold", "ce.colorize_blue_green_gold", "ce.colorize_white_shift", "ce.colorize_black_gold", "ce.colorize_white_green_black", "ce.colorize_rgb", "ce.colorize_blue_gold", "ce.colorize_color_black", "ce.colorize_color_black2"]
     fractal_alg = ["fe.mandelbrot", "fe.julia"]
     entries = []
 
@@ -91,26 +92,53 @@ def makeform(root, settings):
     entries.append((fields[6], entry))
 
 
-
     row = Frame(root)
     label = Label(row, width=18, text=fields[7], anchor="w")
+    value = StringVar(row, value=settings.ROLL_R)
+    entry = Entry(row, textvariable=value)
+    row.pack(side=TOP, fill=X, padx=5, pady=5)
+    label.pack(side=LEFT)
+    entry.pack(side=RIGHT, expand=YES, fill=X)
+    entries.append((fields[7], entry))
+
+
+    row = Frame(root)
+    label = Label(row, width=18, text=fields[8], anchor="w")
+    value = StringVar(row, value=settings.ROLL_G)
+    entry = Entry(row, textvariable=value)
+    row.pack(side=TOP, fill=X, padx=5, pady=5)
+    label.pack(side=LEFT)
+    entry.pack(side=RIGHT, expand=YES, fill=X)
+    entries.append((fields[8], entry))
+
+    row = Frame(root)
+    label = Label(row, width=18, text=fields[9], anchor="w")
+    value = StringVar(row, value=settings.ROLL_B)
+    entry = Entry(row, textvariable=value)
+    row.pack(side=TOP, fill=X, padx=5, pady=5)
+    label.pack(side=LEFT)
+    entry.pack(side=RIGHT, expand=YES, fill=X)
+    entries.append((fields[9], entry))
+
+    row = Frame(root)
+    label = Label(row, width=18, text=fields[10], anchor="w")
     variable = StringVar(root)
     variable.set(settings.COLOR_ALGORITHM)
     color_equation = OptionMenu(row, variable, *color_alg)
     row.pack(side=TOP, fill=X, padx=5, pady=5)
     label.pack(side=LEFT)
     color_equation.pack(side=RIGHT, expand=YES, fill=X)
-    entries.append((fields[7], variable))
+    entries.append((fields[10], variable))
 
     row = Frame(root)
-    label = Label(row, width=18, text=fields[8], anchor="w")
+    label = Label(row, width=18, text=fields[11], anchor="w")
     variable = StringVar(root)
     variable.set(settings.FRACTAL_ALGORITHM)
     color_equation = OptionMenu(row, variable, *fractal_alg)
     row.pack(side=TOP, fill=X, padx=5, pady=5)
     label.pack(side=LEFT)
     color_equation.pack(side=RIGHT, expand=YES, fill=X)
-    entries.append((fields[8], variable))
+    entries.append((fields[11], variable))
 
     return entries
 
@@ -142,8 +170,13 @@ def update(settings, entries):
     settings.C_1 = float(entries[5][1].get())
     settings.C_2 = float(entries[6][1].get())
 
-    settings.COLOR_ALGORITHM = entries[7][1].get()
-    settings.FRACTAL_ALGORITHM = entries[8][1].get()
+    settings.ROLL_R = floor(float(entries[7][1].get()))
+    settings.ROLL_G = floor(float(entries[8][1].get()))
+    settings.ROLL_B = floor(float(entries[9][1].get()))
+
+    settings.COLOR_ALGORITHM = entries[10][1].get()
+    settings.FRACTAL_ALGORITHM = entries[11][1].get()
+
 
 def main():
     """ Main, just used for testing """
