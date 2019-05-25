@@ -59,16 +59,31 @@ def check_keydown(settings, event):
         return True
     elif event.key == pygame.K_BACKSPACE:
         if settings.history:
-            coordinates = settings.history.pop()
-            settings.RE_START = coordinates[0]
-            settings.RE_END = coordinates[1]
-            settings.IM_START = coordinates[2]
-            settings.IM_END = coordinates[3]
+            load_from_history(settings)
             return True
         else:
             print("At beginning")
             return False
 
+
+def load_from_history(settings):
+    coordinates = settings.history.pop()
+
+    settings.RE_START = coordinates[0]
+    settings.RE_END = coordinates[1]
+
+    im_start = coordinates[2]
+    im_end = coordinates[3]
+    ratio = coordinates[4]
+
+    if ratio != settings.RATIO:
+        delta = (settings.RATIO - ratio) / 2
+        settings.IM_START = im_start - ((im_end - im_start) * delta)
+        settings.IM_END = im_end + ((im_end - im_start) * delta)
+    else:
+        settings.IM_START = im_start
+        settings.IM_END = im_end
+    
 
 def left_mouse_down():
     """ Left mouse button down event - capture mouse position """
@@ -150,7 +165,7 @@ def left_mouse_up(settings, mouse_down):
     )
 
     # Save current coordinates
-    settings.history.append((settings.RE_START, settings.RE_END, settings.IM_START, settings.IM_END))
+    settings.history.append((settings.RE_START, settings.RE_END, settings.IM_START, settings.IM_END, settings.RATIO))
 
     # Update settings
     settings.RE_START = new_start_re
@@ -165,7 +180,7 @@ def left_mouse_up(settings, mouse_down):
 def center_mouse_up(settings):
     """ Center mouse button up event - Reset to default screen pos """
     # Save current coordinates
-    settings.history.append((settings.RE_START, settings.RE_END, settings.IM_START, settings.IM_END))
+    settings.history.append((settings.RE_START, settings.RE_END, settings.IM_START, settings.IM_END, settings.RATIO))
 
     settings.RE_START = -2
     settings.RE_END = 1
@@ -208,7 +223,7 @@ def right_mouse_up(settings, mouse_down):
     verticle_shift = verticle_percent * (settings.IM_START - settings.IM_END)
 
     # Save current coordinates
-    settings.history.append((settings.RE_START, settings.RE_END, settings.IM_START, settings.IM_END))
+    settings.history.append((settings.RE_START, settings.RE_END, settings.IM_START, settings.IM_END, settings.RATIO))
 
     # Update settings to new coordinate plane
     settings.RE_START = settings.RE_START + horizontal_shift
@@ -227,7 +242,7 @@ def mouse_wheel_down(settings):
     im_adjust = (settings.IM_START - settings.IM_END) * settings.MWHEEL_ZOOM
 
     # Save current coordinates
-    settings.history.append((settings.RE_START, settings.RE_END, settings.IM_START, settings.IM_END))
+    settings.history.append((settings.RE_START, settings.RE_END, settings.IM_START, settings.IM_END, settings.RATIO))
 
     settings.RE_START += re_adjust
     settings.RE_END -= re_adjust
@@ -244,7 +259,7 @@ def mouse_wheel_up(settings):
     im_adjust = (settings.IM_START - settings.IM_END) * settings.MWHEEL_ZOOM
 
     # Save current coordinates
-    settings.history.append((settings.RE_START, settings.RE_END, settings.IM_START, settings.IM_END))
+    settings.history.append((settings.RE_START, settings.RE_END, settings.IM_START, settings.IM_END, settings.RATIO))
 
     settings.RE_START -= re_adjust
     settings.RE_END += re_adjust
