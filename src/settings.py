@@ -15,7 +15,7 @@ class Settings:
         self.RATIO = self.SCREEN_HEIGHT / self.SCREEN_WIDTH
         self.SCREEN = None
 
-        self.COLOR_ALGORITHM = "ce.colorize_rgb"
+        self.COLOR_ALGORITHM = "ce.colorize_color_black2"
         self.FRACTAL_ALGORITHM = "fe.mandelbrot"
 
         # Color settings for colorize_hue and colorized_hue_shifted
@@ -34,8 +34,12 @@ class Settings:
         self.ROLL_B = 0
 
         # Plot window settings
-        self.RE_START = -2
-        self.RE_END = 1
+        self.RE_START = -1.4853696465081982
+        self.RE_END = -1.4853693374768457
+
+        # self.RE_START = -2
+        # self.RE_END = 1
+        
         self.IM_START = -(((self.RE_END - self.RE_START) * self.RATIO) / 2)
         self.IM_END = ((self.RE_END - self.RE_START) * self.RATIO) / 2
 
@@ -49,3 +53,7 @@ class Settings:
         julia_values = ((0.4, 0.3), (0.3, 0.2), (0.35, 0.4))
         self.C_1 = julia_values[0][0]
         self.C_2 = julia_values[0][1]
+
+        # Redraw
+        self.DRAW = True
+        self.COLOR = True

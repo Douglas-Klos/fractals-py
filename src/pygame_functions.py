@@ -55,8 +55,8 @@ def check_keydown(settings, event):
         return False
     elif event.key == pygame.K_RETURN:
         db.construct_dialog_box(settings)
-        # True, redraw the screen
-        return True
+        # False, redraw the screen
+        return settings.DRAW
     elif event.key == pygame.K_BACKSPACE:
         if settings.history:
             load_from_history(settings)
@@ -83,7 +83,7 @@ def load_from_history(settings):
     else:
         settings.IM_START = im_start
         settings.IM_END = im_end
-    
+
 
 def left_mouse_down():
     """ Left mouse button down event - capture mouse position """

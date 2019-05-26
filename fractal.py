@@ -11,8 +11,6 @@ import src.pygame_functions as pf
 
 def main():
     """ Fractals Main """
-    draw = True
-
     # Get an instance of Settings
     settings = Settings()
 
@@ -32,17 +30,47 @@ def main():
         fractal = eval(settings.FRACTAL_ALGORITHM)
         colorize = eval(settings.COLOR_ALGORITHM)  
 
-        if draw:
+        if settings.DRAW and settings.COLOR:
+            settings.COLOR = False
+            settings.DRAW = False
+
             # Regenerate point_list
             point_list = fractal(settings)
+
+            # Regenreate color palette.
             palette = colorize(settings, point_list)
 
             # Render
             pf.display_fractal(settings, palette, point_list)
 
-            display.flip()
+        elif settings.COLOR and not settings.DRAW:
+            settings.COLOR = False
+            settings.DRAW = False
 
-        draw = pf.check_events(settings)
+            # Regenreate color palette.
+            palette = colorize(settings, point_list)
+
+            # Render
+            pf.display_fractal(settings, palette, point_list)
+
+        # This is getting a bit hacky, but I want this to quickly work,
+        #   and it's been a looooooong weekend, the poor brain...
+        elif settings.DRAW:
+            settings.COLOR = False
+            settings.DRAW = False
+
+            # Regenerate point_list
+            point_list = fractal(settings)
+
+            # Regenreate color palette.
+            palette = colorize(settings, point_list)
+
+            # Render
+            pf.display_fractal(settings, palette, point_list)
+
+        display.flip()
+
+        settings.DRAW = pf.check_events(settings)
 
 
 if __name__ == "__main__":

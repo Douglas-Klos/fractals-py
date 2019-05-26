@@ -11,6 +11,8 @@ from tkinter import Frame, Label, Entry, Tk, StringVar, TOP, X, LEFT, RIGHT, YES
 
 
 def construct_dialog_box(settings):
+    settings.DRAW = False
+    settings.COLOR = False
     root = Tk()
     entries = makeform(root, settings)
     b1 = Button(root, text="Save", command=(lambda e=entries: update(settings, e)))
@@ -18,13 +20,13 @@ def construct_dialog_box(settings):
     b2 = Button(root, text="Close", command=root.destroy)
     b2.pack(side=LEFT, padx=5, pady=5)
     root.mainloop()
-    return 0
+    return 
 
 
 def makeform(root, settings):
     """ Construct the dialog box """
-    fields = ["Iterations >= 64", "Hue Seed", "Color Shift", "Screen Width", "Screen Height", "Julia C_1", "Julis C_2", "Roll H", "Rolls S", "Roll V", "Color Algorithm", "fractal algorithm"]
-    color_alg = ["ce.colorize_hue", "ce.colorize_hue_shifted", "ce.colorize_blue_green_sin", "ce.colorize_blue_green_gold", "ce.colorize_blue_green_gold", "ce.colorize_white_shift", "ce.colorize_black_gold", "ce.colorize_white_green_black", "ce.colorize_rgb", "ce.colorize_blue_gold", "ce.colorize_color_black", "ce.colorize_color_black2"]
+    fields = ["Iterations >= 64", "Hue Seed", "Color Shift", "Screen Width", "Screen Height", "Julia C_1", "Julis C_2", "Roll R", "Rolls G", "Roll B", "Color Algorithm", "fractal algorithm"]
+    color_alg = ["ce.colorize_hue", "ce.colorize_hue_shifted", "ce.colorize_blue_green_sin", "ce.colorize_blue_green_gold", "ce.colorize_white_shift", "ce.colorize_black_gold", "ce.colorize_white_green_black", "ce.colorize_rgb", "ce.colorize_blue_gold", "ce.colorize_color_black", "ce.colorize_color_black2"]
     fractal_alg = ["fe.mandelbrot", "fe.julia"]
     entries = []
 
@@ -91,7 +93,6 @@ def makeform(root, settings):
     entry.pack(side=RIGHT, expand=YES, fill=X)
     entries.append((fields[6], entry))
 
-
     row = Frame(root)
     label = Label(row, width=18, text=fields[7], anchor="w")
     value = StringVar(row, value=settings.ROLL_R)
@@ -145,6 +146,12 @@ def makeform(root, settings):
 
 def update(settings, entries):
     """ Update settings """
+    settings.DRAW = False
+    settings.COLOR = True
+
+    if (settings.MAX_ITER != int(entries[0][1].get()) or settings.C_1 != float(entries[5][1].get()) or settings.C_2 != float(entries[6][1].get())):
+        settings.DRAW = True
+
     old_ratio = settings.SCREEN_HEIGHT / settings.SCREEN_WIDTH
 
     settings.MAX_ITER = int(entries[0][1].get()) if int(entries[0][1].get()) >= 64 else 64
@@ -161,6 +168,7 @@ def update(settings, entries):
     # print(f"old_ratio:{old_ratio}")
     # print(f"new_ratio:{new_ratio}")
     if old_ratio != new_ratio:
+        settings.DRAW = True
         delta = (new_ratio - old_ratio) / 2
         settings.IM_END = settings.IM_END + ((settings.IM_END - settings.IM_START) * delta)
         settings.IM_START = settings.IM_START - ((settings.IM_END - settings.IM_START) * delta)
