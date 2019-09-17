@@ -1,14 +1,37 @@
+import src.fractal_equations as fe
+import src.color_equations as ce
+
 class Settings:
     """ Settings for fractals """
 
     def __init__(self):
+        
+        # Lists of available functions
+        self.color_alg = {
+            "ce.colorize_hue": ce.colorize_hue,
+            "ce.colorize_hue_shifted": ce.colorize_hue_shifted,
+            "ce.colorize_blue_green_sin": ce.colorize_blue_green_sin,
+            "ce.colorize_blue_green_gold": ce.colorize_blue_green_gold,
+            "ce.colorize_white_shift": ce.colorize_white_shift,
+            "ce.colorize_black_gold": ce.colorize_black_gold,
+            "ce.colorize_white_green_black": ce.colorize_white_green_black,
+            "ce.colorize_rgb": ce.colorize_rgb,
+            "ce.colorize_blue_gold": ce.colorize_blue_gold,
+            "ce.colorize_color_black": ce.colorize_color_black,
+            "ce.colorize_color_black2": ce.colorize_color_black2,
+        }
+        self.fractal_alg = {
+            "fe.mandelbrot": fe.mandelbrot,
+            "fe.julia": fe.julia,
+        }
+
 
         # Mandelbrot iterations
-        self.MAX_ITER = 1024
+        self.MAX_ITER = 512
 
         # Screen settings
-        self.SCREEN_WIDTH = 2000
-        self.SCREEN_HEIGHT = 1000
+        self.SCREEN_WIDTH = 1024
+        self.SCREEN_HEIGHT = 768
 
         self.WIDTH = self.SCREEN_WIDTH
         self.HEIGHT = self.SCREEN_WIDTH
@@ -34,11 +57,11 @@ class Settings:
         self.ROLL_B = 0
 
         # Plot window settings
-        self.RE_START = -1.4853696465081982
-        self.RE_END = -1.4853693374768457
+        # self.RE_START = -1.4853696465081982
+        # self.RE_END = -1.4853693374768457
 
-        # self.RE_START = -2
-        # self.RE_END = 1
+        self.RE_START = -2
+        self.RE_END = 1
         
         self.IM_START = -(((self.RE_END - self.RE_START) * self.RATIO) / 2)
         self.IM_END = ((self.RE_END - self.RE_START) * self.RATIO) / 2
@@ -57,3 +80,4 @@ class Settings:
         # Redraw
         self.DRAW = True
         self.COLOR = True
+

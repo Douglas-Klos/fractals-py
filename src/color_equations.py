@@ -7,7 +7,10 @@ import pygame
 from numba import jit
 import numpy as np
 from math import floor
-from .color import Color
+try:
+    from .color import Color
+except ImportError:
+    from color import Color
 
 
 def colorize_hue(settings, point_list, *_):
