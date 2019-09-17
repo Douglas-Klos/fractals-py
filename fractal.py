@@ -2,11 +2,18 @@
 """ Fractals in Python """
 # pylint: disable=E0401
 
+from math import floor
 from pygame import display, init
 from src.settings import Settings
 from loguru import logger
 
 import src.pygame_functions as pf
+
+
+def display_fractal(settings, palette, point_list):
+    """ Draw the fractal to the screen """
+    for point in point_list:
+        settings.SCREEN.set_at((point[0], point[1]), palette[floor(point[2])])
 
 
 def main():
@@ -24,10 +31,10 @@ def main():
 
     point_list = fractal(settings)
     palette = colorize(settings, point_list)
-    pf.display_fractal(settings, palette, point_list)
-    
-    
+
     while True:
+        display_fractal(settings, palette, point_list)
+
         # Set display title
         display.set_caption(
             f"RE:({settings.RE_START}, {settings.RE_END}), "
@@ -37,14 +44,14 @@ def main():
         display.flip()
 
         settings.COLOR = False
-        settings.DRAW = pf.check_events(settings)
+        settings.DRAW = False
+        pf.check_events(settings)
 
         fractal = settings.fractal_alg[settings.FRACTAL_ALGORITHM]
         colorize = settings.color_alg[settings.COLOR_ALGORITHM]
 
         if settings.COLOR:
             logger.debug("Regenerating color palette")
-            colorize = settings.color_alg[settings.COLOR_ALGORITHM]
 
             # Regenreate color palette.
             palette = colorize(settings, point_list)
@@ -54,8 +61,6 @@ def main():
 
             # Regenerate point_list
             point_list = fractal(settings)
-
-        pf.display_fractal(settings, palette, point_list)
 
 
 if __name__ == "__main__":

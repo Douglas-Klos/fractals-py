@@ -2,7 +2,6 @@
 # pylint: disable=C0301, E1101, W0212
 
 from datetime import datetime
-from math import floor
 import pygame
 import src.dialog_box as db
 
@@ -19,51 +18,53 @@ def check_events(settings):
             exit()
 
         elif event.type == pygame.KEYDOWN:
-            return check_keydown(settings, event)
+            check_keydown(settings, event)
+            break
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             mouse_down = left_mouse_down()
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            return left_mouse_up(settings, mouse_down)
+            left_mouse_up(settings, mouse_down)
+            break
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 2:
-            return center_mouse_up(settings)
+            center_mouse_up(settings)
+            break
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
             mouse_down = right_mouse_down()
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 3:
-            return right_mouse_up(settings, mouse_down)
+            right_mouse_up(settings, mouse_down)
+            break
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 4:
-            return mouse_wheel_up(settings)
+            mouse_wheel_up(settings)
+            break
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 5:
-            return mouse_wheel_down(settings)
+            mouse_wheel_down(settings)
+            break
 
 
 def check_keydown(settings, event):
     """ Check event when keydown is detected """
     if event.key == pygame.K_q:
         exit()
+
     elif event.key == pygame.K_SPACE:
         filename = f"{datetime.now():%Y-%m-%d %H-%M-%S}.png"
         print(f"Saving {filename}")
         pygame.image.save(settings.SCREEN, f"fractal {filename}")
-        # False, do not redraw the screen
-        return False
+
     elif event.key == pygame.K_RETURN:
         db.construct_dialog_box(settings)
-        # False, redraw the screen
-        return settings.DRAW
+
     elif event.key == pygame.K_BACKSPACE:
         if settings.history:
             load_from_history(settings)
-            return True
-        else:
-            print("At beginning")
-            return False
+            settings.DRAW = True
 
 
 def load_from_history(settings):
@@ -83,6 +84,8 @@ def load_from_history(settings):
     else:
         settings.IM_START = im_start
         settings.IM_END = im_end
+
+    settings.DRAW = True
 
 
 def left_mouse_down():
@@ -173,8 +176,7 @@ def left_mouse_up(settings, mouse_down):
     settings.IM_START = new_start_im
     settings.IM_END = new_end_im
 
-    # True, redraw the screen
-    return True
+    settings.DRAW = True
 
 
 def center_mouse_up(settings):
@@ -188,8 +190,7 @@ def center_mouse_up(settings):
     settings.IM_START = -(((settings.RE_END - settings.RE_START) * ratio) / 2)
     settings.IM_END = ((settings.RE_END - settings.RE_START) * ratio) / 2
 
-    # True, redraw the screen
-    return True
+    settings.DRAW = True
 
 
 def right_mouse_down():
@@ -231,8 +232,7 @@ def right_mouse_up(settings, mouse_down):
     settings.IM_START = settings.IM_START + verticle_shift
     settings.IM_END = settings.IM_END + verticle_shift
 
-    # True, redraw the screen
-    return True
+    settings.DRAW = True
 
 
 def mouse_wheel_down(settings):
@@ -249,8 +249,7 @@ def mouse_wheel_down(settings):
     settings.IM_START += im_adjust
     settings.IM_END -= im_adjust
 
-    # True, redraw the screen
-    return True
+    settings.DRAW = True
 
 
 def mouse_wheel_up(settings):
@@ -266,12 +265,6 @@ def mouse_wheel_up(settings):
     settings.IM_START -= im_adjust
     settings.IM_END += im_adjust
 
-    # True, redraw the screen
-    return True
+    settings.DRAW = True
 
 
-def display_fractal(settings, palette, point_list):
-    """ Draw the fractal to the screen """
-    for point in point_list:
-        # print(f"x:{point[0]}, y:{point[1]}, z:{palette[floor(point[2])]}")
-        settings.SCREEN.set_at((point[0], point[1]), palette[floor(point[2])])
