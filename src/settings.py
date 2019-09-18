@@ -1,11 +1,11 @@
 import src.fractal_equations as fe
 import src.color_equations as ce
 
+
 class Settings:
     """ Settings for fractals """
 
     def __init__(self):
-        
         # Lists of available functions
         self.color_alg = {
             "ce.colorize_hue": ce.colorize_hue,
@@ -24,7 +24,6 @@ class Settings:
             "fe.mandelbrot": fe.mandelbrot,
             "fe.julia": fe.julia,
         }
-
 
         # Mandelbrot iterations
         self.MAX_ITER = 512
@@ -62,7 +61,7 @@ class Settings:
 
         self.RE_START = -2
         self.RE_END = 1
-        
+
         self.IM_START = -(((self.RE_END - self.RE_START) * self.RATIO) / 2)
         self.IM_END = ((self.RE_END - self.RE_START) * self.RATIO) / 2
 
@@ -70,7 +69,7 @@ class Settings:
         self.history = []
 
         # Mouse zoom
-        self.MWHEEL_ZOOM = .1
+        self.MWHEEL_ZOOM = .2
 
         # Interesting Julia Values
         julia_values = ((0.4, 0.3), (0.3, 0.2), (0.35, 0.4))
@@ -80,4 +79,3 @@ class Settings:
         # Redraw
         self.DRAW = True
         self.COLOR = True
-

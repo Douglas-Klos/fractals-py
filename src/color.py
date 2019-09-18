@@ -38,167 +38,166 @@ FLOAT_ERROR = 0.0000005
 
 
 RGB_TO_COLOR_NAMES = {
-    (0, 0, 0): ['Black'],
-    (0, 0, 128): ['Navy', 'NavyBlue'],
-    (0, 0, 139): ['DarkBlue'],
-    (0, 0, 205): ['MediumBlue'],
-    (0, 0, 255): ['Blue'],
-    (0, 100, 0): ['DarkGreen'],
-    (0, 128, 0): ['Green'],
-    (0, 139, 139): ['DarkCyan'],
-    (0, 191, 255): ['DeepSkyBlue'],
-    (0, 206, 209): ['DarkTurquoise'],
-    (0, 250, 154): ['MediumSpringGreen'],
-    (0, 255, 0): ['Lime'],
-    (0, 255, 127): ['SpringGreen'],
-    (0, 255, 255): ['Cyan', 'Aqua'],
-    (25, 25, 112): ['MidnightBlue'],
-    (30, 144, 255): ['DodgerBlue'],
-    (32, 178, 170): ['LightSeaGreen'],
-    (34, 139, 34): ['ForestGreen'],
-    (46, 139, 87): ['SeaGreen'],
-    (47, 79, 79): ['DarkSlateGray', 'DarkSlateGrey'],
-    (50, 205, 50): ['LimeGreen'],
-    (60, 179, 113): ['MediumSeaGreen'],
-    (64, 224, 208): ['Turquoise'],
-    (65, 105, 225): ['RoyalBlue'],
-    (70, 130, 180): ['SteelBlue'],
-    (72, 61, 139): ['DarkSlateBlue'],
-    (72, 209, 204): ['MediumTurquoise'],
-    (75, 0, 130): ['Indigo'],
-    (85, 107, 47): ['DarkOliveGreen'],
-    (95, 158, 160): ['CadetBlue'],
-    (100, 149, 237): ['CornflowerBlue'],
-    (102, 205, 170): ['MediumAquamarine'],
-    (105, 105, 105): ['DimGray', 'DimGrey'],
-    (106, 90, 205): ['SlateBlue'],
-    (107, 142, 35): ['OliveDrab'],
-    (112, 128, 144): ['SlateGray', 'SlateGrey'],
-    (119, 136, 153): ['LightSlateGray', 'LightSlateGrey'],
-    (123, 104, 238): ['MediumSlateBlue'],
-    (124, 252, 0): ['LawnGreen'],
-    (127, 255, 0): ['Chartreuse'],
-    (127, 255, 212): ['Aquamarine'],
-    (128, 0, 0): ['Maroon'],
-    (128, 0, 128): ['Purple'],
-    (128, 128, 0): ['Olive'],
-    (128, 128, 128): ['Gray', 'Grey'],
-    (132, 112, 255): ['LightSlateBlue'],
-    (135, 206, 235): ['SkyBlue'],
-    (135, 206, 250): ['LightSkyBlue'],
-    (138, 43, 226): ['BlueViolet'],
-    (139, 0, 0): ['DarkRed'],
-    (139, 0, 139): ['DarkMagenta'],
-    (139, 69, 19): ['SaddleBrown'],
-    (143, 188, 143): ['DarkSeaGreen'],
-    (144, 238, 144): ['LightGreen'],
-    (147, 112, 219): ['MediumPurple'],
-    (148, 0, 211): ['DarkViolet'],
-    (152, 251, 152): ['PaleGreen'],
-    (153, 50, 204): ['DarkOrchid'],
-    (154, 205, 50): ['YellowGreen'],
-    (160, 82, 45): ['Sienna'],
-    (165, 42, 42): ['Brown'],
-    (169, 169, 169): ['DarkGray', 'DarkGrey'],
-    (173, 216, 230): ['LightBlue'],
-    (173, 255, 47): ['GreenYellow'],
-    (175, 238, 238): ['PaleTurquoise'],
-    (176, 196, 222): ['LightSteelBlue'],
-    (176, 224, 230): ['PowderBlue'],
-    (178, 34, 34): ['Firebrick'],
-    (184, 134, 11): ['DarkGoldenrod'],
-    (186, 85, 211): ['MediumOrchid'],
-    (188, 143, 143): ['RosyBrown'],
-    (189, 183, 107): ['DarkKhaki'],
-    (192, 192, 192): ['Silver'],
-    (199, 21, 133): ['MediumVioletRed'],
-    (205, 92, 92): ['IndianRed'],
-    (205, 133, 63): ['Peru'],
-    (208, 32, 144): ['VioletRed'],
-    (210, 105, 30): ['Chocolate'],
-    (210, 180, 140): ['Tan'],
-    (211, 211, 211): ['LightGray', 'LightGrey'],
-    (216, 191, 216): ['Thistle'],
-    (218, 112, 214): ['Orchid'],
-    (218, 165, 32): ['Goldenrod'],
-    (219, 112, 147): ['PaleVioletRed'],
-    (220, 20, 60): ['Crimson'],
-    (220, 220, 220): ['Gainsboro'],
-    (221, 160, 221): ['Plum'],
-    (222, 184, 135): ['Burlywood'],
-    (224, 255, 255): ['LightCyan'],
-    (230, 230, 250): ['Lavender'],
-    (233, 150, 122): ['DarkSalmon'],
-    (238, 130, 238): ['Violet'],
-    (238, 221, 130): ['LightGoldenrod'],
-    (238, 232, 170): ['PaleGoldenrod'],
-    (240, 128, 128): ['LightCoral'],
-    (240, 230, 140): ['Khaki'],
-    (240, 248, 255): ['AliceBlue'],
-    (240, 255, 240): ['Honeydew'],
-    (240, 255, 255): ['Azure'],
-    (244, 164, 96): ['SandyBrown'],
-    (245, 222, 179): ['Wheat'],
-    (245, 245, 220): ['Beige'],
-    (245, 245, 245): ['WhiteSmoke'],
-    (245, 255, 250): ['MintCream'],
-    (248, 248, 255): ['GhostWhite'],
-    (250, 128, 114): ['Salmon'],
-    (250, 235, 215): ['AntiqueWhite'],
-    (250, 240, 230): ['Linen'],
-    (250, 250, 210): ['LightGoldenrodYellow'],
-    (253, 245, 230): ['OldLace'],
-    (255, 0, 0): ['Red'],
-    (255, 0, 255): ['Magenta', 'Fuchsia'],
-    (255, 20, 147): ['DeepPink'],
-    (255, 69, 0): ['OrangeRed'],
-    (255, 99, 71): ['Tomato'],
-    (255, 105, 180): ['HotPink'],
-    (255, 127, 80): ['Coral'],
-    (255, 140, 0): ['DarkOrange'],
-    (255, 160, 122): ['LightSalmon'],
-    (255, 165, 0): ['Orange'],
-    (255, 182, 193): ['LightPink'],
-    (255, 192, 203): ['Pink'],
-    (255, 215, 0): ['Gold'],
-    (255, 218, 185): ['PeachPuff'],
-    (255, 222, 173): ['NavajoWhite'],
-    (255, 228, 181): ['Moccasin'],
-    (255, 228, 196): ['Bisque'],
-    (255, 228, 225): ['MistyRose'],
-    (255, 235, 205): ['BlanchedAlmond'],
-    (255, 239, 213): ['PapayaWhip'],
-    (255, 240, 245): ['LavenderBlush'],
-    (255, 245, 238): ['Seashell'],
-    (255, 248, 220): ['Cornsilk'],
-    (255, 250, 205): ['LemonChiffon'],
-    (255, 250, 240): ['FloralWhite'],
-    (255, 250, 250): ['Snow'],
-    (255, 255, 0): ['Yellow'],
-    (255, 255, 224): ['LightYellow'],
-    (255, 255, 240): ['Ivory'],
-    (255, 255, 255): ['White']
+    (0, 0, 0): ["Black"],
+    (0, 0, 128): ["Navy", "NavyBlue"],
+    (0, 0, 139): ["DarkBlue"],
+    (0, 0, 205): ["MediumBlue"],
+    (0, 0, 255): ["Blue"],
+    (0, 100, 0): ["DarkGreen"],
+    (0, 128, 0): ["Green"],
+    (0, 139, 139): ["DarkCyan"],
+    (0, 191, 255): ["DeepSkyBlue"],
+    (0, 206, 209): ["DarkTurquoise"],
+    (0, 250, 154): ["MediumSpringGreen"],
+    (0, 255, 0): ["Lime"],
+    (0, 255, 127): ["SpringGreen"],
+    (0, 255, 255): ["Cyan", "Aqua"],
+    (25, 25, 112): ["MidnightBlue"],
+    (30, 144, 255): ["DodgerBlue"],
+    (32, 178, 170): ["LightSeaGreen"],
+    (34, 139, 34): ["ForestGreen"],
+    (46, 139, 87): ["SeaGreen"],
+    (47, 79, 79): ["DarkSlateGray", "DarkSlateGrey"],
+    (50, 205, 50): ["LimeGreen"],
+    (60, 179, 113): ["MediumSeaGreen"],
+    (64, 224, 208): ["Turquoise"],
+    (65, 105, 225): ["RoyalBlue"],
+    (70, 130, 180): ["SteelBlue"],
+    (72, 61, 139): ["DarkSlateBlue"],
+    (72, 209, 204): ["MediumTurquoise"],
+    (75, 0, 130): ["Indigo"],
+    (85, 107, 47): ["DarkOliveGreen"],
+    (95, 158, 160): ["CadetBlue"],
+    (100, 149, 237): ["CornflowerBlue"],
+    (102, 205, 170): ["MediumAquamarine"],
+    (105, 105, 105): ["DimGray", "DimGrey"],
+    (106, 90, 205): ["SlateBlue"],
+    (107, 142, 35): ["OliveDrab"],
+    (112, 128, 144): ["SlateGray", "SlateGrey"],
+    (119, 136, 153): ["LightSlateGray", "LightSlateGrey"],
+    (123, 104, 238): ["MediumSlateBlue"],
+    (124, 252, 0): ["LawnGreen"],
+    (127, 255, 0): ["Chartreuse"],
+    (127, 255, 212): ["Aquamarine"],
+    (128, 0, 0): ["Maroon"],
+    (128, 0, 128): ["Purple"],
+    (128, 128, 0): ["Olive"],
+    (128, 128, 128): ["Gray", "Grey"],
+    (132, 112, 255): ["LightSlateBlue"],
+    (135, 206, 235): ["SkyBlue"],
+    (135, 206, 250): ["LightSkyBlue"],
+    (138, 43, 226): ["BlueViolet"],
+    (139, 0, 0): ["DarkRed"],
+    (139, 0, 139): ["DarkMagenta"],
+    (139, 69, 19): ["SaddleBrown"],
+    (143, 188, 143): ["DarkSeaGreen"],
+    (144, 238, 144): ["LightGreen"],
+    (147, 112, 219): ["MediumPurple"],
+    (148, 0, 211): ["DarkViolet"],
+    (152, 251, 152): ["PaleGreen"],
+    (153, 50, 204): ["DarkOrchid"],
+    (154, 205, 50): ["YellowGreen"],
+    (160, 82, 45): ["Sienna"],
+    (165, 42, 42): ["Brown"],
+    (169, 169, 169): ["DarkGray", "DarkGrey"],
+    (173, 216, 230): ["LightBlue"],
+    (173, 255, 47): ["GreenYellow"],
+    (175, 238, 238): ["PaleTurquoise"],
+    (176, 196, 222): ["LightSteelBlue"],
+    (176, 224, 230): ["PowderBlue"],
+    (178, 34, 34): ["Firebrick"],
+    (184, 134, 11): ["DarkGoldenrod"],
+    (186, 85, 211): ["MediumOrchid"],
+    (188, 143, 143): ["RosyBrown"],
+    (189, 183, 107): ["DarkKhaki"],
+    (192, 192, 192): ["Silver"],
+    (199, 21, 133): ["MediumVioletRed"],
+    (205, 92, 92): ["IndianRed"],
+    (205, 133, 63): ["Peru"],
+    (208, 32, 144): ["VioletRed"],
+    (210, 105, 30): ["Chocolate"],
+    (210, 180, 140): ["Tan"],
+    (211, 211, 211): ["LightGray", "LightGrey"],
+    (216, 191, 216): ["Thistle"],
+    (218, 112, 214): ["Orchid"],
+    (218, 165, 32): ["Goldenrod"],
+    (219, 112, 147): ["PaleVioletRed"],
+    (220, 20, 60): ["Crimson"],
+    (220, 220, 220): ["Gainsboro"],
+    (221, 160, 221): ["Plum"],
+    (222, 184, 135): ["Burlywood"],
+    (224, 255, 255): ["LightCyan"],
+    (230, 230, 250): ["Lavender"],
+    (233, 150, 122): ["DarkSalmon"],
+    (238, 130, 238): ["Violet"],
+    (238, 221, 130): ["LightGoldenrod"],
+    (238, 232, 170): ["PaleGoldenrod"],
+    (240, 128, 128): ["LightCoral"],
+    (240, 230, 140): ["Khaki"],
+    (240, 248, 255): ["AliceBlue"],
+    (240, 255, 240): ["Honeydew"],
+    (240, 255, 255): ["Azure"],
+    (244, 164, 96): ["SandyBrown"],
+    (245, 222, 179): ["Wheat"],
+    (245, 245, 220): ["Beige"],
+    (245, 245, 245): ["WhiteSmoke"],
+    (245, 255, 250): ["MintCream"],
+    (248, 248, 255): ["GhostWhite"],
+    (250, 128, 114): ["Salmon"],
+    (250, 235, 215): ["AntiqueWhite"],
+    (250, 240, 230): ["Linen"],
+    (250, 250, 210): ["LightGoldenrodYellow"],
+    (253, 245, 230): ["OldLace"],
+    (255, 0, 0): ["Red"],
+    (255, 0, 255): ["Magenta", "Fuchsia"],
+    (255, 20, 147): ["DeepPink"],
+    (255, 69, 0): ["OrangeRed"],
+    (255, 99, 71): ["Tomato"],
+    (255, 105, 180): ["HotPink"],
+    (255, 127, 80): ["Coral"],
+    (255, 140, 0): ["DarkOrange"],
+    (255, 160, 122): ["LightSalmon"],
+    (255, 165, 0): ["Orange"],
+    (255, 182, 193): ["LightPink"],
+    (255, 192, 203): ["Pink"],
+    (255, 215, 0): ["Gold"],
+    (255, 218, 185): ["PeachPuff"],
+    (255, 222, 173): ["NavajoWhite"],
+    (255, 228, 181): ["Moccasin"],
+    (255, 228, 196): ["Bisque"],
+    (255, 228, 225): ["MistyRose"],
+    (255, 235, 205): ["BlanchedAlmond"],
+    (255, 239, 213): ["PapayaWhip"],
+    (255, 240, 245): ["LavenderBlush"],
+    (255, 245, 238): ["Seashell"],
+    (255, 248, 220): ["Cornsilk"],
+    (255, 250, 205): ["LemonChiffon"],
+    (255, 250, 240): ["FloralWhite"],
+    (255, 250, 250): ["Snow"],
+    (255, 255, 0): ["Yellow"],
+    (255, 255, 224): ["LightYellow"],
+    (255, 255, 240): ["Ivory"],
+    (255, 255, 255): ["White"],
 }
 
 ## Building inverse relation
 COLOR_NAME_TO_RGB = dict(
-    (name.lower(), rgb)
-    for rgb, names in RGB_TO_COLOR_NAMES.items()
-    for name in names)
+    (name.lower(), rgb) for rgb, names in RGB_TO_COLOR_NAMES.items() for name in names
+)
 
 
-LONG_HEX_COLOR = re.compile(r'^#[0-9a-fA-F]{6}$')
-SHORT_HEX_COLOR = re.compile(r'^#[0-9a-fA-F]{3}$')
+LONG_HEX_COLOR = re.compile(r"^#[0-9a-fA-F]{6}$")
+SHORT_HEX_COLOR = re.compile(r"^#[0-9a-fA-F]{3}$")
 
 
 class C_HSL:
-
     def __getattr__(self, value):
         label = value.lower()
         if label in COLOR_NAME_TO_RGB:
-            return rgb2hsl(tuple(v / 255. for v in COLOR_NAME_TO_RGB[label]))
-        raise AttributeError("%s instance has no attribute %r"
-                             % (self.__class__, value))
+            return rgb2hsl(tuple(v / 255.0 for v in COLOR_NAME_TO_RGB[label]))
+        raise AttributeError(
+            "%s instance has no attribute %r" % (self.__class__, value)
+        )
 
 
 HSL = C_HSL()
@@ -239,6 +238,7 @@ class C_HEX:
     def __getattr__(self, value):
         return rgb2hex(getattr(RGB, value))
 
+
 RGB = C_RGB()
 HEX = C_HEX()
 
@@ -246,6 +246,7 @@ HEX = C_HEX()
 ##
 ## Conversion function
 ##
+
 
 def hsl2rgb(hsl):
     """Convert HSL representation towards RGB
@@ -376,14 +377,13 @@ def rgb2hsl(rgb):
     """
     r, g, b = [float(v) for v in rgb]
 
-    for name, v in {'Red': r, 'Green': g, 'Blue': b}.items():
+    for name, v in {"Red": r, "Green": g, "Blue": b}.items():
         if not (0 - FLOAT_ERROR <= v <= 1 + FLOAT_ERROR):
-            raise ValueError("%s must be between 0 and 1. You provided %r."
-                             % (name, v))
+            raise ValueError("%s must be between 0 and 1. You provided %r." % (name, v))
 
     vmin = min(r, g, b)  ## Min. value of RGB
     vmax = max(r, g, b)  ## Max. value of RGB
-    diff = vmax - vmin   ## Delta RGB value
+    diff = vmax - vmin  ## Delta RGB value
 
     vsum = vmin + vmax
 
@@ -413,8 +413,10 @@ def rgb2hsl(rgb):
     elif b == vmax:
         h = (2.0 / 3) + dg - dr
 
-    if h < 0: h += 1
-    if h > 1: h -= 1
+    if h < 0:
+        h += 1
+    if h > 1:
+        h -= 1
 
     return (h, s, l)
 
@@ -424,12 +426,17 @@ def _hue2rgb(v1, v2, vH):
     :param vH: rotation around the chromatic circle (between 0..1)
     """
 
-    while vH < 0: vH += 1
-    while vH > 1: vH -= 1
+    while vH < 0:
+        vH += 1
+    while vH > 1:
+        vH -= 1
 
-    if 6 * vH < 1: return v1 + (v2 - v1) * 6 * vH
-    if 2 * vH < 1: return v2
-    if 3 * vH < 2: return v1 + (v2 - v1) * ((2.0 / 3) - vH) * 6
+    if 6 * vH < 1:
+        return v1 + (v2 - v1) * 6 * vH
+    if 2 * vH < 1:
+        return v2
+    if 3 * vH < 2:
+        return v1 + (v2 - v1) * ((2.0 / 3) - vH) * 6
 
     return v1
 
@@ -453,11 +460,10 @@ def rgb2hex(rgb, force_long=False):
     '#00ffff'
     """
 
-    hx = ''.join(["%02x" % int(c * 255 + 0.5 - FLOAT_ERROR)
-                  for c in rgb])
+    hx = "".join(["%02x" % int(c * 255 + 0.5 - FLOAT_ERROR) for c in rgb])
 
     if not force_long and hx[0::2] == hx[1::2]:
-        hx = ''.join(hx[0::2])
+        hx = "".join(hx[0::2])
 
     return "#%s" % hx
 
@@ -489,8 +495,7 @@ def hex2rgb(str_rgb):
         else:
             raise ValueError()
     except:
-        raise ValueError("Invalid value %r provided for rgb color."
-                         % str_rgb)
+        raise ValueError("Invalid value %r provided for rgb color." % str_rgb)
 
     return tuple([float(int(v, 16)) / 255 for v in (r, g, b)])
 
@@ -518,15 +523,16 @@ def hex2web(hex):
         ## take the first one
         color_name = RGB_TO_COLOR_NAMES[dec_rgb][0]
         ## Enforce full lowercase for single worded color name.
-        return color_name if len(re.sub(r"[^A-Z]", "", color_name)) > 1 \
-               else color_name.lower()
+        return (
+            color_name
+            if len(re.sub(r"[^A-Z]", "", color_name)) > 1
+            else color_name.lower()
+        )
 
     # Hex format is verified by hex2rgb function. And should be 3 or 6 digit
     if len(hex) == 7:
-        if hex[1] == hex[2] and \
-           hex[3] == hex[4] and \
-           hex[5] == hex[6]:
-            return '#' + hex[1] + hex[3] + hex[5]
+        if hex[1] == hex[2] and hex[3] == hex[4] and hex[5] == hex[6]:
+            return "#" + hex[1] + hex[3] + hex[5]
     return hex
 
 
@@ -563,14 +569,12 @@ def web2hex(web, force_long=False):
     >>> Color('RED')
     <Color red>
     """
-    if web.startswith('#'):
-        if (LONG_HEX_COLOR.match(web) or
-            (not force_long and SHORT_HEX_COLOR.match(web))):
+    if web.startswith("#"):
+        if LONG_HEX_COLOR.match(web) or (not force_long and SHORT_HEX_COLOR.match(web)):
             return web.lower()
         elif SHORT_HEX_COLOR.match(web) and force_long:
-            return '#' + ''.join([("%s" % (t, )) * 2 for t in web[1:]])
-        raise AttributeError(
-            "%r is not in web format. Need 3 or 6 hex digit." % web)
+            return "#" + "".join([("%s" % (t,)) * 2 for t in web[1:]])
+        raise AttributeError("%r is not in web format. Need 3 or 6 hex digit." % web)
 
     web = web.lower()
     if web not in COLOR_NAME_TO_RGB:
@@ -578,8 +582,7 @@ def web2hex(web, force_long=False):
 
     ## convert dec to hex:
 
-    return rgb2hex([float(int(v)) / 255 for v in COLOR_NAME_TO_RGB[web]],
-                   force_long)
+    return rgb2hex([float(int(v)) / 255 for v in COLOR_NAME_TO_RGB[web]], force_long)
 
 
 ## Missing functions conversion
@@ -611,11 +614,13 @@ def color_scale(begin_hsl, end_hsl, nb):
     """
 
     if nb < 0:
-        raise ValueError(
-            "Unsupported negative number of colors (nb=%r)." % nb)
+        raise ValueError("Unsupported negative number of colors (nb=%r)." % nb)
 
-    step = tuple([float(end_hsl[i] - begin_hsl[i]) / nb for i in range(0, 3)]) \
-           if nb > 0 else (0, 0, 0)
+    step = (
+        tuple([float(end_hsl[i] - begin_hsl[i]) / nb for i in range(0, 3)])
+        if nb > 0
+        else (0, 0, 0)
+    )
 
     def mul(step, value):
         return tuple([v * value for v in step])
@@ -629,6 +634,7 @@ def color_scale(begin_hsl, end_hsl, nb):
 ##
 ## Color Pickers
 ##
+
 
 def RGB_color_picker(obj):
     """Build a color representation from the string representation of an object
@@ -650,20 +656,20 @@ def RGB_color_picker(obj):
     ## Turn the input into a by 3-dividable string. SHA-384 is good because it
     ## divides into 3 components of the same size, which will be used to
     ## represent the RGB values of the color.
-    digest = hashlib.sha384(str(obj).encode('utf-8')).hexdigest()
+    digest = hashlib.sha384(str(obj).encode("utf-8")).hexdigest()
 
     ## Split the digest into 3 sub-strings of equivalent size.
     subsize = int(len(digest) / 3)
-    splitted_digest = [digest[i * subsize: (i + 1) * subsize]
-                       for i in range(3)]
+    splitted_digest = [digest[i * subsize : (i + 1) * subsize] for i in range(3)]
 
     ## Convert those hexadecimal sub-strings into integer and scale them down
     ## to the 0..1 range.
     max_value = float(int("f" * subsize, 16))
     components = (
-        int(d, 16)     ## Make a number from a list with hex digits
-        / max_value    ## Scale it down to [0.0, 1.0]
-        for d in splitted_digest)
+        int(d, 16)  ## Make a number from a list with hex digits
+        / max_value  ## Scale it down to [0.0, 1.0]
+        for d in splitted_digest
+    )
 
     return Color(rgb2hex(components))  ## Profit!
 
@@ -680,6 +686,7 @@ def hash_or_str(obj):
 ##
 ## All purpose object
 ##
+
 
 class Color(object):
     """Abstraction of a color object
@@ -812,11 +819,16 @@ class Color(object):
         (0.0, 1.0, 0.5)
     """
 
-    _hsl = None   ## internal representation
+    _hsl = None  ## internal representation
 
-    def __init__(self, color=None,
-                 pick_for=None, picker=RGB_color_picker, pick_key=hash_or_str,
-                 **kwargs):
+    def __init__(
+        self,
+        color=None,
+        pick_for=None,
+        picker=RGB_color_picker,
+        pick_key=hash_or_str,
+        **kwargs
+    ):
 
         if pick_key is None:
             pick_key = lambda x: x
@@ -827,7 +839,7 @@ class Color(object):
         if isinstance(color, Color):
             self.web = color.web
         else:
-            self.web = color if color else 'black'
+            self.web = color if color else "black"
 
         self.equality = RGB_equivalence
 
@@ -838,13 +850,13 @@ class Color(object):
         if label.startswith("get_"):
             raise AttributeError("'%s' not found" % label)
         try:
-            return getattr(self, 'get_' + label)()
+            return getattr(self, "get_" + label)()
         except AttributeError:
             raise AttributeError("'%s' not found" % label)
 
     def __setattr__(self, label, value):
         if label not in ["_hsl", "equality"]:
-            fc = getattr(self, 'set_' + label)
+            fc = getattr(self, "set_" + label)
             fc(value)
         else:
             self.__dict__[label] = value
@@ -958,9 +970,9 @@ HSL_equivalence = lambda c1, c2: c1._hsl == c2._hsl
 
 
 def make_color_factory(**kwargs_defaults):
-
     def ColorFactory(*args, **kwargs):
         new_kwargs = kwargs_defaults.copy()
         new_kwargs.update(kwargs)
         return Color(*args, **new_kwargs)
+
     return ColorFactory

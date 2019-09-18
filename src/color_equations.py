@@ -6,7 +6,7 @@ from math import sin, cos, floor, sqrt
 import pygame
 from numba import jit
 import numpy as np
-from math import floor
+# For testing purposes
 try:
     from .color import Color
 except ImportError:
@@ -337,7 +337,6 @@ def colorize_blue_gold(settings, *_):
     """ Predefined blue and gold color palette """
     gold = Color("gold")
     black = Color("black")
-    white = Color("white")
     palette = []
     return_palette = []
 
@@ -463,46 +462,60 @@ def colorize_color_black2(settings, *_):
 def black_to_white(span):
     return [[x * (256/span), x * (256/span), x * (256/span)] for x in range(span)]
 
+
 def white_to_black(span):
     return [[x * (256/span), x * (256/span), x * (256/span)] for x in reversed(range(span))]
+
 
 def blue_to_black(span):
     """ Colour package blue.range_to(black) gives incorrect result """
     return [[0, 0, floor(x * (256/span))] for x in reversed(range(span))]
 
+
 def black_to_blue(span):
     """ Colour package black.range_to(blue) gives incorrect result """
     return [[0, 0, floor(x * (256/span))] for x in range(span)]
 
+
 def green_to_black(span):
     return [[0, floor(x * (256/span)), 0] for x in reversed(range(span))]
+
 
 def black_to_green(span):
     return [[0, floor(x * (256/span)), 0] for x in range(span)]
 
+
 def red_to_black(span):
     return [[floor(x * (256/span)), 0, 0] for x in reversed(range(span))]
+
 
 def black_to_red(span):
     return [[floor(x * (256/span)), 0, 0] for x in range(span)]
 
+
 def cyan_to_black(span):
     return [[0, floor(x * (256/span)), floor(x * (256/span))] for x in reversed(range(span))]
+
 
 def black_to_cyan(span):
     return [[0, floor(x * (256/span)), floor(x * (256/span))] for x in range(span)]
 
+
 def yellow_to_black(span):
     return [[floor(x * (256/span)), floor(x * (256/span)), 0] for x in reversed(range(span))]
+
 
 def black_to_yellow(span):
     return [[floor(x * (256/span)), floor(x * (256/span)), 0] for x in range(span)]
 
+
 def violet_to_black(span):
     return [[floor(x * (256/span)), 0, floor(x * (256/span))] for x in reversed(range(span))]
 
+
 def black_to_violet(span):
     return [[floor(x * (256/span)), 0, floor(x * (256/span))] for x in range(span)]
+
 
 def roll_rgb(palette, settings):
     array = np.array(palette)

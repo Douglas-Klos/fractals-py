@@ -1,5 +1,5 @@
 """ Fractal Equations """
-#pylint: disable=C0330, C0103, R0913
+# pylint: disable=C0330, C0103, R0913
 
 from datetime import datetime
 from math import log
@@ -37,9 +37,9 @@ def mandelbrot(settings):
     ):
         if point[1] % 1000 == 0:
             print(
-            f"Calculating Fractal: {((point[0] / settings.SCREEN_WIDTH) * 100):0.2f} % complete  ",
-            end="\r",
-        )
+                f"Calculating Fractal: {((point[0] / settings.SCREEN_WIDTH) * 100):0.2f} % complete  ",
+                end="\r",
+            )
         point_list.append(point)
 
     print(f"Calculating Fractal: 100.00% complete - Time:{datetime.now()-start}")
@@ -75,13 +75,13 @@ def julia(settings):
         settings.IM_END,
         settings.MAX_ITER,
         settings.C_1,
-        settings.C_2
+        settings.C_2,
     ):
         if point[1] % 1000 == 0:
             print(
-            f"Calculating Fractal: {((point[0] / settings.SCREEN_WIDTH) * 100):0.2f} % complete  ",
-            end="\r",
-        )
+                f"Calculating Fractal: {((point[0] / settings.SCREEN_WIDTH) * 100):0.2f} % complete  ",
+                end="\r",
+            )
         point_list.append(point)
 
     print(f"Calculating Fractal: 100.00% complete - Time:{datetime.now()-start}")
@@ -89,7 +89,9 @@ def julia(settings):
 
 
 @jit(nopython=True)
-def calculate_julia(width, height, re_start, re_end, im_start, im_end, max_iter, C_1, C_2):
+def calculate_julia(
+    width, height, re_start, re_end, im_start, im_end, max_iter, C_1, C_2
+):
     """ Julia sequence for our screen size """
     for x in range(0, width):
         for y in range(0, height):

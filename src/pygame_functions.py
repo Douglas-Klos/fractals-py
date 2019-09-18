@@ -1,6 +1,6 @@
 """ Pygame functions for Fractals """
-# pylint: disable=C0301, E1101, W0212
 
+from math import floor
 from datetime import datetime
 import pygame
 import src.dialog_box as db
@@ -18,34 +18,28 @@ def check_events(settings):
             exit()
 
         elif event.type == pygame.KEYDOWN:
-            check_keydown(settings, event)
-            break
+            return check_keydown(settings, event)
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             mouse_down = left_mouse_down()
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            left_mouse_up(settings, mouse_down)
-            break
+            return left_mouse_up(settings, mouse_down)
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 2:
-            center_mouse_up(settings)
-            break
+            return center_mouse_up(settings)
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
             mouse_down = right_mouse_down()
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 3:
-            right_mouse_up(settings, mouse_down)
-            break
+            return right_mouse_up(settings, mouse_down)
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 4:
-            mouse_wheel_up(settings)
-            break
+            return mouse_wheel_up(settings)
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 5:
-            mouse_wheel_down(settings)
-            break
+            return mouse_wheel_down(settings)
 
 
 def check_keydown(settings, event):
@@ -68,6 +62,7 @@ def check_keydown(settings, event):
 
 
 def load_from_history(settings):
+    """ Retreives previous location from history and draws """
     coordinates = settings.history.pop()
 
     settings.RE_START = coordinates[0]
@@ -98,14 +93,12 @@ def left_mouse_up(settings, mouse_down):
     mouse_up = pygame.mouse.get_pos()
 
     # Trapping some corner case that shouldn't exist, but occasionally does.
-    if mouse_down == None or mouse_up == None:
-        # False, do not redraw the screen
-        return False
+    if mouse_down is None or mouse_up is None:
+        return
 
     # Rejecting clicks that didn't move
     if mouse_down[0] == mouse_up[0] and mouse_down[1] == mouse_up[1]:
-        # False, do not redraw the screen
-        return False
+        return
 
     # Setting left, right, bottom, top values for click points
     if mouse_down[0] < mouse_up[0]:
@@ -121,7 +114,6 @@ def left_mouse_up(settings, mouse_down):
     else:
         bottom = mouse_up[1]
         top = mouse_down[1]
-
 
     # Maintain our screen ratio
     delta = ((right - left) + (top - bottom)) / 2
@@ -168,7 +160,15 @@ def left_mouse_up(settings, mouse_down):
     )
 
     # Save current coordinates
-    settings.history.append((settings.RE_START, settings.RE_END, settings.IM_START, settings.IM_END, settings.RATIO))
+    settings.history.append(
+        (
+            settings.RE_START,
+            settings.RE_END,
+            settings.IM_START,
+            settings.IM_END,
+            settings.RATIO,
+        )
+    )
 
     # Update settings
     settings.RE_START = new_start_re
@@ -182,7 +182,15 @@ def left_mouse_up(settings, mouse_down):
 def center_mouse_up(settings):
     """ Center mouse button up event - Reset to default screen pos """
     # Save current coordinates
-    settings.history.append((settings.RE_START, settings.RE_END, settings.IM_START, settings.IM_END, settings.RATIO))
+    settings.history.append(
+        (
+            settings.RE_START,
+            settings.RE_END,
+            settings.IM_START,
+            settings.IM_END,
+            settings.RATIO,
+        )
+    )
 
     settings.RE_START = -2
     settings.RE_END = 1
@@ -203,13 +211,11 @@ def right_mouse_up(settings, mouse_down):
     mouse_up = pygame.mouse.get_pos()
 
     # Trapping some corner case that shouldn't exist, but occasionally does.
-    if mouse_down == None or mouse_up == None:
-        # False, do not redraw the screen
-        return False
+    if mouse_down is None or mouse_up is None:
+        return
 
     if mouse_down[0] == mouse_up[0] and mouse_down[1] == mouse_up[1]:
-        # False, do not redraw the screen
-        return False
+        return
 
     # Calculate how many pixels the mouse moved while right clicked
     horizontal_movement = mouse_up[0] - mouse_down[0]
@@ -224,7 +230,15 @@ def right_mouse_up(settings, mouse_down):
     verticle_shift = verticle_percent * (settings.IM_START - settings.IM_END)
 
     # Save current coordinates
-    settings.history.append((settings.RE_START, settings.RE_END, settings.IM_START, settings.IM_END, settings.RATIO))
+    settings.history.append(
+        (
+            settings.RE_START,
+            settings.RE_END,
+            settings.IM_START,
+            settings.IM_END,
+            settings.RATIO,
+        )
+    )
 
     # Update settings to new coordinate plane
     settings.RE_START = settings.RE_START + horizontal_shift
@@ -242,7 +256,15 @@ def mouse_wheel_down(settings):
     im_adjust = (settings.IM_START - settings.IM_END) * settings.MWHEEL_ZOOM
 
     # Save current coordinates
-    settings.history.append((settings.RE_START, settings.RE_END, settings.IM_START, settings.IM_END, settings.RATIO))
+    settings.history.append(
+        (
+            settings.RE_START,
+            settings.RE_END,
+            settings.IM_START,
+            settings.IM_END,
+            settings.RATIO,
+        )
+    )
 
     settings.RE_START += re_adjust
     settings.RE_END -= re_adjust
@@ -258,7 +280,15 @@ def mouse_wheel_up(settings):
     im_adjust = (settings.IM_START - settings.IM_END) * settings.MWHEEL_ZOOM
 
     # Save current coordinates
-    settings.history.append((settings.RE_START, settings.RE_END, settings.IM_START, settings.IM_END, settings.RATIO))
+    settings.history.append(
+        (
+            settings.RE_START,
+            settings.RE_END,
+            settings.IM_START,
+            settings.IM_END,
+            settings.RATIO,
+        )
+    )
 
     settings.RE_START -= re_adjust
     settings.RE_END += re_adjust
@@ -268,3 +298,7 @@ def mouse_wheel_up(settings):
     settings.DRAW = True
 
 
+def display_fractal(settings, palette, point_list):
+    """ Draw the fractal to the screen """
+    for point in point_list:
+        settings.SCREEN.set_at((point[0], point[1]), palette[floor(point[2])])

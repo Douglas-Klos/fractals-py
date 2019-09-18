@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 """ TKinter Dialog box to change settings """
-# pylint: disable=W0614, W0401
 
 from math import floor
-from pygame import display
 from tkinter import (
     Frame,
     Label,
@@ -18,15 +16,10 @@ from tkinter import (
     Button,
     OptionMenu,
 )
-
-# This is for testing outside of execution
-# from settings import Settings
+from pygame import display
 
 
 def construct_dialog_box(settings):
-    settings.DRAW = False
-    settings.COLOR = False
-
     root = Tk()
     entries = makeform(root, settings)
 
@@ -38,24 +31,22 @@ def construct_dialog_box(settings):
 
     root.mainloop()
 
-    return
-
 
 def makeform(root, settings):
     """ Construct the dialog box """
     fields = (
-        ("Iterations >= 64", settings.MAX_ITER),
-        ("Hue Seed", settings.HUE_SEED),
-        ("Color Shift", settings.SHIFT),
-        ("Screen Width", settings.SCREEN_WIDTH),
-        ("Screen Height", settings.SCREEN_HEIGHT),
-        ("Julia C_1", settings.C_1),
-        ("Julis C_2", settings.C_2),
-        ("Roll R", settings.ROLL_R),
-        ("Rolls G", settings.ROLL_G),
-        ("Roll B", settings.ROLL_B),
-        ("Color Algorithm", settings.COLOR_ALGORITHM),
-        ("Fractal Algorithm", settings.FRACTAL_ALGORITHM),
+        ("Iterations >= 64", settings.MAX_ITER),  # 0
+        ("Hue Seed", settings.HUE_SEED),  # 1
+        ("Color Shift", settings.SHIFT),  # 2
+        ("Screen Width", settings.SCREEN_WIDTH),  # 3
+        ("Screen Height", settings.SCREEN_HEIGHT),  # 4
+        ("Julia C_1", settings.C_1),  # 5
+        ("Julis C_2", settings.C_2),  # 6
+        ("Roll R", settings.ROLL_R),  # 7
+        ("Roll G", settings.ROLL_G),  # 8
+        ("Roll B", settings.ROLL_B),  # 9
+        ("Color Algorithm", settings.COLOR_ALGORITHM),  # 10
+        ("Fractal Algorithm", settings.FRACTAL_ALGORITHM),  # 11
     )
 
     entries = []
@@ -89,17 +80,25 @@ def makeform(root, settings):
 
 def update(settings, entries):
     """ Update settings """
-    settings.DRAW = False
-    settings.COLOR = False
-
     if (
-        settings.MAX_ITER != int(entries[0][1].get())
-        or settings.C_1 != float(entries[5][1].get())
-        or settings.C_2 != float(entries[6][1].get())
+            settings.MAX_ITER != int(entries[0][1].get()) or
+            settings.SCREEN_WIDTH != int(entries[3][1].get()) or
+            settings.SCREEN_HEIGHT != int(entries[4][1].get()) or
+            settings.C_1 != float(entries[5][1].get()) or
+            settings.C_2 != float(entries[6][1].get()) or
+            settings.FRACTAL_ALGORITHM != entries[11][1].get()
     ):
         settings.DRAW = True
 
-    old_ratio = settings.SCREEN_HEIGHT / settings.SCREEN_WIDTH
+    if (
+            settings.HUE_SEED != float(entries[1][1].get()) or
+            settings.SHIFT != int(entries[2][1].get()) or
+            settings.ROLL_R != int(entries[7][1].get()) or
+            settings.ROLL_G != int(entries[8][1].get()) or
+            settings.ROLL_B != int(entries[9][1].get()) or
+            settings.COLOR_ALGORITHM != entries[10][1].get()
+    ):
+        settings.COLOR = True
 
     settings.MAX_ITER = (
         int(entries[0][1].get()) if int(entries[0][1].get()) >= 64 else 64
@@ -111,20 +110,16 @@ def update(settings, entries):
     settings.WIDTH = int(entries[3][1].get())
     settings.HEIGHT = int(entries[4][1].get())
 
-    new_ratio = settings.SCREEN_HEIGHT / settings.SCREEN_WIDTH
+    old_ratio = settings.SCREEN_HEIGHT / settings.SCREEN_WIDTH
     settings.RATIO = settings.SCREEN_HEIGHT / settings.SCREEN_WIDTH
 
-    # print(f"old_ratio:{old_ratio}")
-    # print(f"new_ratio:{new_ratio}")
-    if old_ratio != new_ratio:
-        settings.DRAW = True
-        delta = (new_ratio - old_ratio) / 2
-        settings.IM_END = settings.IM_END + (
-            (settings.IM_END - settings.IM_START) * delta
-        )
-        settings.IM_START = settings.IM_START - (
-            (settings.IM_END - settings.IM_START) * delta
-        )
+    delta = (settings.RATIO - old_ratio) / 2
+    settings.IM_END = settings.IM_END + (
+        (settings.IM_END - settings.IM_START) * delta
+    )
+    settings.IM_START = settings.IM_START - (
+        (settings.IM_END - settings.IM_START) * delta
+    )
 
     settings.SCREEN = display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
 
@@ -135,27 +130,17 @@ def update(settings, entries):
     settings.ROLL_G = floor(float(entries[8][1].get()))
     settings.ROLL_B = floor(float(entries[9][1].get()))
 
-    if (settings.COLOR_ALGORITHM != entries[10][1].get()):
-        settings.COLOR_ALGORITHM = entries[10][1].get()
-        settings.COLOR = True
-
-    if (settings.FRACTAL_ALGORITHM != entries[11][1].get()):
-        settings.FRACTAL_ALGORITHM = entries[11][1].get()
-        settings.DRAW = True
-
-    # print(settings.COLOR_ALGORITHM)
-    # print(settings.FRACTAL_ALGORITHM)
+    settings.COLOR_ALGORITHM = entries[10][1].get()
+    settings.FRACTAL_ALGORITHM = entries[11][1].get()
 
 
 def main():
     """ Main, just used for testing """
 
-    import fractal_equations as fe
-    import color_equations as ce
+    from settings import Settings
 
     root = Tk()
 
-    # Initialize settings object
     settings = Settings()
     entries = makeform(root, settings)
 
