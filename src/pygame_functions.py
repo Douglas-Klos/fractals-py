@@ -72,15 +72,29 @@ def load_from_history(settings):
     im_end = coordinates[3]
     ratio = coordinates[4]
 
-    if ratio != settings.RATIO:
-        delta = (settings.RATIO - ratio) / 2
-        settings.IM_START = im_start - ((im_end - im_start) * delta)
-        settings.IM_END = im_end + ((im_end - im_start) * delta)
-    else:
-        settings.IM_START = im_start
-        settings.IM_END = im_end
+    # if ratio != settings.RATIO:
+    #     delta = (settings.RATIO - ratio) / 2
+    #     settings.IM_START = im_start - ((im_end - im_start) * delta)
+    #     settings.IM_END = im_end + ((im_end - im_start) * delta)
+    # else:
+    #     print(f"same")
+    #     settings.IM_START = im_start
+    #     settings.IM_END = im_end
+
+    delta = (settings.RATIO - ratio) / 2
+    settings.IM_START = im_start - ((im_end - im_start) * delta)
+    settings.IM_END = im_end + ((im_end - im_start) * delta)
 
     settings.DRAW = True
+
+
+def draw_rect(settings, left, right, top, bottom):
+    mouseRect = pygame.Rect(left, top, (right - left), (bottom - top))
+    mousescreen = pygame.Surface((settings.SCREEN.get_size()))
+    mousescreen.set_alpha(50)
+    pygame.draw.rect(mousescreen,  pygame.Color(255, 255, 255), mouseRect, 5)
+    settings.SCREEN.blit(mousescreen, (0,0))
+    pygame.display.flip()
 
 
 def left_mouse_down():
@@ -93,36 +107,24 @@ def left_mouse_up(settings, mouse_down):
     mouse_up = pygame.mouse.get_pos()
 
     # Trapping some corner case that shouldn't exist, but occasionally does.
-    if mouse_down is None or mouse_up is None:
+    if (
+        mouse_down is None or
+        mouse_up is None or
+        (  # Rejecting clicks that didn't move
+            mouse_down[0] == mouse_up[0] and mouse_down[1] == mouse_up[1]
+        )
+    ):
         return
 
-    # Rejecting clicks that didn't move
-    if mouse_down[0] == mouse_up[0] and mouse_down[1] == mouse_up[1]:
-        return
+    left = min(mouse_down[0], mouse_up[0])
+    right = max(mouse_down[0], mouse_up[0])
+    top = max(mouse_down[1], mouse_up[1])
+    bottom = min(mouse_down[1], mouse_up[1])
 
-    # Setting left, right, bottom, top values for click points
-    if mouse_down[0] < mouse_up[0]:
-        left = mouse_down[0]
-        right = mouse_up[0]
-    else:
-        left = mouse_up[0]
-        right = mouse_down[0]
-
-    if mouse_down[1] < mouse_up[1]:
-        bottom = mouse_down[1]
-        top = mouse_up[1]
-    else:
-        bottom = mouse_up[1]
-        top = mouse_down[1]
-
-    # Maintain our screen ratio
+    # The user might draw a rectangle that isn't the same as our screen ratio.
+    #   Here we calculate adjustments to their selection to maintain the screen ratio.
     delta = ((right - left) + (top - bottom)) / 2
 
-    # print(f"left:{left}, right:{right}, bottom:{bottom}, top:{top}")
-    # print(f"l-r:{left - right}, t-b:{top-bottom}")
-    # print(f"delta:{delta}")
-
-    # Calculate the amount to adjust screen position based on click points
     if (right - left) <= delta:
         h_adjust = (delta - (right - left)) / 2
     else:  # (right - left) > delta:
@@ -138,6 +140,9 @@ def left_mouse_up(settings, mouse_down):
     right += h_adjust
     bottom -= v_adjust
     top += v_adjust
+
+    # Show selection area on screen
+    draw_rect(settings, left, right, top, bottom)
 
     # Calculate the % of the current corrdinate plane the mouse moved.
     start_percent_re = left / settings.SCREEN_WIDTH

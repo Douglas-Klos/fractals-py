@@ -23,7 +23,9 @@ def construct_dialog_box(settings):
     root = Tk()
     entries = makeform(root, settings)
 
-    save_button = Button(root, text="Save", command=(lambda e=entries: update(settings, e)))
+    save_button = Button(
+        root, text="Save", command=(lambda e=entries: update(settings, e))
+    )
     save_button.pack(side=LEFT, padx=5, pady=5)
 
     close_botton = Button(root, text="Close", command=root.destroy)
@@ -53,7 +55,7 @@ def makeform(root, settings):
 
     for counter, field in enumerate(fields):
         row = Frame(root)
-        label = Label(row, width=18, text=field[0], anchor='w')
+        label = Label(row, width=18, text=field[0], anchor="w")
         if counter < 10:
             value = StringVar(row, value=field[1])
             entry = Entry(row, textvariable=value)
@@ -107,49 +109,31 @@ def update(settings, entries):
     settings.SHIFT = int(entries[2][1].get())
     settings.SCREEN_WIDTH = int(entries[3][1].get())
     settings.SCREEN_HEIGHT = int(entries[4][1].get())
-    settings.WIDTH = int(entries[3][1].get())
-    settings.HEIGHT = int(entries[4][1].get())
-
-    old_ratio = settings.SCREEN_HEIGHT / settings.SCREEN_WIDTH
-    settings.RATIO = settings.SCREEN_HEIGHT / settings.SCREEN_WIDTH
-
-    delta = (settings.RATIO - old_ratio) / 2
-    settings.IM_END = settings.IM_END + (
-        (settings.IM_END - settings.IM_START) * delta
-    )
-    settings.IM_START = settings.IM_START - (
-        (settings.IM_END - settings.IM_START) * delta
-    )
-
     settings.SCREEN = display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
-
+    settings.RATIO = settings.SCREEN_HEIGHT / settings.SCREEN_WIDTH
+    settings.IM_START = -(((settings.RE_END - settings.RE_START) * settings.RATIO) / 2)
+    settings.IM_END = ((settings.RE_END - settings.RE_START) * settings.RATIO) / 2
     settings.C_1 = float(entries[5][1].get())
     settings.C_2 = float(entries[6][1].get())
-
     settings.ROLL_R = floor(float(entries[7][1].get()))
     settings.ROLL_G = floor(float(entries[8][1].get()))
     settings.ROLL_B = floor(float(entries[9][1].get()))
-
     settings.COLOR_ALGORITHM = entries[10][1].get()
     settings.FRACTAL_ALGORITHM = entries[11][1].get()
 
 
 def main():
     """ Main, just used for testing """
-
     from settings import Settings
-
     root = Tk()
-
     settings = Settings()
     entries = makeform(root, settings)
-
-    save_button = Button(root, text="Save", command=(lambda e=entries: update(settings, e)))
+    save_button = Button(
+        root, text="Save", command=(lambda e=entries: update(settings, e))
+    )
     save_button.pack(side=LEFT, padx=5, pady=5)
-
     close_botton = Button(root, text="Close", command=root.destroy)
     close_botton.pack(side=LEFT, padx=5, pady=5)
-
     root.mainloop()
 
 

@@ -25,20 +25,22 @@ class Settings:
             "fe.julia": fe.julia,
         }
 
+        # Default algorithms
+        self.COLOR_ALGORITHM = "ce.colorize_color_black2"
+        self.FRACTAL_ALGORITHM = "fe.mandelbrot"
+
         # Mandelbrot iterations
-        self.MAX_ITER = 512
+        self.MAX_ITER = 128
 
         # Screen settings
-        self.SCREEN_WIDTH = 1024
-        self.SCREEN_HEIGHT = 768
-
-        self.WIDTH = self.SCREEN_WIDTH
-        self.HEIGHT = self.SCREEN_WIDTH
+        self.SCREEN_WIDTH = 500
+        self.SCREEN_HEIGHT = 500
         self.RATIO = self.SCREEN_HEIGHT / self.SCREEN_WIDTH
         self.SCREEN = None
 
-        self.COLOR_ALGORITHM = "ce.colorize_color_black2"
-        self.FRACTAL_ALGORITHM = "fe.mandelbrot"
+        # Deprecated.  Remove after we're sure nothing is crashing.
+        # self.WIDTH = self.SCREEN_WIDTH
+        # self.HEIGHT = self.SCREEN_WIDTH
 
         # Color settings for colorize_hue and colorized_hue_shifted
         # 0. = Violet              .5 = Green
