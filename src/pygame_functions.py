@@ -68,34 +68,33 @@ def load_from_history(settings):
     """ Retreives previous location from history and draws """
     coordinates = settings.history.pop()
 
-    if settings.ratio != coordinates[4]:
-        delta = (settings.ratio() - ratio) / 2
+    if settings.ratio() < coordinates[4]:  # Screen is wider
+        delta = (coordinates[4] - settings.ratio())
 
+        re_start = coordinates[0]
+        re_end = coordinates[1]
+
+        settings.RE_START = re_start - ((re_end - re_start) * delta)
+        settings.RE_END = re_end + ((re_end - re_start) * delta)
+        settings.IM_START = coordinates[2]
+        settings.IM_END = coordinates[3]
+
+    elif settings.ratio() > coordinates[4]:  # Screen is taller
+        delta = (settings.ratio() - coordinates[4]) / 2
         im_start = coordinates[2]
         im_end = coordinates[3]
-
+        settings.RE_START = coordinates[0]
+        settings.RE_END = coordinates[1]
         settings.IM_START = im_start - ((im_end - im_start) * delta)
         settings.IM_END = im_end + ((im_end - im_start) * delta)
-    else:
+
+    else:  # settings.ratio == coordinates[4]:
         settings.RE_START = coordinates[0]
         settings.RE_END = coordinates[1]
         settings.IM_START = coordinates[2]
         settings.IM_END = coordinates[3]
 
     settings.DRAW = True
-
-
-    # if settings.SCREEN_HEIGHT != int(entries[4][1].get()):
-    #     im_middle = mid_point(0, 0, settings.IM_START, settings.IM_END)
-    #     settings.IM_START = im_middle[1] -(((settings.RE_END - settings.RE_START) * int(entries[4][1].get()) / settings.SCREEN_WIDTH) / 2)
-    #     settings.IM_END = im_middle[1] + ((settings.RE_END - settings.RE_START) * int(entries[4][1].get()) / settings.SCREEN_WIDTH) / 2
-    #     settings.SCREEN_HEIGHT = int(entries[4][1].get())
-
-    # if settings.SCREEN_WIDTH != int(entries[3][1].get()):
-    #     re_middle = mid_point(settings.RE_START, settings.RE_END, 0, 0)
-    #     settings.RE_START = re_middle[0] - ((settings.IM_END - settings.IM_START) * int(entries[3][1].get()) / settings.SCREEN_HEIGHT /2)
-    #     settings.RE_END = re_middle[0] + ((settings.IM_END - settings.IM_START) * int(entries[3][1].get()) / settings.SCREEN_HEIGHT /2)
-    #     settings.SCREEN_WIDTH = int(entries[3][1].get())
 
 
 def left_mouse_down():
