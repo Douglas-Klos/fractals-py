@@ -26,6 +26,9 @@ def check_events(settings):
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             return left_mouse_up(settings, mouse_down)
 
+        elif event.type == pygame.MOUSEMOTION:
+            left_mouse_button_movement(settings, mouse_down)
+
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 2:
             return center_mouse_up(settings)
 
@@ -40,6 +43,54 @@ def check_events(settings):
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 5:
             return mouse_wheel_down(settings)
+
+
+def draw_rect(settings, left, right, top, bottom):
+    mouseRect = pygame.Rect(left, top, (right - left), (bottom - top))
+    mousescreen = pygame.Surface((settings.SCREEN.get_size()))
+    mousescreen.set_alpha(50)
+    pygame.draw.rect(mousescreen,  pygame.Color(255, 255, 255), mouseRect, 5)
+    settings.SCREEN.blit(mousescreen, (0,0))
+    pygame.display.flip()
+
+
+def left_mouse_button_movement(settings, mouse_down):
+    if mouse_down:
+        mpos = pygame.mouse.get_pos()
+
+        x2 = mpos[0]
+        y2 = mpos[1]
+        print(f"---------")
+        print(f"x2:{x2}")
+        print(f"y2:{y2}")
+
+        left = min(mouse_down[0], x2)
+        top = min(mouse_down[1], y2)
+        width = abs(x2 - mouse_down[0])
+        height = abs(mouse_down[1] - y2)
+
+
+        # s = pygame.Surface((x2 - mouse_down[0], y2 - mouse_down[1]), pygame.SRCALPHA)  # per-pixel alpha
+        # s.fill((255,255,255,128))  # notice the alpha value in the color
+        # settings.SCREEN.blit(s, (mouse_down[0], mouse_down[1]))
+        # screen_previous = settings.SCREEN
+
+
+
+        s = pygame.Surface((x2 - mouse_down[0], y2 - mouse_down[1]))
+        s.set_alpha(50)
+        s.fill((255,255,255))
+        settings.SCREEN.blit(s, (mouse_down[0], mouse_down[1]))
+
+        # mouseRect = pygame.Rect(left, top, width, height)
+        # mousescreen = pygame.Surface((screen.get_size()))
+        # mousescreen.set_alpha(50)
+        # pygame.draw.rect(mousescreen,  pygame.Color(255, 255, 255), mouseRect, 5)
+        # screen.blit(mousescreen, (0,0))
+        pygame.display.flip()
+        display_fractal(settings)
+        # settings.SCREEN = screen_previous
+        # pygame.display.update()
 
 
 def check_keydown(settings, event):
@@ -72,29 +123,11 @@ def load_from_history(settings):
     im_end = coordinates[3]
     ratio = coordinates[4]
 
-    # if ratio != settings.RATIO:
-    #     delta = (settings.RATIO - ratio) / 2
-    #     settings.IM_START = im_start - ((im_end - im_start) * delta)
-    #     settings.IM_END = im_end + ((im_end - im_start) * delta)
-    # else:
-    #     print(f"same")
-    #     settings.IM_START = im_start
-    #     settings.IM_END = im_end
-
     delta = (settings.RATIO - ratio) / 2
     settings.IM_START = im_start - ((im_end - im_start) * delta)
     settings.IM_END = im_end + ((im_end - im_start) * delta)
 
     settings.DRAW = True
-
-
-def draw_rect(settings, left, right, top, bottom):
-    mouseRect = pygame.Rect(left, top, (right - left), (bottom - top))
-    mousescreen = pygame.Surface((settings.SCREEN.get_size()))
-    mousescreen.set_alpha(50)
-    pygame.draw.rect(mousescreen,  pygame.Color(255, 255, 255), mouseRect, 5)
-    settings.SCREEN.blit(mousescreen, (0,0))
-    pygame.display.flip()
 
 
 def left_mouse_down():
@@ -142,7 +175,7 @@ def left_mouse_up(settings, mouse_down):
     top += v_adjust
 
     # Show selection area on screen
-    draw_rect(settings, left, right, top, bottom)
+    # draw_rect(settings, left, right, top, bottom)
 
     # Calculate the % of the current corrdinate plane the mouse moved.
     start_percent_re = left / settings.SCREEN_WIDTH
@@ -303,7 +336,7 @@ def mouse_wheel_up(settings):
     settings.DRAW = True
 
 
-def display_fractal(settings, palette, point_list):
+def display_fractal(settings):
     """ Draw the fractal to the screen """
-    for point in point_list:
-        settings.SCREEN.set_at((point[0], point[1]), palette[floor(point[2])])
+    for point in settings.point_list:
+        settings.SCREEN.set_at((point[0], point[1]), settings.palette[floor(point[2])])

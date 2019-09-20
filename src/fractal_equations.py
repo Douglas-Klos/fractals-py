@@ -1,5 +1,4 @@
 """ Fractal Equations """
-# pylint: disable=C0330, C0103, R0913
 
 from datetime import datetime
 from math import log

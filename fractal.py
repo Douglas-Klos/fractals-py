@@ -19,11 +19,11 @@ def main():
     fractal = settings.fractal_alg[settings.FRACTAL_ALGORITHM]
     colorize = settings.color_alg[settings.COLOR_ALGORITHM]
 
-    point_list = fractal(settings)
-    palette = colorize(settings, point_list)
+    settings.point_list = fractal(settings)
+    settings.palette = colorize(settings)
 
     while True:
-        pf.display_fractal(settings, palette, point_list)
+        pf.display_fractal(settings)
 
         # Set display title
         display.set_caption(
@@ -41,12 +41,12 @@ def main():
         colorize = settings.color_alg[settings.COLOR_ALGORITHM]
 
         if settings.COLOR:
-            # Regenreate color palette.
-            palette = colorize(settings, point_list)
+            # Regenreate color settings.palette.
+            settings.palette = colorize(settings)
 
         if settings.DRAW:
-            # Regenerate point_list
-            point_list = fractal(settings)
+            # Regenerate settings.point_list
+            settings.point_list = fractal(settings)
 
 
 if __name__ == "__main__":

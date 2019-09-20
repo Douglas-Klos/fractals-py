@@ -33,14 +33,10 @@ class Settings:
         self.MAX_ITER = 128
 
         # Screen settings
-        self.SCREEN_WIDTH = 500
-        self.SCREEN_HEIGHT = 500
+        self.SCREEN_WIDTH = 1000
+        self.SCREEN_HEIGHT = 1000
         self.RATIO = self.SCREEN_HEIGHT / self.SCREEN_WIDTH
         self.SCREEN = None
-
-        # Deprecated.  Remove after we're sure nothing is crashing.
-        # self.WIDTH = self.SCREEN_WIDTH
-        # self.HEIGHT = self.SCREEN_WIDTH
 
         # Color settings for colorize_hue and colorized_hue_shifted
         # 0. = Violet              .5 = Green
@@ -70,6 +66,12 @@ class Settings:
         # Point history
         self.history = []
 
+        # Points
+        self.point_list = []
+
+        # Palette
+        self.palette = []
+
         # Mouse zoom
         self.MWHEEL_ZOOM = .2
 
@@ -79,5 +81,5 @@ class Settings:
         self.C_2 = julia_values[0][1]
 
         # Redraw
-        self.DRAW = True
-        self.COLOR = True
+        self.DRAW = False
+        self.COLOR = False
