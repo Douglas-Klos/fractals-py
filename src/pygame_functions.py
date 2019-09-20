@@ -28,7 +28,11 @@ def check_events(settings):
             return left_mouse_up(settings, l_mouse_down)
 
         elif event.type == pygame.MOUSEMOTION and l_mouse_down is not None:
+            print(r_mouse_down)
             left_mouse_button_movement(settings, l_mouse_down)
+
+        elif event.type == pygame.MOUSEMOTION and r_mouse_down is not None:
+            right_mouse_button_movement(settings, r_mouse_down)
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 2:
             return center_mouse_up(settings)
@@ -66,10 +70,23 @@ def check_keydown(settings, event):
 
 
 def load_from_history(settings):
-    """ Retreives previous location from history and draws """
+    """
+        Loads the previous point from history into the current settings.
+
+        If the current screen is wider than the coordinates stored in history,
+            we use the imaginary (y) values that are saved, then adjust the real values
+            (x) based on the difference in screen ratios.
+        If the current screen is taller than the coordinates stored in history,
+            we use the real (x) values that are saved, then adjust the imaginary values
+            (y) based on the difference in screen rations.
+        Else the ratios are the same even if the screen size isn't,
+            we load all the saved values from history.
+    """
+
     coordinates = settings.history.pop()
 
     if settings.ratio() < coordinates[4]:  # Screen is wider
+
         delta = (coordinates[4] - settings.ratio())
         re_start = coordinates[0]
         re_end = coordinates[1]
@@ -116,6 +133,25 @@ def left_mouse_button_movement(settings, mouse_down):
             max(mouse_down[0], mpos[0]),
             min(mouse_down[1], mpos[1]),
             max(mouse_down[1], mpos[1]),
+        )
+
+        # Restore the original screen clearing the selection box we just drew.
+        settings.SCREEN.blit(backup_surface, (0, 0))
+
+
+def right_mouse_button_movement(settings, mouse_down):
+    if mouse_down:
+        backup_surface = pygame.Surface((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
+        backup_surface.blit(settings.SCREEN, (0, 0))
+
+        mpos = pygame.mouse.get_pos()
+
+        draw_rect(
+            settings,
+            mpos[0] - settings.SCREEN_WIDTH / 2,
+            mpos[0] + settings.SCREEN_WIDTH / 2,
+            mpos[1] - settings.SCREEN_HEIGHT / 2,
+            mpos[1] + settings.SCREEN_HEIGHT / 2
         )
 
         # Restore the original screen clearing the selection box we just drew.

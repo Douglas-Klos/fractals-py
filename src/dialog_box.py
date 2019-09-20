@@ -121,6 +121,21 @@ def update(settings, entries):
 
 
 def adjust_edges(settings, entries):
+    """
+        Adjusts the RE and IM values to correct for the new screen resolution.
+
+        If the screen height has changed:
+            Real values are left unchaged.
+            Imaginary values are adjusted based on the new screen height.
+
+        If the screen width has changed:
+            Imaginary values are left unchanged.
+            Real values are adjusted based on the new screen width.
+
+        If both are changed, first the imaginary then real are updated.
+            This has the effect of increasing the area to be rendered instead
+                of scaling the current RM and IM values.
+    """
     if settings.SCREEN_HEIGHT != int(entries[4][1].get()):
         im_middle = mid_point(0, 0, settings.IM_START, settings.IM_END)
         adjustment = (

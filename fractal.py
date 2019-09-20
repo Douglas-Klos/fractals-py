@@ -23,10 +23,12 @@ def main():
         if settings.COLOR:
             # Regenreate color settings.palette.
             settings.palette = colorize(settings)
+            settings.COLOR = False
 
         if settings.DRAW:
             # Regenerate settings.point_list
             settings.point_list = fractal(settings)
+            settings.DRAW = False
 
         pf.display_fractal(settings)
 
@@ -37,9 +39,6 @@ def main():
         )
 
         display.flip()
-
-        settings.COLOR = False
-        settings.DRAW = False
 
         pf.check_events(settings)
 
