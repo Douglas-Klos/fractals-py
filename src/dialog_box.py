@@ -107,11 +107,10 @@ def update(settings, entries):
     )
     settings.HUE_SEED = float(entries[1][1].get())
     settings.SHIFT = int(entries[2][1].get())
-    settings.SCREEN_WIDTH = int(entries[3][1].get())
-    settings.SCREEN_HEIGHT = int(entries[4][1].get())
+
+    adjust_edges(settings, entries)
+
     settings.SCREEN = display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
-    settings.IM_START = -(((settings.RE_END - settings.RE_START) * settings.ratio()) / 2)
-    settings.IM_END = ((settings.RE_END - settings.RE_START) * settings.ratio()) / 2
     settings.C_1 = float(entries[5][1].get())
     settings.C_2 = float(entries[6][1].get())
     settings.ROLL_R = floor(float(entries[7][1].get()))
@@ -121,9 +120,40 @@ def update(settings, entries):
     settings.FRACTAL_ALGORITHM = entries[11][1].get()
 
 
+def adjust_edges(settings, entries):
+    if settings.SCREEN_HEIGHT != int(entries[4][1].get()):
+        im_middle = mid_point(0, 0, settings.IM_START, settings.IM_END)
+        adjustment = (
+            (settings.RE_END - settings.RE_START) *
+            int(entries[4][1].get()) /
+            settings.SCREEN_WIDTH /
+            2
+        )
+        settings.IM_START = im_middle[1] - adjustment
+        settings.IM_END = im_middle[1] + adjustment
+        settings.SCREEN_HEIGHT = int(entries[4][1].get())
+
+    if settings.SCREEN_WIDTH != int(entries[3][1].get()):
+        re_middle = mid_point(settings.RE_START, settings.RE_END, 0, 0)
+        adjustment = (
+            (settings.IM_END - settings.IM_START) *
+            int(entries[3][1].get()) /
+            settings.SCREEN_HEIGHT /
+            2
+        )
+        settings.RE_START = re_middle[0] - adjustment
+        settings.RE_END = re_middle[0] + adjustment
+        settings.SCREEN_WIDTH = int(entries[3][1].get())
+
+
+def mid_point(x1, x2, y1, y2):
+    return ((x1 + x2) / 2, (y1 + y2) / 2)
+
+
 def main():
     """ Main, just used for testing """
     from settings import Settings
+
     root = Tk()
     settings = Settings()
     entries = makeform(root, settings)

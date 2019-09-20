@@ -33,19 +33,29 @@ class Settings:
         self.MAX_ITER = 128
 
         # Screen settings
-        self.SCREEN_WIDTH = 1000
-        self.SCREEN_HEIGHT = 1000
+        self.SCREEN_WIDTH = 400
+        self.SCREEN_HEIGHT = 400
         self.SCREEN = None
 
         # Plot window settings
         self.RE_START = -2
         self.RE_END = 1
+        self._im_mid = 0
 
         # self.RE_START = -1.4853696465081982
         # self.RE_END = -1.4853693374768457
 
-        self.IM_START = -(((self.RE_END - self.RE_START) * self.ratio()) / 2)
-        self.IM_END = ((self.RE_END - self.RE_START) * self.ratio()) / 2
+        # self.RE_START = -1.355
+        # self.RE_END = -1.1168
+
+        self.IM_START = self._im_mid -(((self.RE_END - self.RE_START) * self.ratio()) / 2)
+        self.IM_END = self._im_mid + ((self.RE_END - self.RE_START) * self.ratio()) / 2
+
+        # print(self.IM_START)
+        # print(self.IM_END)
+
+        # self.IM_START = -(((self.RE_END - self.RE_START) * self.ratio()) / 2)
+        # self.IM_END = ((self.RE_END - self.RE_START) * self.ratio()) / 2
 
         # Mouse zoom
         self.MWHEEL_ZOOM = .2
