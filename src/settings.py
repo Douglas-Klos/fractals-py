@@ -6,7 +6,7 @@ class Settings:
     """ Settings for fractals """
 
     def __init__(self):
-        # Lists of available functions
+        # Lists of available color and fractal algorithms.
         self.color_alg = {
             "ce.colorize_hue": ce.colorize_hue,
             "ce.colorize_hue_shifted": ce.colorize_hue_shifted,
@@ -35,8 +35,20 @@ class Settings:
         # Screen settings
         self.SCREEN_WIDTH = 1000
         self.SCREEN_HEIGHT = 1000
-        self.RATIO = self.SCREEN_HEIGHT / self.SCREEN_WIDTH
         self.SCREEN = None
+
+        # Plot window settings
+        self.RE_START = -2
+        self.RE_END = 1
+
+        # self.RE_START = -1.4853696465081982
+        # self.RE_END = -1.4853693374768457
+
+        self.IM_START = -(((self.RE_END - self.RE_START) * self.ratio()) / 2)
+        self.IM_END = ((self.RE_END - self.RE_START) * self.ratio()) / 2
+
+        # Mouse zoom
+        self.MWHEEL_ZOOM = .2
 
         # Color settings for colorize_hue and colorized_hue_shifted
         # 0. = Violet              .5 = Green
@@ -49,19 +61,10 @@ class Settings:
         # Setting for colorized_hue_shifted
         self.SHIFT = 10
 
+        # Roll RGB values
         self.ROLL_R = 0
         self.ROLL_G = 0
         self.ROLL_B = 0
-
-        # Plot window settings
-        # self.RE_START = -1.4853696465081982
-        # self.RE_END = -1.4853693374768457
-
-        self.RE_START = -2
-        self.RE_END = 1
-
-        self.IM_START = -(((self.RE_END - self.RE_START) * self.RATIO) / 2)
-        self.IM_END = ((self.RE_END - self.RE_START) * self.RATIO) / 2
 
         # Point history
         self.history = []
@@ -72,9 +75,6 @@ class Settings:
         # Palette
         self.palette = []
 
-        # Mouse zoom
-        self.MWHEEL_ZOOM = .2
-
         # Interesting Julia Values
         julia_values = ((0.4, 0.3), (0.3, 0.2), (0.35, 0.4))
         self.C_1 = julia_values[0][0]
@@ -83,3 +83,6 @@ class Settings:
         # Redraw
         self.DRAW = False
         self.COLOR = False
+
+    def ratio(self):
+        return self.SCREEN_HEIGHT / self.SCREEN_WIDTH

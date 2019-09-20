@@ -45,54 +45,6 @@ def check_events(settings):
             return mouse_wheel_down(settings)
 
 
-def draw_rect(settings, left, right, top, bottom):
-    mouseRect = pygame.Rect(left, top, (right - left), (bottom - top))
-    mousescreen = pygame.Surface((settings.SCREEN.get_size()))
-    mousescreen.set_alpha(50)
-    pygame.draw.rect(mousescreen,  pygame.Color(255, 255, 255), mouseRect, 5)
-    settings.SCREEN.blit(mousescreen, (0,0))
-    pygame.display.flip()
-
-
-def left_mouse_button_movement(settings, mouse_down):
-    if mouse_down:
-        mpos = pygame.mouse.get_pos()
-
-        x2 = mpos[0]
-        y2 = mpos[1]
-        print(f"---------")
-        print(f"x2:{x2}")
-        print(f"y2:{y2}")
-
-        left = min(mouse_down[0], x2)
-        top = min(mouse_down[1], y2)
-        width = abs(x2 - mouse_down[0])
-        height = abs(mouse_down[1] - y2)
-
-
-        # s = pygame.Surface((x2 - mouse_down[0], y2 - mouse_down[1]), pygame.SRCALPHA)  # per-pixel alpha
-        # s.fill((255,255,255,128))  # notice the alpha value in the color
-        # settings.SCREEN.blit(s, (mouse_down[0], mouse_down[1]))
-        # screen_previous = settings.SCREEN
-
-
-
-        s = pygame.Surface((x2 - mouse_down[0], y2 - mouse_down[1]))
-        s.set_alpha(50)
-        s.fill((255,255,255))
-        settings.SCREEN.blit(s, (mouse_down[0], mouse_down[1]))
-
-        # mouseRect = pygame.Rect(left, top, width, height)
-        # mousescreen = pygame.Surface((screen.get_size()))
-        # mousescreen.set_alpha(50)
-        # pygame.draw.rect(mousescreen,  pygame.Color(255, 255, 255), mouseRect, 5)
-        # screen.blit(mousescreen, (0,0))
-        pygame.display.flip()
-        display_fractal(settings)
-        # settings.SCREEN = screen_previous
-        # pygame.display.update()
-
-
 def check_keydown(settings, event):
     """ Check event when keydown is detected """
     if event.key == pygame.K_q:
@@ -123,7 +75,7 @@ def load_from_history(settings):
     im_end = coordinates[3]
     ratio = coordinates[4]
 
-    delta = (settings.RATIO - ratio) / 2
+    delta = (settings.ratio() - ratio) / 2
     settings.IM_START = im_start - ((im_end - im_start) * delta)
     settings.IM_END = im_end + ((im_end - im_start) * delta)
 
@@ -135,77 +87,88 @@ def left_mouse_down():
     return pygame.mouse.get_pos()
 
 
+def left_mouse_button_movement(settings, mouse_down):
+    # We're going to draw over our current screen, but need to refresh it after every
+    #   frame.  We blit the screen onto a backup surface.
+    if mouse_down:
+        backup_surface = pygame.Surface((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
+        backup_surface.blit(settings.SCREEN, (0, 0))
+
+        mpos = pygame.mouse.get_pos()
+
+        draw_box(
+            settings,
+            min(mouse_down[0], mpos[0]),
+            max(mouse_down[0], mpos[0]),
+            min(mouse_down[1], mpos[1]),
+            max(mouse_down[1], mpos[1]),
+        )
+
+        # Restore the original screen clearing the selection box we just drew.
+        settings.SCREEN.blit(backup_surface, (0, 0))
+
+
 def left_mouse_up(settings, mouse_down):
     """ Left mouse button up event - zoom in on mouse selection area """
     mouse_up = pygame.mouse.get_pos()
 
     # Trapping some corner case that shouldn't exist, but occasionally does.
-    if (
-        mouse_down is None or
-        mouse_up is None or
-        (  # Rejecting clicks that didn't move
-            mouse_down[0] == mouse_up[0] and mouse_down[1] == mouse_up[1]
-        )
-    ):
+    if mouse_down is None or mouse_up is None:
         return
+
+    # Click but no movement
+    if mouse_down[0] == mouse_up[0] and mouse_down[1] == mouse_up[1]:
+        return
+
+    # Save current coordinates
+    save_current_point(settings)
 
     left = min(mouse_down[0], mouse_up[0])
     right = max(mouse_down[0], mouse_up[0])
-    top = max(mouse_down[1], mouse_up[1])
-    bottom = min(mouse_down[1], mouse_up[1])
+    top = min(mouse_down[1], mouse_up[1])
+    bottom = max(mouse_down[1], mouse_up[1])
 
     # The user might draw a rectangle that isn't the same as our screen ratio.
     #   Here we calculate adjustments to their selection to maintain the screen ratio.
-    delta = ((right - left) + (top - bottom)) / 2
+    delta = ((right - left) + (bottom - top)) / 2
 
     if (right - left) <= delta:
         h_adjust = (delta - (right - left)) / 2
     else:  # (right - left) > delta:
         h_adjust = -(((right - left) - delta) / 2)
 
-    if (top - bottom) <= (delta * settings.RATIO):
-        v_adjust = ((delta * settings.RATIO) - (top - bottom)) / 2
-    else:  # (top - bottom) > (delta * settings.RATIO):
-        v_adjust = -(((top - bottom) - (delta * settings.RATIO)) / 2)
+    if (bottom - top) <= (delta * settings.ratio()):
+        v_adjust = ((delta * settings.ratio()) - (bottom - top)) / 2
+    else:  # (top - bottom) > (delta * settings.ratio()):
+        v_adjust = -(((bottom - top) - (delta * settings.ratio())) / 2)
 
     # Center the zoom at the middle of the two click points
     left -= h_adjust
     right += h_adjust
-    bottom -= v_adjust
-    top += v_adjust
+    top -= v_adjust
+    bottom += v_adjust
 
     # Show selection area on screen
-    # draw_rect(settings, left, right, top, bottom)
+    draw_box(settings, left, right, top, bottom)
 
     # Calculate the % of the current corrdinate plane the mouse moved.
     start_percent_re = left / settings.SCREEN_WIDTH
     end_percent_re = right / settings.SCREEN_WIDTH
-    start_percent_im = bottom / settings.SCREEN_HEIGHT
-    end_percent_im = top / settings.SCREEN_HEIGHT
+    start_percent_im = top / settings.SCREEN_HEIGHT
+    end_percent_im = bottom / settings.SCREEN_HEIGHT
 
     # Calculate the new coordinate plane to render.
-    new_start_re = settings.RE_START + abs(
-        (start_percent_re * abs((settings.RE_START - settings.RE_END)))
+    new_start_re = settings.RE_START + (
+        start_percent_re * (settings.RE_END - settings.RE_START)
     )
-    new_end_re = new_start_re + abs((end_percent_re - start_percent_re)) * abs(
-        (settings.RE_START - settings.RE_END)
+    new_end_re = new_start_re + (end_percent_re - start_percent_re) * (
+        settings.RE_END - settings.RE_START
     )
-    new_start_im = settings.IM_START + abs(
-        (start_percent_im * abs((settings.IM_START - settings.IM_END)))
+    new_start_im = settings.IM_START + (
+        start_percent_im * (settings.IM_END - settings.IM_START)
     )
-    new_end_im = new_start_im + abs((end_percent_im - start_percent_im)) * abs(
-        (settings.IM_START - settings.IM_END)
-    )
-
-    # Save current coordinates
-    settings.history.append(
-        (
-            settings.RE_START,
-            settings.RE_END,
-            settings.IM_START,
-            settings.IM_END,
-            settings.RATIO,
-        )
+    new_end_im = new_start_im + (end_percent_im - start_percent_im) * (
+        settings.IM_END - settings.IM_START
     )
 
     # Update settings
@@ -213,29 +176,16 @@ def left_mouse_up(settings, mouse_down):
     settings.RE_END = new_end_re
     settings.IM_START = new_start_im
     settings.IM_END = new_end_im
-
     settings.DRAW = True
 
 
 def center_mouse_up(settings):
     """ Center mouse button up event - Reset to default screen pos """
-    # Save current coordinates
-    settings.history.append(
-        (
-            settings.RE_START,
-            settings.RE_END,
-            settings.IM_START,
-            settings.IM_END,
-            settings.RATIO,
-        )
-    )
-
+    save_current_point(settings)
     settings.RE_START = -2
     settings.RE_END = 1
-    ratio = settings.SCREEN_HEIGHT / settings.SCREEN_WIDTH
-    settings.IM_START = -(((settings.RE_END - settings.RE_START) * ratio) / 2)
-    settings.IM_END = ((settings.RE_END - settings.RE_START) * ratio) / 2
-
+    ettings.IM_START = -(((settings.RE_END - settings.RE_START) * settings.ratio()) / 2)
+    settings.IM_END = ((settings.RE_END - settings.RE_START) * settings.ratio()) / 2
     settings.DRAW = True
 
 
@@ -268,15 +218,7 @@ def right_mouse_up(settings, mouse_down):
     verticle_shift = verticle_percent * (settings.IM_START - settings.IM_END)
 
     # Save current coordinates
-    settings.history.append(
-        (
-            settings.RE_START,
-            settings.RE_END,
-            settings.IM_START,
-            settings.IM_END,
-            settings.RATIO,
-        )
-    )
+    save_current_point(settings)
 
     # Update settings to new coordinate plane
     settings.RE_START = settings.RE_START + horizontal_shift
@@ -288,21 +230,13 @@ def right_mouse_up(settings, mouse_down):
 
 
 def mouse_wheel_down(settings):
-    """ Mouse wheel down event, zoom out 10% """
+    """ Mouse wheel down event, zoom out by settings.MWHEEL_ZOOM """
 
     re_adjust = (settings.RE_START - settings.RE_END) * settings.MWHEEL_ZOOM
     im_adjust = (settings.IM_START - settings.IM_END) * settings.MWHEEL_ZOOM
 
     # Save current coordinates
-    settings.history.append(
-        (
-            settings.RE_START,
-            settings.RE_END,
-            settings.IM_START,
-            settings.IM_END,
-            settings.RATIO,
-        )
-    )
+    save_current_point(settings)
 
     settings.RE_START += re_adjust
     settings.RE_END -= re_adjust
@@ -318,15 +252,7 @@ def mouse_wheel_up(settings):
     im_adjust = (settings.IM_START - settings.IM_END) * settings.MWHEEL_ZOOM
 
     # Save current coordinates
-    settings.history.append(
-        (
-            settings.RE_START,
-            settings.RE_END,
-            settings.IM_START,
-            settings.IM_END,
-            settings.RATIO,
-        )
-    )
+    save_current_point(settings)
 
     settings.RE_START -= re_adjust
     settings.RE_END += re_adjust
@@ -340,3 +266,33 @@ def display_fractal(settings):
     """ Draw the fractal to the screen """
     for point in settings.point_list:
         settings.SCREEN.set_at((point[0], point[1]), settings.palette[floor(point[2])])
+
+
+def draw_rect(settings, left, right, top, bottom):
+    mouse_rect = pygame.Rect(left, top, (right - left), (bottom - top))
+    mouse_screen = pygame.Surface((settings.SCREEN.get_size()))
+    mouse_screen.set_alpha(50)
+    pygame.draw.rect(mouse_screen, pygame.Color(255, 255, 255), mouse_rect, 5)
+    settings.SCREEN.blit(mouse_screen, (0, 0))
+    pygame.display.flip()
+
+
+def draw_box(settings, left, right, top, bottom):
+    mouse_rect = pygame.Surface((right - left, bottom - top))
+    mouse_rect.set_alpha(50)  # Set alpha (transparency) to 50%
+    mouse_rect.fill((255, 255, 255))  # Fill the surface white
+    settings.SCREEN.blit(mouse_rect, (left, top))  # Blit the surface onto the screen
+    pygame.display.flip()  # Flip display to show
+
+
+def save_current_point(settings):
+    # Save current coordinates
+    settings.history.append(
+        (
+            settings.RE_START,
+            settings.RE_END,
+            settings.IM_START,
+            settings.IM_END,
+            settings.ratio()
+        )
+    )

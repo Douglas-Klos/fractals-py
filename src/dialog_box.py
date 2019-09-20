@@ -35,7 +35,7 @@ def construct_dialog_box(settings):
 
 
 def makeform(root, settings):
-    """ Construct the dialog box """
+    """ Adds fields the dialog box """
     fields = (
         ("Iterations >= 64", settings.MAX_ITER),  # 0
         ("Hue Seed", settings.HUE_SEED),  # 1
@@ -110,9 +110,8 @@ def update(settings, entries):
     settings.SCREEN_WIDTH = int(entries[3][1].get())
     settings.SCREEN_HEIGHT = int(entries[4][1].get())
     settings.SCREEN = display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
-    settings.RATIO = settings.SCREEN_HEIGHT / settings.SCREEN_WIDTH
-    settings.IM_START = -(((settings.RE_END - settings.RE_START) * settings.RATIO) / 2)
-    settings.IM_END = ((settings.RE_END - settings.RE_START) * settings.RATIO) / 2
+    settings.IM_START = -(((settings.RE_END - settings.RE_START) * settings.ratio()) / 2)
+    settings.IM_END = ((settings.RE_END - settings.RE_START) * settings.ratio()) / 2
     settings.C_1 = float(entries[5][1].get())
     settings.C_2 = float(entries[6][1].get())
     settings.ROLL_R = floor(float(entries[7][1].get()))
