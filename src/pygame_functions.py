@@ -70,10 +70,8 @@ def load_from_history(settings):
 
     if settings.ratio() < coordinates[4]:  # Screen is wider
         delta = (coordinates[4] - settings.ratio())
-
         re_start = coordinates[0]
         re_end = coordinates[1]
-
         settings.RE_START = re_start - ((re_end - re_start) * delta)
         settings.RE_END = re_end + ((re_end - re_start) * delta)
         settings.IM_START = coordinates[2]

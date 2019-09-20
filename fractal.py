@@ -16,13 +16,18 @@ def main():
     init()
     settings.SCREEN = display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
 
-    fractal = settings.fractal_alg[settings.FRACTAL_ALGORITHM]
-    colorize = settings.color_alg[settings.COLOR_ALGORITHM]
-
-    settings.point_list = fractal(settings)
-    settings.palette = colorize(settings)
-
     while True:
+        fractal = settings.fractal_alg[settings.FRACTAL_ALGORITHM]
+        colorize = settings.color_alg[settings.COLOR_ALGORITHM]
+
+        if settings.COLOR:
+            # Regenreate color settings.palette.
+            settings.palette = colorize(settings)
+
+        if settings.DRAW:
+            # Regenerate settings.point_list
+            settings.point_list = fractal(settings)
+
         pf.display_fractal(settings)
 
         # Set display title
@@ -35,18 +40,8 @@ def main():
 
         settings.COLOR = False
         settings.DRAW = False
+
         pf.check_events(settings)
-
-        fractal = settings.fractal_alg[settings.FRACTAL_ALGORITHM]
-        colorize = settings.color_alg[settings.COLOR_ALGORITHM]
-
-        if settings.COLOR:
-            # Regenreate color settings.palette.
-            settings.palette = colorize(settings)
-
-        if settings.DRAW:
-            # Regenerate settings.point_list
-            settings.point_list = fractal(settings)
 
 
 if __name__ == "__main__":

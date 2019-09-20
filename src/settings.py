@@ -91,8 +91,8 @@ class Settings:
         self.C_2 = julia_values[0][1]
 
         # Redraw
-        self.DRAW = False
-        self.COLOR = False
+        self.DRAW = True
+        self.COLOR = True
 
     def ratio(self):
         return self.SCREEN_HEIGHT / self.SCREEN_WIDTH
