@@ -8,7 +8,8 @@ import src.dialog_box as db
 
 def check_events(settings):
     """ Check events """
-    mouse_down = None
+    l_mouse_down = None
+    r_mouse_down = None
 
     while True:
 
@@ -21,22 +22,22 @@ def check_events(settings):
             return check_keydown(settings, event)
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            mouse_down = left_mouse_down()
+            l_mouse_down = left_mouse_down()
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            return left_mouse_up(settings, mouse_down)
+            return left_mouse_up(settings, l_mouse_down)
 
-        elif event.type == pygame.MOUSEMOTION:
-            left_mouse_button_movement(settings, mouse_down)
+        elif event.type == pygame.MOUSEMOTION and l_mouse_down is not None:
+            left_mouse_button_movement(settings, l_mouse_down)
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 2:
             return center_mouse_up(settings)
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
-            mouse_down = right_mouse_down()
+            r_mouse_down = right_mouse_down()
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 3:
-            return right_mouse_up(settings, mouse_down)
+            return right_mouse_up(settings, r_mouse_down)
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 4:
             return mouse_wheel_up(settings)
