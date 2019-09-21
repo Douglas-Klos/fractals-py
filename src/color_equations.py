@@ -13,12 +13,12 @@ except ImportError:
     from color import Color
 
 
-def colorize_hue(settings, point_list, *_):
+def colorize_hue(settings):
     """ Calculate hue color palette """
     palette = [0] * settings.MAX_ITER
     hues = []
 
-    for point in point_list:
+    for point in settings.point_list:
         hues.append(floor(point[2]))
 
     min_val = min(set(hues))
@@ -40,12 +40,12 @@ def colorize_hue(settings, point_list, *_):
     return roll_rgb(palette, settings)
 
 
-def colorize_hue_shifted(settings, point_list, *_):
+def colorize_hue_shifted(settings):
     """ Calculate hue color palette shifted """
     palette = [0] * settings.MAX_ITER
     hues = []
 
-    for point in point_list:
+    for point in settings.point_list:
         hues.append(floor(point[2]))
 
     min_val = min(set(hues))
@@ -88,7 +88,7 @@ def colorize_hue_shifted(settings, point_list, *_):
     return geld(roll_rgb(palette, settings))
 
 
-def colorize_blue_green_sin(settings, *_):
+def colorize_blue_green_sin(settings):
     """ Calculate sin color palette """
     palette = [0] * settings.MAX_ITER
 
@@ -128,7 +128,7 @@ def geld(palette):
     return palette
 
 
-def colorize_blue_green_gold(settings, *_):
+def colorize_blue_green_gold(settings):
     """ Predefined blue - green - gold color palette """
     gold = Color("gold")
     blue = Color("blue")
@@ -162,7 +162,7 @@ def colorize_blue_green_gold(settings, *_):
     return roll_rgb(return_palette, settings)
 
 
-def colorize_black_shift(settings, *_):
+def colorize_black_shift(settings):
     """ Predefined black - color rainbow palette """
     red = Color("red")
     yellow = Color("yellow")
@@ -200,7 +200,7 @@ def colorize_black_shift(settings, *_):
     return roll_rgb(return_palette, settings)
 
 
-def colorize_white_shift(settings, *_):
+def colorize_white_shift(settings):
     """ Predefined white - color rainbow palette """
     red = Color("red")
     yellow = Color("yellow")
@@ -238,7 +238,7 @@ def colorize_white_shift(settings, *_):
     return roll_rgb(return_palette, settings)
 
 
-def colorize_black_gold(settings, *_):
+def colorize_black_gold(settings):
     """ Predefined black and gold color palette """
     gold = Color("gold")
     black = Color("black")
@@ -266,7 +266,7 @@ def colorize_black_gold(settings, *_):
     return roll_rgb(return_palette, settings)
 
 
-def colorize_white_green_black(settings, *_):
+def colorize_white_green_black(settings):
     """ Predefined white - green - black color palette """
     black = Color("black")
     white = Color("white")
@@ -295,7 +295,7 @@ def colorize_white_green_black(settings, *_):
     return roll_rgb(return_palette, settings)
 
 
-def colorize_rgb(settings, *_):
+def colorize_rgb(settings):
     """ Predefined RGB / rainbow color palette """
     red = Color("red")
     yellow = Color("yellow")
@@ -333,7 +333,7 @@ def colorize_rgb(settings, *_):
     return roll_rgb(return_palette, settings)
 
 
-def colorize_blue_gold(settings, *_):
+def colorize_blue_gold(settings):
     """ Predefined blue and gold color palette """
     gold = Color("gold")
     black = Color("black")
@@ -370,7 +370,7 @@ def colorize_blue_gold(settings, *_):
     return roll_rgb(return_palette, settings)
 
 
-def colorize_color_black(settings, *_):
+def colorize_color_black(settings):
     """ Predefined blue and gold color palette """
     palette = []
     return_palette = []
@@ -406,7 +406,7 @@ def colorize_color_black(settings, *_):
     return_palette[(settings.MAX_ITER - 1)] = (0, 0, 0)
     return roll_rgb(return_palette, settings)
 
-def colorize_color_black2(settings, *_):
+def colorize_color_black2(settings):
     """ Predefined blue and gold color palette """
     palette = []
     return_palette = []

@@ -93,6 +93,7 @@ def update(settings, entries):
         settings.DRAW = True
 
     if (
+            settings.MAX_ITER != int(entries[0][1].get()) or
             settings.HUE_SEED != float(entries[1][1].get()) or
             settings.SHIFT != int(entries[2][1].get()) or
             settings.ROLL_R != int(entries[7][1].get()) or

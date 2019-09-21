@@ -125,7 +125,7 @@ def left_mouse_button_movement(settings, mouse_down):
 
         mpos = pygame.mouse.get_pos()
 
-        draw_box(
+        draw_selection_box(
             settings,
             min(mouse_down[0], mpos[0]),
             max(mouse_down[0], mpos[0]),
@@ -144,15 +144,20 @@ def right_mouse_button_movement(settings, mouse_down):
 
         mpos = pygame.mouse.get_pos()
 
-        draw_box(
-            settings,
-            mpos[0] - settings.SCREEN_WIDTH / 2,
-            mpos[0] + settings.SCREEN_WIDTH / 2,
-            mpos[1] - settings.SCREEN_HEIGHT / 2,
-            mpos[1] + settings.SCREEN_HEIGHT / 2
+        pygame.draw.line(
+            settings.SCREEN,
+            (255, 255, 255, 0),
+            (mpos[0], -settings.SCREEN_HEIGHT * 2),
+            (mpos[0], settings.SCREEN_HEIGHT * 2)
+        )
+        pygame.draw.line(
+            settings.SCREEN,
+            (255, 255, 255, 0),
+            (-settings.SCREEN_WIDTH * 2, mpos[1]),
+            (settings.SCREEN_WIDTH * 2, mpos[1]),
         )
 
-        # Restore the original screen clearing the selection box we just drew.
+        pygame.display.flip()
         settings.SCREEN.blit(backup_surface, (0, 0))
 
 
@@ -197,7 +202,7 @@ def left_mouse_up(settings, mouse_down):
     bottom += v_adjust
 
     # Show selection area on screen
-    draw_box(settings, left, right, top, bottom)
+    draw_selection_box(settings, left, right, top, bottom)
 
     # Calculate the % of the current corrdinate plane the mouse moved.
     start_percent_re = left / settings.SCREEN_WIDTH
@@ -250,6 +255,7 @@ def right_mouse_up(settings, mouse_down):
     if mouse_down is None or mouse_up is None:
         return
 
+    # Click but no movement
     if mouse_down[0] == mouse_up[0] and mouse_down[1] == mouse_up[1]:
         return
 
@@ -316,7 +322,7 @@ def display_fractal(settings):
         settings.SCREEN.set_at((point[0], point[1]), settings.palette[floor(point[2])])
 
 
-def draw_box(settings, left, right, top, bottom):
+def draw_selection_box(settings, left, right, top, bottom):
     # Create a box from a surface and set transparency to 50%
     box_inside = pygame.Surface((right - left, bottom - top))
     box_inside.set_alpha(50)

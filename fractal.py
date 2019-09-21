@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """ Fractals in Python """
 
+import logging
 from pygame import display, init
 from src.settings import Settings
 import src.pygame_functions as pf
+
 
 
 def main():
@@ -11,6 +13,7 @@ def main():
 
     # Initialize settings object
     settings = Settings()
+    logging.basicConfig(level=logging.DEBUG)
 
     # Initialize Pygame and create a screen
     init()
@@ -22,11 +25,13 @@ def main():
 
         if settings.COLOR:
             # Regenreate color settings.palette.
+            logging.debug("Generating color palette...")
             settings.palette = colorize(settings)
             settings.COLOR = False
 
         if settings.DRAW:
             # Regenerate settings.point_list
+            logging.debug("Generating point list palette...")
             settings.point_list = fractal(settings)
             settings.DRAW = False
 
