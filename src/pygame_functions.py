@@ -28,7 +28,6 @@ def check_events(settings):
             return left_mouse_up(settings, l_mouse_down)
 
         elif event.type == pygame.MOUSEMOTION and l_mouse_down is not None:
-            print(r_mouse_down)
             left_mouse_button_movement(settings, l_mouse_down)
 
         elif event.type == pygame.MOUSEMOTION and r_mouse_down is not None:
@@ -86,7 +85,6 @@ def load_from_history(settings):
     coordinates = settings.history.pop()
 
     if settings.ratio() < coordinates[4]:  # Screen is wider
-
         delta = (coordinates[4] - settings.ratio())
         re_start = coordinates[0]
         re_end = coordinates[1]
@@ -146,7 +144,7 @@ def right_mouse_button_movement(settings, mouse_down):
 
         mpos = pygame.mouse.get_pos()
 
-        draw_rect(
+        draw_box(
             settings,
             mpos[0] - settings.SCREEN_WIDTH / 2,
             mpos[0] + settings.SCREEN_WIDTH / 2,
@@ -318,21 +316,18 @@ def display_fractal(settings):
         settings.SCREEN.set_at((point[0], point[1]), settings.palette[floor(point[2])])
 
 
-def draw_rect(settings, left, right, top, bottom):
-    mouse_rect = pygame.Rect(left, top, (right - left), (bottom - top))
-    mouse_screen = pygame.Surface((settings.SCREEN.get_size()))
-    mouse_screen.set_alpha(50)
-    pygame.draw.rect(mouse_screen, pygame.Color(255, 255, 255), mouse_rect, 5)
-    settings.SCREEN.blit(mouse_screen, (0, 0))
-    pygame.display.flip()
-
-
 def draw_box(settings, left, right, top, bottom):
-    mouse_rect = pygame.Surface((right - left, bottom - top))
-    mouse_rect.set_alpha(50)  # Set alpha (transparency) to 50%
-    mouse_rect.fill((255, 255, 255))  # Fill the surface white
-    settings.SCREEN.blit(mouse_rect, (left, top))  # Blit the surface onto the screen
-    pygame.display.flip()  # Flip display to show
+    # Create a box from a surface and set transparency to 50%
+    box_inside = pygame.Surface((right - left, bottom - top))
+    box_inside.set_alpha(50)
+    box_inside.fill((255, 255, 255))  # Fill the surface white
+
+    # Create a rectable and blit it to the screen.
+    box_outside = pygame.Rect(left, top, (right - left), (bottom - top))
+    pygame.draw.rect(settings.SCREEN, pygame.Color(255, 255, 255), box_outside, 1)
+    settings.SCREEN.blit(box_inside, (left, top))
+
+    pygame.display.flip()
 
 
 def save_current_point(settings):

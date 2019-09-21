@@ -33,8 +33,8 @@ class Settings:
         self.MAX_ITER = 128
 
         # Screen settings
-        self.SCREEN_WIDTH = 400
-        self.SCREEN_HEIGHT = 400
+        self.SCREEN_WIDTH = 800
+        self.SCREEN_HEIGHT = 800
         self.SCREEN = None
 
         # Plot window settings
