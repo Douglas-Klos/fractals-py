@@ -21,6 +21,7 @@ class Settings:
             "ce.colorize_color_black2": ce.colorize_color_black2,
         }
         self.fractal_alg = {
+            "fe.mandelbrot_parallel": fe.mandelbrot_parallel,
             "fe.mandelbrot": fe.mandelbrot,
             "fe.julia": fe.julia,
         }
@@ -30,7 +31,7 @@ class Settings:
         self.FRACTAL_ALGORITHM = "fe.mandelbrot"
 
         # Mandelbrot iterations
-        self.MAX_ITER = 128
+        self.MAX_ITER = 1024
 
         # Screen settings
         self.SCREEN_WIDTH = 800

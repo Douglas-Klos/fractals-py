@@ -52,31 +52,27 @@ def colorize_hue_shifted(settings):
 
     for i in range(settings.MAX_ITER):
         hue = settings.HUE_SEED + (
-            1
-            - abs(
-                ((float(i) - min_val) / settings.MAX_ITER - 1)
-                ** (sqrt(settings.MAX_ITER))
-            )
-            / 4
+            1 -
+            abs(
+                ((float(i) - min_val) / settings.MAX_ITER - 1) **
+                sqrt(settings.MAX_ITER)
+            ) / 4
         )
         sat = 1 - (
-            1
-            - abs(
-                ((float(i) - min_val) / settings.MAX_ITER - 1)
-                ** (sqrt(settings.MAX_ITER))
+            1 -
+            abs(
+                ((float(i) - min_val) / settings.MAX_ITER - 1) **
+                sqrt(settings.MAX_ITER)
             )
         )
         val = (
             abs(
-                1
-                - abs(
+                1 - abs(
                     (
-                        (i - min_val - settings.SHIFT - (settings.MAX_ITER / 128))
-                        / settings.MAX_ITER
-                    )
-                    - 1
-                )
-                ** 32
+                        (i - min_val - settings.SHIFT - (settings.MAX_ITER / 128)) /
+                        settings.MAX_ITER
+                    ) - 1
+                ) ** 32
             )
             if i < settings.MAX_ITER - 1
             else 0

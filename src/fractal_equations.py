@@ -1,8 +1,82 @@
 """ Fractal Equations """
 
+import logging
+from pprint import pprint
 from datetime import datetime
 from math import log
 from numba import jit
+import time
+
+
+from multiprocessing import Process, Queue
+
+
+def mandelbrot_parallel(settings):
+    start = datetime.now()
+    point_list = []
+        
+    start = datetime.now()
+
+    results_1 = Queue()
+    results_2 = Queue()
+    process_1 = Process(target=calculate_mandelbrot_1, args=(settings, results_1))
+    process_2 = Process(target=calculate_mandelbrot_2, args=(settings, results_2))
+
+    print(f"starting process 1")
+    process_1.start()
+    print(f"starting process 2")
+    process_2.start()
+
+    time.sleep(.2)
+
+    while results_1.qsize() > 0 or results_2.qsize() > 0:
+        while results_1.qsize() > 0:
+            point_list.extend(results_1.get())
+        while results_2.qsize() > 0:
+            point_list.extend(results_2.get())
+        # time.sleep(.01)
+
+
+    print(f"joining process 1")
+    process_1.join()
+    print(f"joining process 2")
+    process_2.join()
+    print(f"total time: {datetime.now() - start}")
+    # print(process_2)
+    # print(f"queue: {results_2.get()}")
+    # pprint(point_list_1)
+    return point_list
+
+
+def calculate_mandelbrot_1(settings, results_1):
+    for x in range(0, settings.SCREEN_WIDTH, 2):
+        point_list = []
+        for y in range(0, settings.SCREEN_HEIGHT):
+            c = complex(
+                (settings.RE_START + (x / settings.SCREEN_WIDTH) * (settings.RE_END - settings.RE_START)),
+                (settings.IM_START + (y / settings.SCREEN_HEIGHT) * (settings.IM_END - settings.IM_START)),
+            )
+
+            m = iterate_mandelbrot(settings.MAX_ITER, c)
+            point_list.append([x, y, m])
+
+        results_1.put(point_list)
+
+
+def calculate_mandelbrot_2(settings, results_2):
+    for x in range(1, settings.SCREEN_WIDTH, 2):
+        point_list = []
+
+        for y in range(0, settings.SCREEN_HEIGHT):
+            c = complex(
+                (settings.RE_START + (x / settings.SCREEN_WIDTH) * (settings.RE_END - settings.RE_START)),
+                (settings.IM_START + (y / settings.SCREEN_HEIGHT) * (settings.IM_END - settings.IM_START)),
+            )
+
+            m = iterate_mandelbrot(settings.MAX_ITER, c)
+            point_list.append([x, y, m])
+
+        results_2.put(point_list)
 
 
 @jit(nopython=True)
@@ -45,7 +119,7 @@ def mandelbrot(settings):
     return point_list
 
 
-@jit(nopython=True)
+# @jit(nopython=True)
 def calculate_mandelbrot(width, height, re_start, re_end, im_start, im_end, max_iter):
     """ Calculate mandelbrot for our screen size """
     for x in range(0, width):
